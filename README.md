@@ -2,4 +2,4 @@
 
 Registrate en: https://forms.gle/yZ8xsdWj7W7ECWAG8
 
-![Logo Code for Food](icono.png)
+![Logo Code for Food](icono_1.png)
