@@ -1,5 +1,7 @@
 {
   "name": "CodeForFood",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
