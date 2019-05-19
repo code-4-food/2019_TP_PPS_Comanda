@@ -21,3 +21,12 @@ Registrate en: https://forms.gle/yZ8xsdWj7W7ECWAG8
 - Tenemos el branch **master** el cual mustra la version final y **staging** en el cual testeamos todos las tareas realizadas por cada integrante.
 
 ![rECORRIDO](RECORRIDO.png)
+
+# Comandos utilizados
+- git checkout **rama a cambiar**
+- git checkout -b **rama a crear**
+- git pull *actualizar rama*
+- git push -u origin **rama actual** *para hacer el primer push*
+- git status
+- git diff
+- git add **archivos a agregar**
