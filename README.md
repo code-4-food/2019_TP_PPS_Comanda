@@ -21,7 +21,7 @@ Registrate en: https://forms.gle/yZ8xsdWj7W7ECWAG8
 - Tenemos el branch **master** el cual mustra la version final y **staging** en el cual testeamos todos las tareas realizadas por cada integrante.
 
 ```mermaid
-graph LR;
+graph TD;
 B((Nuevo branch)) --> C(Trabajamos el ticket);
 C -- al terminamos --> D{Generamos PR};
 D --> E[Se pide revision];
