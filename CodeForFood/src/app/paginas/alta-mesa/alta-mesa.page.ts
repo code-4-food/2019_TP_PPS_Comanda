@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { MesasService } from './../../servicios/mesas.service';
+import { FirestorageService } from './../../servicios/firestorage.service';
 
 @Component({
   selector: 'app-alta-mesa',
@@ -15,7 +16,8 @@ export class AltaMesaPage {
   public codigoQrMesa: string;
   public urlFotoMesa: string;
 
-  constructor(private barcodeScanner: BarcodeScanner, private camera: Camera, private mesasService: MesasService) {
+  constructor(private barcodeScanner: BarcodeScanner, private camera: Camera,
+  private mesasService: MesasService, private firestorageService: FirestorageService) {
     this.numeroMesa = null;
     this.cantidadComensales = null;
     this.tipoMesa = '';
@@ -43,7 +45,7 @@ export class AltaMesaPage {
     };
 
     this.camera.getPicture(options).then((imageData) => {
-      this.mesasService.uploadFotoToFirebase(imageData).then(imageURL => {
+      this.firestorageService.uploadFotoToFirebase(imageData).then(imageURL => {
         this.urlFotoMesa = imageURL;
       });
     });
