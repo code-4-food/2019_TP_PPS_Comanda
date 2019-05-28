@@ -15,7 +15,9 @@ const routes: Routes = [
     path: 'list',
     loadChildren: './list/list.module#ListPageModule'
   },
-  { path: 'log-in', loadChildren: './paginas/log-in/log-in.module#LogInPageModule' }
+  { path: 'log-in', loadChildren: './paginas/log-in/log-in.module#LogInPageModule' },
+  { path: 'alta-mesa', loadChildren: './paginas/alta-mesa/alta-mesa.module#AltaMesaPageModule' }
+
 ];
 
 @NgModule({
