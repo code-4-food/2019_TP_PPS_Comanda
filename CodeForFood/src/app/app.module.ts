@@ -14,9 +14,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { firebaseConfig } from "../environments/environment";
 
 import { AngularFireModule } from '@angular/fire';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
-// import { Camera } from '@ionic-native/camera/ngx';
+
+import { AngularFireAuthModule } from '@angular/fire/auth'
+import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore'
+import { Camera } from '@ionic-native/camera/ngx';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 
 @NgModule({
@@ -35,9 +36,9 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
     StatusBar,
     SplashScreen,
     BarcodeScanner,
-    Camera,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: FirestoreSettingsToken, useValue:{}}
+    { provide: FirestoreSettingsToken, useValue:{}},
+    Camera
   ],
   bootstrap: [AppComponent]
 })
