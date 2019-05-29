@@ -14,17 +14,15 @@ export interface Cliente {
 
 export interface Empleado {
     uid:string;
-    foto:string;
     nombre:string;
     apellido:string;
-    mail:string;
     dni:string;
-    genero:string;
-    nacimiento:string;
-    nacionalidad:string;
     cuil:string;
-    activo:boolean;
+    foto:string;
     perfil:string;
+    mail:string;
+    clave:string;
+    activo:boolean;
 }
 
 export interface Anonimo {
