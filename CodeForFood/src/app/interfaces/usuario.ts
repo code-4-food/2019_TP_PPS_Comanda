@@ -21,7 +21,6 @@ export interface Empleado {
     foto:string;
     perfil:string;
     mail:string;
-    clave:string;
     activo:boolean;
 }
 

@@ -21,11 +21,11 @@ export class AltaEmpleadoPage implements OnInit {
     dni: '',
     cuil: '',
     mail: '',
-    clave: '',
     perfil: '',
     foto: '',
     activo: true
   };
+  public password = '';
   public emailmal: boolean;
 
   constructor(private camera: Camera, private fotosService: FirestorageService,
@@ -41,7 +41,7 @@ export class AltaEmpleadoPage implements OnInit {
     console.log(this.empleado);
     if (this.empleado.nombre !== '' && this.empleado.apellido !== '' &&
     this.empleado.dni !== '' && this.empleado.cuil !== '' && this.empleado.perfil !== ''
-    && this.empleado.mail !== '' && this.empleado.clave !== '') {
+    && this.empleado.mail !== '' && this.password !== '') {
       const emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
       if (emailRegex.test(this.empleado.mail)) {
         const camOptions: CameraOptions = {
@@ -58,7 +58,7 @@ export class AltaEmpleadoPage implements OnInit {
         this.camera.getPicture(camOptions).then(async (pictureAux) => {
           this.fotosService.uploadFotoToFirebase(pictureAux).then(imageURL => {
             this.empleado.foto = imageURL;
-            this.authService.CrearAuth(this.empleado.mail, this.empleado.clave, this.empleado, imageURL).then( () => {
+            this.authService.CrearAuth(this.empleado.mail, this.password, this.empleado, imageURL).then( () => {
               this.errorHand.MostrarErrorSoloLower('Empleado agregado!');
               this.router.navigate(['/home']);
             });
