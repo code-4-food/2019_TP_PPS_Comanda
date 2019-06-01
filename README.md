@@ -30,3 +30,28 @@ Registrate en: https://forms.gle/yZ8xsdWj7W7ECWAG8
 - git status
 - git diff
 - git add **archivos a agregar**
+
+# Trabajo de Integrantes:
+
+## Marcos Ivan Rey:
+
+| Branch | Descripcion del trabajo | Fecha Finalizacion |
+|---|---|---|
+| organizacion-proyecto | Creacion de servicion (sin funcionalidad), interfaces y paginas para empezar a trabajar. Esqueleto del proyecto | 17/5 |
+| CFF-35/Crear-Auth-Service | Log In y auth service para creacion de usuarios | 25/5 |
+| CFF-2/Alta-producto | Creacion de un producto | 30/5 |
+
+
+## Micaela Saez:
+
+| Branch | Descripcion del trabajo | Fecha Finalizacion |
+|---|---|---|
+| CFF-4-alta-empleados | Registro de empleado, dueño y supervisor | 28/5 |
+
+## Ezequiel Mahafud:
+
+| Branch | Descripcion del trabajo | Fecha Finalizacion |
+|---|---|---|
+| Alta-mesa | Registro una nueva mesa | 26/5 |
+| Firestorage-service | Arregla errores por el merge de la rama 'Alta-mesa' | 26/5 |
+| Fix-app-module | Arregla errores por el merge de la rama 'Alta-mesa' | 26/5 |
