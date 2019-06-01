@@ -32,6 +32,9 @@ export class AuthService {
                 case 'bar':
                 case 'cocina':
                 case 'supervisor':
+                case 'mozo':
+                case 'metre':
+                case 'delivery':
                 case 'dueño':
                   this.usuario = obj_element as Empleado;
                   localStorage.setItem('usuario', JSON.stringify(this.usuario))

@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'alta-producto',
+    redirectTo: 'alta-supervisor',
     pathMatch: 'full'
   },
   {
@@ -17,6 +17,8 @@ const routes: Routes = [
   },
   { path: 'log-in', loadChildren: './paginas/log-in/log-in.module#LogInPageModule' },
   { path: 'alta-mesa', loadChildren: './paginas/alta-mesa/alta-mesa.module#AltaMesaPageModule' },
+  { path: 'alta-supervisor', loadChildren: './paginas/alta-supervisor/alta-supervisor.module#AltaSupervisorPageModule' },
+  { path: 'alta-empleado', loadChildren: './paginas/alta-empleado/alta-empleado.module#AltaEmpleadoPageModule' },
   { path: 'alta-producto', loadChildren: './paginas/alta-producto/alta-producto.module#AltaProductoPageModule' }
 
 ];
