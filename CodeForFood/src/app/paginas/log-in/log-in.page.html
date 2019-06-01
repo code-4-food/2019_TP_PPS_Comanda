@@ -1,0 +1,88 @@
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-header>
+      <ion-card-title class="container" color='dark'>
+        <div>
+          <h2 class='text'>Iniciar Sesión</h2>
+        </div>
+        <img class="icon" src="assets/icon/icono_1.png">
+      </ion-card-title>
+    </ion-card-header>
+
+
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item shape="round">
+        <ion-label position="floating">
+          <ion-text>
+            <h4>
+              Correo Electronico
+            </h4>
+          </ion-text>
+
+        </ion-label>
+        <ion-input clear-input type='text' [(ngModel)]='email'></ion-input>
+      </ion-item>
+
+      <ion-item shape="round">
+        <ion-label position="floating">
+          <ion-text>
+            <h4>
+              Contraseña
+            </h4>
+          </ion-text>
+
+        </ion-label>
+        <ion-input clearInput type='password' [(ngModel)]='password'></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>
+          <ion-button expand="full" (click)='OnSubmitLogIn()' shape="round" color='success' fill="outline">
+            <ion-icon slot="start" name="checkmark"></ion-icon>
+            Aceptar
+          </ion-button>
+        </ion-label>
+
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <ion-button expand="full" (click)='Rellenar("marcostest8","1234567")' color='dark'>
+            <ion-icon slot="start" name="person"></ion-icon>
+            Supervisor
+          </ion-button>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <ion-button expand="full" (click)='Rellenar("invitado_1",555555)' color='dark'>
+            <ion-icon slot="start" name="person"></ion-icon>
+            Cliente Uno
+          </ion-button>
+        </ion-label>
+        <ion-label>
+          <ion-button expand="full" (click)='Rellenar("invitado_2",222222)' color='dark'>
+            <ion-icon slot="start" name="person"></ion-icon>
+            Cliente Dos
+          </ion-button>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <ion-button expand="full" (click)='Rellenar("bar",333333)' color='dark'>
+            <ion-icon slot="start" name="person"></ion-icon>
+            Bar
+          </ion-button>
+        </ion-label>
+        <ion-label>
+          <ion-button expand="full" (click)='Rellenar("cocina",444444)' color='dark'>
+            <ion-icon slot="start" name="person"></ion-icon>
+            Cocina
+          </ion-button>
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
