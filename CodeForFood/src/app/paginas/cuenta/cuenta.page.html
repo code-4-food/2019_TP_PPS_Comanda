@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title color="danger" style="text-align: center;">Cuenta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <ion-label>Pedidos:</ion-label>
+    <ion-select [(ngModel)]="id" placeholder="Seleccione pedido">
+      <ng-container  *ngFor="let item of pedidos">
+        <ion-select-option>{{item.id}}</ion-select-option>
+      </ng-container>
+    </ion-select>
+    <ion-button color="danger" (click)="CargarCuenta()">Cargar Cuenta</ion-button>
+  </div>
+  <br>
+  <div>
+    <table style="border: 2px solid red; width: 100%; text-align: center;">
+      <thead>
+          <th>Producto</th>
+          <th>Precio</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of productosCuenta">
+          <td>{{item.nombre}}</td>
+          <td slot="end">{{item.precio}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <h1>Total: {{total}}</h1>
+    <ion-button color="danger" expand="block" (click)="Pagada()">Pagar</ion-button>
+  </div>
+</ion-content>
