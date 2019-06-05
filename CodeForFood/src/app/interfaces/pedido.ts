@@ -1,6 +1,16 @@
 export interface Pedido {
+
+    id:string;
+    id_mesa_cliente:string;
+    id_mozo:string;
+    estado:string;
     comienzo: string;
-    'id-mesa-cliente': string;
-    'id-mozo': string;
-    estado: string;
+}
+
+export interface PedidoProducto {
+    id:string;
+    id_pedido:string;
+    id_producto:any;
+    estado:string;
+    id_comanda:string;
 }
