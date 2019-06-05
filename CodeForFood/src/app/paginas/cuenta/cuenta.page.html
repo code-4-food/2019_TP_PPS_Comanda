@@ -6,10 +6,10 @@
 
 <ion-content>
   <div>
-    <ion-label>Pedidos:</ion-label>
-    <ion-select [(ngModel)]="id" placeholder="Seleccione pedido">
-      <ng-container  *ngFor="let item of pedidos">
-        <ion-select-option>{{item.id}}</ion-select-option>
+    <ion-label>Mesas con pedidos:</ion-label>
+    <ion-select [(ngModel)]="id" placeholder="Seleccione mesa">
+      <ng-container  *ngFor="let item of mesas">
+        <ion-select-option>{{item.numero}}</ion-select-option>
       </ng-container>
     </ion-select>
     <ion-button color="danger" (click)="CargarCuenta()">Cargar Cuenta</ion-button>

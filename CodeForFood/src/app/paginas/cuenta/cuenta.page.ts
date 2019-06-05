@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PedidosService } from '../../servicios/pedidos.service';
 import { ProductosService } from '../../servicios/productos.service';
 import { Pedido } from 'src/app/interfaces/pedido';
+import { MesasService } from 'src/app/servicios/mesas.service';
 
 @Component({
   selector: 'app-cuenta',
@@ -16,8 +17,9 @@ export class CuentaPage implements OnInit {
   private productos: any;
   public productosCuenta = [];
   public total = 0;
+  public mesas = [];
 
-  constructor(private pedidosServ: PedidosService, private productosServ: ProductosService) {
+  constructor(private pedidosServ: PedidosService, private mesasServ: MesasService) {
     this.pedidosServ.getPedidos().subscribe( (data) => {
       this.pedidos = data;
       console.log('pedidos: ', this.pedidos);
@@ -30,6 +32,10 @@ export class CuentaPage implements OnInit {
       this.productos = data;
       console.log('productos: ', this.productos);
     });
+    this.mesasServ.getMesas().subscribe( (data) => {
+      this.mesas = data;
+      console.log('mesas: ', this.mesas);
+    });
   }
 
   ngOnInit() {
@@ -38,15 +44,19 @@ export class CuentaPage implements OnInit {
   public CargarCuenta() {
     this.total = 0;
     if (this.id !== '') {
-      this.pedidos.forEach( p => {
-        if (p['id'] == this.id) {
-          this.pedidoSelecc = p;
-          this.pedidosproductos.forEach( pp => {
-            if (p['id'] == pp['id-pedido']) {
-              this.productos.forEach( prod => {
-                if (prod['id'] == pp['id-producto']) {
-                  this.productosCuenta.push(prod);
-                  this.total += Number.parseInt(prod['precio']);
+      this.mesas.forEach( m => {
+        if (m['numero'] == this.id) {
+          this.pedidos.forEach( p => {
+            if (p['id-mesa-cliente'] == m['id']) {
+              this.pedidoSelecc = p;
+              this.pedidosproductos.forEach( pp => {
+                if (p['id'] == pp['id-pedido']) {
+                  this.productos.forEach( prod => {
+                    if (prod['id'] == pp['id-producto']) {
+                      this.productosCuenta.push(prod);
+                      this.total += Number.parseInt(prod['precio']);
+                    }
+                  });
                 }
               });
             }
