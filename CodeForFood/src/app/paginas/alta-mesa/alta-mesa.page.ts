@@ -67,7 +67,7 @@ export class AltaMesaPage {
       tipo: this.tipoMesa,
       qr: this.codigoQrMesa,
       foto: this.urlFotoMesa,
-      ocupada: false
+      estado: 'disponible'
     });
   }
 }
