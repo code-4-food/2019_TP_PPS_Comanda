@@ -39,16 +39,28 @@
       <ion-select-option value="delivery">Delivery</ion-select-option>
     </ion-select>
   </ion-item>
+  <ion-item>
+    <ion-label>Foto: </ion-label>
+    <ion-label *ngIf="empleado.foto == ''">Sin subir</ion-label>
+    <ion-label *ngIf="empleado.foto != ''">Subida</ion-label>
+    <ion-thumbnail  *ngIf="empleado.foto != ''">
+      <ion-img [src]="empleado.foto"></ion-img>
+    </ion-thumbnail>
+  </ion-item>
   <br>
   <h3 *ngIf="faltan" class="error">Faltan datos en el registro!</h3>
+  <h3 *ngIf="faltaFoto" class="error">Falta subir foto de usuario!</h3>
   <h3 *ngIf="emailmal" class="error">Ingrese correo válido!</h3>
   <br>
-  <ion-button (click)="LeerQR()" color="danger" expand="block">
-    Cargar con QR del DNI
-  </ion-button>
   
-  <ion-button (click)="Ingresar()" color="danger" expand="block">
-    Sacar foto y Cargar
-  </ion-button>
+    <ion-button (click)="LeerQR()" color="danger" expand="block">
+      Cargar con QR del DNI
+    </ion-button>
+    <ion-button (click)="SacarFoto()" color="danger" expand="block">
+      Sacar foto
+    </ion-button>
+    <ion-button (click)="Ingresar()" color="danger" expand="block">
+      Guardar Usuario
+    </ion-button>
   
 </ion-content>

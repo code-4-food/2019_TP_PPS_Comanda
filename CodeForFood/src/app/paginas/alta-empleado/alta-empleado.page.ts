@@ -14,65 +14,77 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 })
 export class AltaEmpleadoPage implements OnInit {
   public faltan: boolean;
-  public empleado: Empleado = {
-    uid: '',
-    nombre: '',
-    apellido: '',
-    dni: '',
-    cuil: '',
-    mail: '',
-    perfil: '',
-    foto: '',
-    activo: true
-  };
+  public empleado: Empleado;
   public password = '';
   public emailmal: boolean;
+  private imageData: string;
+  public faltaFoto: boolean;
 
   constructor(private camera: Camera, private fotosService: FirestorageService,
     private errorHand: ErrorService, private authService: AuthService,
-    private router: Router, private barcodeScanner: BarcodeScanner) { }
+    private router: Router, private barcodeScanner: BarcodeScanner) {
+      this.empleado  = {
+        uid: '',
+        nombre: '',
+        apellido: '',
+        dni: '',
+        cuil: '',
+        mail: '',
+        perfil: '',
+        foto: '',
+        activo: true
+      };
+      this.password = '';
+    }
 
   ngOnInit() {
   }
-
-  Ingresar() {
+  public SacarFoto() {
+    const camOptions: CameraOptions = {
+      quality: 50,
+      targetWidth: 500,
+      targetHeight: 500,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.ALLMEDIA,
+      sourceType: this.camera.PictureSourceType.CAMERA,
+      correctOrientation: true,
+      saveToPhotoAlbum: true
+    };
+    this.camera.getPicture(camOptions).then( (pictureAux) => {
+      this.imageData = pictureAux;
+      this.fotosService.uploadFotoToFirebase(pictureAux).then( (imageURL) => {
+        this.empleado.foto = imageURL;
+      });
+    }, error => {
+      if (error === 'No Image Selected') {
+        this.errorHand.MostrarErrorSoloLower('No se sacó imágen');
+      } else {
+        this.errorHand.MostrarErrorSoloLower('Error al sacar foto ' + error);
+      }
+      console.log(error);
+    }).catch(err => {
+      console.log(err);
+    });
+  }
+  public Ingresar() {
     this.faltan = false;
     this.emailmal = false;
+    this.faltaFoto = false;
     console.log(this.empleado);
     if (this.empleado.nombre !== '' && this.empleado.apellido !== '' &&
     this.empleado.dni !== '' && this.empleado.cuil !== '' && this.empleado.perfil !== ''
     && this.empleado.mail !== '' && this.password !== '') {
       const emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
       if (emailRegex.test(this.empleado.mail)) {
-        const camOptions: CameraOptions = {
-          quality: 50,
-          destinationType: this.camera.DestinationType.DATA_URL,
-          sourceType: this.camera.PictureSourceType.CAMERA,
-          allowEdit: false,
-          encodingType: this.camera.EncodingType.JPEG,
-          targetWidth: 500,
-          targetHeight: 500,
-          saveToPhotoAlbum: true,
-          correctOrientation: true,
-        };
-        this.camera.getPicture(camOptions).then(async (pictureAux) => {
-          this.fotosService.uploadFotoToFirebase(pictureAux).then(imageURL => {
-            this.empleado.foto = imageURL;
-            this.authService.CrearAuth(this.empleado.mail, this.password, this.empleado, imageURL).then( () => {
-              this.errorHand.MostrarErrorSoloLower('Empleado agregado!');
-              this.router.navigate(['/home']);
-            });
+        if (this.empleado.foto !== '') {
+          this.authService.CrearAuth(this.empleado.mail, this.password, this.empleado, this.imageData).then( () => {
+            this.errorHand.MostrarErrorSoloLower('Empleado agregado!');
+            this.router.navigate(['/home']);
           });
-        }, error => {
-          if (error === 'No Image Selected') {
-            this.errorHand.MostrarErrorSoloLower('No se sacó imágen');
-          } else {
-            this.errorHand.MostrarErrorSoloLower('Error al sacar foto ' + error);
-          }
-          console.log(error);
-        }).catch(err => {
-          console.log(err);
-        });
+        } else {
+          this.faltaFoto = true;
+        }
       } else {
         this.emailmal = true;
       }
@@ -80,7 +92,7 @@ export class AltaEmpleadoPage implements OnInit {
       this.faltan = true;
     }
   }
-  LeerQR() {
+  public LeerQR() {
     this.barcodeScanner.scan().then(barcodeData => {
       try {
         const datos = barcodeData.text.split('@');
