@@ -1,5 +1,6 @@
 export interface Cliente {
     uid: string;
+    id?: string;
     foto: string;
     nombre: string;
     apellido: string;
@@ -14,6 +15,7 @@ export interface Cliente {
 
 export interface Empleado {
     uid: string;
+    id?: string;
     nombre: string;
     apellido: string;
     dni: string;
@@ -25,7 +27,7 @@ export interface Empleado {
 }
 
 export interface Anonimo {
-    uid: string;
+    id?: string;
     foto: string;
     nombre: string;
     perfil: string;

@@ -16,11 +16,12 @@ export class MesasService {
       alert(error);
     });
   }
-  public getMesas() {
-    return this.db.collection('mesas').snapshotChanges().pipe(map((fotos) => {
-      return fotos.map((a) => {
-        const data = a.payload.doc.data() as Mesa;
-        data['id'] = a.payload.doc.id;
+
+  getMesas() {
+    return this.db.collection('mesas').snapshotChanges().pipe(map(mesas => {
+      return mesas.map(mesa => {
+        const data = mesa.payload.doc.data() as Mesa;
+        data.id = mesa.payload.doc.id;
         return data;
       });
     }));

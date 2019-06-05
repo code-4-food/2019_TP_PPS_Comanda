@@ -116,8 +116,10 @@ export class AltaClientePage {
         foto: this.urlFotoUsuario,
         nombre: this.nombreUsuario,
         perfil: 'anonimo'
-      }, this.dataFotoUsuario, this.nombreUsuario).then(() => {
+      }, this.dataFotoUsuario, this.nombreUsuario).then(usuario => {
         alert('Usuario anónimo registrado exitosamente!');
+        this.authService.setAnonimoInLocalStorage(usuario);
+        alert(localStorage.getItem('usuario'));
       }).catch(error => {
         alert('ERROR: ' + error);
       });
