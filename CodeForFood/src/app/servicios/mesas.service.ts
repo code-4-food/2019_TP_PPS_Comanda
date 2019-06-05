@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Mesa } from './../interfaces/mesa';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,5 +15,15 @@ export class MesasService {
     }).catch(error => {
       alert(error);
     });
+  }
+
+  getMesas() {
+    return this.db.collection('mesas').snapshotChanges().pipe(map(mesas => {
+      return mesas.map(mesa => {
+        const data = mesa.payload.doc.data() as Mesa;
+        data.id = mesa.payload.doc.id;
+        return data;
+      });
+    }));
   }
 }
