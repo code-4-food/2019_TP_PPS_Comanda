@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireStorage } from '@angular/fire/storage';
 import { Mesa } from './../interfaces/mesa';
+import { map } from 'rxjs/internal/operators/map';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MesasService {
-  constructor(private db: AngularFirestore, private fireStorage: AngularFireStorage) { }
+  constructor(private db: AngularFirestore) { }
 
   addMesa(mesa: Mesa) {
     this.db.collection('mesas').add(mesa).then(() => {
@@ -15,5 +15,15 @@ export class MesasService {
     }).catch(error => {
       alert(error);
     });
+  }
+
+  getMesas() {
+    return this.db.collection('mesas').snapshotChanges().pipe(map(mesas => {
+      return mesas.map(mesa => {
+        const data = mesa.payload.doc.data() as Mesa;
+        data.id = mesa.payload.doc.id;
+        return data;
+      });
+    }));
   }
 }

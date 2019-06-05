@@ -4,6 +4,7 @@ import { map } from 'rxjs/internal/operators/map';
 import { Pedido, PedidoProducto } from '../interfaces/pedido';
 import { ProductosService } from './productos.service';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,6 +36,16 @@ export class PedidosService {
     }));
   }
 
+  public getPedidosProductos() {
+    return this.firestore.collection('pedido-productos').snapshotChanges().pipe(map((fotos) => {
+      return fotos.map((a) => {
+        const data = a.payload.doc.data();
+        data['id'] = a.payload.doc.id;
+        return data;
+      });
+    }));
+  }
+
   updatePedido(id, pedido){
     this.firestore.doc('pedidos/'+id).update(pedido)
 
@@ -44,4 +55,26 @@ export class PedidosService {
     this.firestore.doc('pedido-productos/'+id).update(pedido)
   }
 
+  public getProductos() {
+    return this.firestore.collection('productos').snapshotChanges().pipe(map((fotos) => {
+      return fotos.map((a) => {
+        const data = a.payload.doc.data();
+        data['id'] = a.payload.doc.id;
+        return data;
+      });
+    }));
+  }
+  public PagarPedido(pedido: Pedido) {
+    return this.firestore.collection('pedidos').ref.where('id', '==', pedido['id']).get().then(async (documento) => {
+      this.firestore.collection('pedidos').doc(pedido['id']).set({
+          comienzo: pedido.comienzo,
+          'id-mesa-cliente': pedido['id-mesa-cliente'],
+          'id-mozo': pedido['id-mozo'],
+          estado: 'pagado'
+      })
+      .catch(err => {
+        console.log('Error al pagar', err);
+      });
+    });
+  }
 }
