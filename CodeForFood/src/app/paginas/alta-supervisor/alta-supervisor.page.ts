@@ -65,6 +65,7 @@ export class AltaSupervisorPage implements OnInit {
       this.faltan = true;
     }
   }
+  
   public SacarFoto() {
     const camOptions: CameraOptions = {
       quality: 50,
@@ -93,6 +94,7 @@ export class AltaSupervisorPage implements OnInit {
       console.log(err);
     });
   }
+  
   public LeerQR() {
     this.barcodeScanner.scan().then(barcodeData => {
       alert(barcodeData.text);

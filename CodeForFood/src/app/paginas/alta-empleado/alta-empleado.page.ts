@@ -71,7 +71,6 @@ export class AltaEmpleadoPage implements OnInit {
     this.faltan = false;
     this.emailmal = false;
     this.faltaFoto = false;
-    console.log(this.empleado);
     if (this.empleado.nombre !== '' && this.empleado.apellido !== '' &&
     this.empleado.dni !== '' && this.empleado.cuil !== '' && this.empleado.perfil !== ''
     && this.empleado.mail !== '' && this.password !== '') {
@@ -94,6 +93,7 @@ export class AltaEmpleadoPage implements OnInit {
   }
   public LeerQR() {
     this.barcodeScanner.scan().then(barcodeData => {
+      alert(barcodeData.text);
       try {
         const datos = barcodeData.text.split('@');
         this.empleado.cuil = datos[0];

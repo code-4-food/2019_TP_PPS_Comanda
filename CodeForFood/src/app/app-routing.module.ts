@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'alta-supervisor',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
   {
@@ -17,8 +17,15 @@ const routes: Routes = [
   },
   { path: 'log-in', loadChildren: './paginas/log-in/log-in.module#LogInPageModule' },
   { path: 'alta-mesa', loadChildren: './paginas/alta-mesa/alta-mesa.module#AltaMesaPageModule' },
-  { path: 'alta-supervisor', loadChildren: './paginas/alta-supervisor/alta-supervisor.module#AltaSupervisorPageModule' },  { path: 'alta-empleado', loadChildren: './paginas/alta-empleado/alta-empleado.module#AltaEmpleadoPageModule' }
-
+  { path: 'alta-supervisor', loadChildren: './paginas/alta-supervisor/alta-supervisor.module#AltaSupervisorPageModule' },
+  { path: 'alta-empleado', loadChildren: './paginas/alta-empleado/alta-empleado.module#AltaEmpleadoPageModule' },
+  { path: 'alta-producto', loadChildren: './paginas/alta-producto/alta-producto.module#AltaProductoPageModule' },
+  { path: 'bar-cocina', loadChildren: './paginas/bar-cocina/bar-cocina.module#BarCocinaPageModule' },
+  { path: 'bar-cocina-aceptados', loadChildren: './paginas/bar-cocina-aceptados/bar-cocina-aceptados.module#BarCocinaAceptadosPageModule' },
+  { path: 'home-comanda', loadChildren: './paginas/home-comanda/home-comanda.module#HomeComandaPageModule' },
+  { path: 'alta-cliente', loadChildren: './paginas/alta-cliente/alta-cliente.module#AltaClientePageModule' },
+  { path: 'cuenta', loadChildren: './paginas/cuenta/cuenta.module#CuentaPageModule' },
+  { path: 'home-cliente', loadChildren: './paginas/home-cliente/home-cliente.module#HomeClientePageModule' },
 
 ];
 

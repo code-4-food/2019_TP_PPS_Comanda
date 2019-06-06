@@ -19,6 +19,11 @@ export class AuthService {
     private fireStorage: AngularFireStorage,
     ) { }
 
+  setAnonimoInLocalStorage(usuario: any) {
+    localStorage.setItem('usuario', JSON.stringify(usuario));
+    alert('Usuario seteado en LS!');
+  }
+
   LogIn(mail, pass) {
     return new Promise((resolve, rejected) => {
       this.AFauth.auth.signInWithEmailAndPassword(mail, pass).then(usuarioLogeado => {
@@ -42,11 +47,6 @@ export class AuthService {
                   break;
                 case 'cliente':
                   this.usuario = obj_element as Cliente;
-                  localStorage.setItem('usuario', JSON.stringify(this.usuario))
-                  resolve(this.usuario)
-                  break;
-                case 'anonimo':
-                  this.usuario = obj_element as Anonimo;
                   localStorage.setItem('usuario', JSON.stringify(this.usuario))
                   resolve(this.usuario)
                   break;
@@ -83,7 +83,7 @@ export class AuthService {
       this.AFauth.auth.createUserWithEmailAndPassword(mail, pass).then(nuevousuario => {
         // let usuarioData = this.TransformarUsuario(usuarioLogeado.user.uid)
         usuario.uid = nuevousuario.user.uid;
-        this.CrearUsuario(usuario, foto).then(ret => {
+        this.CrearUsuario(usuario, foto, usuario.uid).then(ret => {
           this.LogOut()
           resolve(usuario);
         }).catch(err => {
@@ -102,24 +102,20 @@ export class AuthService {
     return JSON.parse(localStorage.getItem('usuario'));
   }
 
-  private CrearUsuario(usuarios, foto) {
+  public CrearUsuario(usuarios, foto, identificador) {
     return new Promise((resolve, rejected) => {
-      this.fireStorage.storage.ref(this.getUid()).putString(foto, 'base64', { contentType: 'image/jpeg' }).then(
-       async () =>{
-        await this.fireStorage.ref(this.getUid()).getDownloadURL().subscribe(downloadLink => {
+      this.fireStorage.storage.ref(identificador).putString(foto, 'base64', { contentType: 'image/jpeg' }).then(
+       async () => {
+        await this.fireStorage.ref(identificador).getDownloadURL().subscribe(downloadLink => {
           usuarios.foto = downloadLink;
           this.firestore.collection('usuarios').add(usuarios).then(ret => {
-            resolve(ret)
+            usuarios.id = ret.id;
+            resolve(usuarios);
           }).catch(err => {
-            rejected(err)
-          })
+            rejected(err);
+          });
         });
-       }
-      )
-    })
-
+      });
+    });
   }
-
-
-
 }

@@ -1,0 +1,43 @@
+ion-card {
+    text-align: center;
+    --background: rgb(229, 229, 229);
+    display: block;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+    height: 50%;
+    
+}
+
+.card-vertical {
+    height: 33.33%;
+    width: 50%;
+    float: left;
+}
+
+.card-horizontal {
+    height: 50%;
+    width: 33.33%;
+    float: left;
+}
+
+ion-ripple-effect {
+    color: #FFFFFF;
+}
+
+.icon-vertical {
+    margin-top: 13.5%;
+}
+
+.icon-horizontal {
+    margin-top: 4%;
+}
+
+h1 {
+    font-size: 60px;
+    font-weight: bold;
+    /*line-height: 0px;*/
+    padding-top: 0;
+    margin-top: 0;
+    color: rgb(0, 0, 0);
+}

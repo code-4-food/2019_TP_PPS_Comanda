@@ -10,7 +10,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit{
-
+  url='';
   constructor(
     private auth:AuthService,
     private publicRouter:Router,
@@ -30,6 +30,10 @@ export class HomePage implements OnInit{
 
   }
 
+  mover(url){
+    console.log(url)
+    this.publicRouter.navigate([url])
+  }
     // tomarFoto(usuario){
     //   let data= {} as Anonimo;
     //   data.nombre='Marcos';
