@@ -22,20 +22,20 @@ export class AltaSupervisorPage implements OnInit {
   public faltaFoto: boolean;
 
   constructor(private camera: Camera, private fotosService: FirestorageService,
-              private errorHand: ErrorService, private authService: AuthService,
-              private router: Router, private barcodeScanner: BarcodeScanner) {
-                this.empleado = {
-                  uid: '',
-                  nombre: '',
-                  apellido: '',
-                  dni: '',
-                  cuil: '',
-                  mail: '',
-                  perfil: '',
-                  foto: '',
-                  activo: true
-                };
-                this.password = '';
+    private errorHand: ErrorService, private authService: AuthService,
+    private router: Router, private barcodeScanner: BarcodeScanner) {
+      this.empleado = {
+        uid: '',
+        nombre: '',
+        apellido: '',
+        dni: '',
+        cuil: '',
+        mail: '',
+        perfil: '',
+        foto: '',
+        activo: true
+      };
+      this.password = '';
   }
 
   ngOnInit() {
