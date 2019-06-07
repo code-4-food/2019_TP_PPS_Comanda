@@ -31,4 +31,19 @@ export class MesasService {
       alert(error);
     });
   }
+
+  entrarListaEspera(uid, nombre){
+    let fecha = new Date();
+    let anio = fecha.getFullYear().toString();
+    let mes = fecha.getMonth().toString()
+    let dia = fecha.getDate().toString()
+    let hora = fecha.getHours().toString()
+    let minuto = fecha.getMinutes().toString()
+
+    this.db.collection('lista-espera').add({
+      nombre: nombre,
+      ingreso: anio+'-'+mes+'-'+dia+'-'+hora+'-'+minuto,
+      cliente: uid
+    }).then(ret=>{console.log(ret)}).catch(err=>{console.log(err)})
+  }
 }

@@ -7,6 +7,7 @@ import { MesasService } from './../../servicios/mesas.service';
 import { Mesa } from './../../interfaces/mesa';
 import { Reserva } from 'src/app/interfaces/reserva';
 import { ReservasService } from 'src/app/servicios/reservas.service';
+import { AuthService } from 'src/app/servicios/auth.service';
 
 @Component({
   selector: 'app-home-cliente',
@@ -20,9 +21,8 @@ export class HomeClientePage {
   public pedido: any;
 
   constructor(private platform: Platform, private barcodeScanner: BarcodeScanner, private reservasService: ReservasService,
-    private mesasService: MesasService, private pedidosService: PedidosService) {
+    private mesasService: MesasService, private pedidosService: PedidosService,private authService: AuthService) {
     this.usuario = JSON.parse(localStorage.getItem('usuario'));
-
     this.mesasService.getMesas().subscribe(mesas => {
       this.mesas = mesas;
     });
@@ -35,6 +35,12 @@ export class HomeClientePage {
   public EscannerQR() {
     this.barcodeScanner.scan().then(resultado => {
       let qrValido = false;
+      if(resultado.text == 'entrar al local'){
+        let cliente = this.authService.getUsuario()
+        alert(cliente['uid'])
+        this.mesasService.entrarListaEspera(cliente['uid'], cliente['nombre'])
+        return
+      }
 
       this.mesas.forEach(async mesa => {
         if (resultado.text === mesa.qr) {
@@ -107,7 +113,7 @@ export class HomeClientePage {
       });
 
       if (!qrValido) {
-        alert('Código QR inválido!');
+        alert(resultado.text);
       }
     });
   }
