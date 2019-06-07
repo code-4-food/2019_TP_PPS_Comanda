@@ -61,13 +61,18 @@ export class AltaMesaPage {
       return;
     }
 
-    this.mesasService.addMesa({
+    this.mesasService.updateMesa({
+      id: this.codigoQrMesa,
       numero: this.numeroMesa,
       espacios: this.cantidadComensales,
       tipo: this.tipoMesa,
       qr: this.codigoQrMesa,
       foto: this.urlFotoMesa,
       estado: 'disponible'
+    }).then(() => {
+      alert('Mesa cargada exitosamente!');
+    }).catch(error => {
+      alert(error);
     });
   }
 }
