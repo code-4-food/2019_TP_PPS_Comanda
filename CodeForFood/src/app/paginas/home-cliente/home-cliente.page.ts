@@ -21,7 +21,7 @@ export class HomeClientePage {
 
   constructor(private platform: Platform, private barcodeScanner: BarcodeScanner, private reservasService: ReservasService,
     private mesasService: MesasService, private pedidosService: PedidosService) {
-    this.usuario = localStorage.getItem('usuario');
+    this.usuario = JSON.parse(localStorage.getItem('usuario'));
 
     this.mesasService.getMesas().subscribe(mesas => {
       this.mesas = mesas;
@@ -50,7 +50,7 @@ export class HomeClientePage {
 
                 this.mesasService.asignarMesa({
                   cerrada: false,
-                  idCliente: this.usuario.id,
+                  idCliente: this.usuario.uid,
                   idMesa: mesa.id,
                   idMozo: '',
                   juegoBebida: false,

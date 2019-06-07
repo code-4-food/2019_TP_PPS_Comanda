@@ -28,6 +28,7 @@ export interface Empleado {
 
 export interface Anonimo {
     id?: string;
+    uid?: string;
     foto: string;
     nombre: string;
     perfil: string;
