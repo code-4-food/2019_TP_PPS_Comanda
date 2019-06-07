@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/internal/operators/map';
-import { resolve, reject } from 'q';
+import { resolve, reject, isRejected } from 'q';
 import { Anonimo, Empleado, Cliente } from '../interfaces/usuario';
 import { Router } from '@angular/router';
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -12,16 +12,24 @@ import { AngularFireStorage } from '@angular/fire/storage';
   providedIn: 'root'
 })
 export class AuthService {
-  usuario:any = false;
+  usuario: any = false;
+
   constructor(
     private AFauth: AngularFireAuth,
     private firestore: AngularFirestore,
     private fireStorage: AngularFireStorage,
     ) { }
 
-  setAnonimoInLocalStorage(usuario: any) {
-    localStorage.setItem('usuario', JSON.stringify(usuario));
-    alert('Usuario seteado en LS!');
+  loginAnonimo(usuario) {
+    return new Promise((resolved, rejected) => {
+      this.AFauth.auth.signInAnonymously().then(usuarioAnonimo => {
+        usuario.uid = usuarioAnonimo.user.uid + usuario.foto;
+        localStorage.setItem('usuario', JSON.stringify(usuario));
+        resolved(usuario);
+      }).catch(error => {
+        rejected(error);
+      });
+    });
   }
 
   LogIn(mail, pass) {
@@ -42,34 +50,34 @@ export class AuthService {
                 case 'delivery':
                 case 'dueño':
                   this.usuario = obj_element as Empleado;
-                  localStorage.setItem('usuario', JSON.stringify(this.usuario))
-                  resolve(this.usuario)
+                  localStorage.setItem('usuario', JSON.stringify(this.usuario));
+                  resolve(this.usuario);
                   break;
                 case 'cliente':
                   this.usuario = obj_element as Cliente;
-                  localStorage.setItem('usuario', JSON.stringify(this.usuario))
-                  resolve(this.usuario)
+                  localStorage.setItem('usuario', JSON.stringify(this.usuario));
+                  resolve(this.usuario);
                   break;
               }
             }
           });
-          if(this.usuario){
-            resolve(this.usuario)
+          if (this.usuario) {
+            resolve(this.usuario);
           }
-          else{
+          else {
             this.LogOut();
-            rejected(this.usuario)
+            rejected(this.usuario);
           }
-
         });
       }).catch(err => {
         this.LogOut();
-        rejected(err)});
+        rejected(err);
+      });
     });
   }
 
   LogOut() {
-    localStorage.removeItem("usuario")
+    localStorage.removeItem('usuario');
     this.AFauth.auth.signOut();
   }
 
@@ -83,34 +91,33 @@ export class AuthService {
       this.AFauth.auth.createUserWithEmailAndPassword(mail, pass).then(nuevousuario => {
         // let usuarioData = this.TransformarUsuario(usuarioLogeado.user.uid)
         usuario.uid = nuevousuario.user.uid;
-        this.CrearUsuario(usuario, foto, usuario.uid).then(ret => {
-          this.LogOut()
+        this.CrearUsuario(usuario, foto).then(ret => {
+          this.LogOut();
           resolve(usuario);
         }).catch(err => {
           this.LogOut();
-          rejected(err)
-        })
+          rejected(err);
+        });
       }).catch(err => rejected(err));
     });
   }
 
-  getUid(){
+  getUid() {
     return this.getUsuario().uid;
   }
 
-  getUsuario(){
+  getUsuario() {
     return JSON.parse(localStorage.getItem('usuario'));
   }
 
-  public CrearUsuario(usuarios, foto, identificador) {
+  public CrearUsuario(usuario, foto) {
     return new Promise((resolve, rejected) => {
-      this.fireStorage.storage.ref(identificador).putString(foto, 'base64', { contentType: 'image/jpeg' }).then(
-       async () => {
-        await this.fireStorage.ref(identificador).getDownloadURL().subscribe(downloadLink => {
-          usuarios.foto = downloadLink;
-          this.firestore.collection('usuarios').add(usuarios).then(ret => {
-            usuarios.id = ret.id;
-            resolve(usuarios);
+      this.fireStorage.storage.ref(usuario.uid).putString(foto, 'base64', { contentType: 'image/jpeg' }).then(async () => {
+        await this.fireStorage.ref(usuario.uid).getDownloadURL().subscribe(downloadLink => {
+          usuario.foto = downloadLink;
+          this.firestore.collection('usuarios').add(usuario).then(ret => {
+            usuario.id = ret.id;
+            resolve(usuario);
           }).catch(err => {
             rejected(err);
           });

@@ -112,14 +112,13 @@ export class AltaClientePage {
       });
     }
     else {
-      this.authService.CrearUsuario({
+      this.authService.loginAnonimo({
         foto: this.urlFotoUsuario,
         nombre: this.nombreUsuario,
         perfil: 'anonimo'
-      }, this.dataFotoUsuario, this.nombreUsuario).then(usuario => {
+      }).then(usuario => {
         alert('Usuario anónimo registrado exitosamente!');
-        this.authService.setAnonimoInLocalStorage(usuario);
-        alert(localStorage.getItem('usuario'));
+        const usuarito = JSON.parse(localStorage.getItem('usuario'));
       }).catch(error => {
         alert('ERROR: ' + error);
       });
