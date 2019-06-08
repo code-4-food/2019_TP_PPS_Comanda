@@ -3,6 +3,8 @@ import { PedidosService } from '../../servicios/pedidos.service';
 import { ProductosService } from '../../servicios/productos.service';
 import { Pedido } from 'src/app/interfaces/pedido';
 import { MesasService } from 'src/app/servicios/mesas.service';
+import { MesaCliente } from 'src/app/interfaces/mesa-cliente';
+import { Mesa } from 'src/app/interfaces/mesa';
 
 @Component({
   selector: 'app-cuenta',
@@ -50,9 +52,9 @@ export class CuentaPage implements OnInit {
             if (p['id-mesa-cliente'] == m['id']) {
               this.pedidoSelecc = p;
               this.pedidosproductos.forEach( pp => {
-                if (p['id'] == pp['id-pedido']) {
+                if (p['id'] == pp['id_pedido']) {
                   this.productos.forEach( prod => {
-                    if (prod['id'] == pp['id-producto']) {
+                    if (prod['id'] == pp['id_producto']) {
                       this.productosCuenta.push(prod);
                       this.total += Number.parseInt(prod['precio']);
                     }
@@ -69,6 +71,16 @@ export class CuentaPage implements OnInit {
   public Pagada() {
     this.pedidosServ.PagarPedido(this.pedidoSelecc).then( data => {
       console.log('pagado');
+    });
+    this.mesasServ.getMesaClientePorID(this.pedidoSelecc.id_mesa_cliente).then( (data) => {
+      let mesaCliente: MesaCliente = data[0];
+      mesaCliente.cerrada = true;
+      this.mesasServ.updateMesaCliente(mesaCliente);
+    });
+    this.mesasServ.getMesaPorID(this.pedidoSelecc.id_mesa).then( (data) => {
+      let mesa: Mesa = data[0];
+      mesa.estado = 'disponible';
+      this.mesasServ.updateMesa(mesa);
     });
   }
 

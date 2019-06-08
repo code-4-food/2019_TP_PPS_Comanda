@@ -4,6 +4,8 @@ import { Producto } from 'src/app/interfaces/producto';
 import { Pedido } from 'src/app/interfaces/pedido';
 import { PedidoProducto } from 'src/app/interfaces/pedido';
 import { PedidosService } from 'src/app/servicios/pedidos.service';
+import { MesasService } from 'src/app/servicios/mesas.service';
+import { AuthService } from 'src/app/servicios/auth.service';
 
 @Component({
   selector: 'app-hacer-pedido',
@@ -20,13 +22,27 @@ export class HacerPedidoPage implements OnInit {
     id_mozo: ''
   };
   private pedidosProductos = [];
+  private mesasClientes = [];
+  private idUsusario = '';
 
-  constructor(private prodServ: ProductosService, private pedidoServ: PedidosService) {
+  constructor(private prodServ: ProductosService, private pedidoServ: PedidosService,
+    private mesaServ: MesasService, private authServ: AuthService) {
     this.prodServ.getProductos().subscribe( (data) => {
       this.productos = data;
       console.log(data);
     });
     this.cantidad = 1;
+    this.idUsusario = this.authServ.getUsuario()['id']
+    this.mesaServ.getMesasClientes().subscribe( (data) => {
+      this.mesasClientes = data;
+      for (let item of this.mesasClientes) {
+        if (item.idCliente == this.idUsusario) {
+          this.pedido.id_mesa_cliente = item.id;
+          this.pedido.id_mozo = item.idMozo;
+          break;
+        }
+      }
+    });
   }
   ngOnInit() {
   }
@@ -39,7 +55,7 @@ export class HacerPedidoPage implements OnInit {
           id_pedido: this.pedido['id'],
           estado: 'esperando',
           id_producto: idProd,
-          id_comanda: '??????'
+          id_comanda: ''
         };
         this.pedidosProductos.push(pedidoProd);
       }
@@ -50,12 +66,14 @@ export class HacerPedidoPage implements OnInit {
       this.pedidoServ.AddPedido(this.pedido).then( (res) => {
         this.pedido['id'] = res['id'];
         console.log(this.pedido);
+        for (const item of this.pedidosProductos) {
+          item.id_pedido = res['id'];
+          this.pedidoServ.AddPedidoProducto(item).then( (res) => {
+            console.log('agregado');
+          });
+        }
       });
-      for (const item of this.pedidosProductos) {
-        this.pedidoServ.AddPedidoProducto(item).then( (res) => {
-          console.log('agregado');
-        });
-      }
+      
     }
   }
   public LeerQR() {

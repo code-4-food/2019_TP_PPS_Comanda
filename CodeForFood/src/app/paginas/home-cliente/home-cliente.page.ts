@@ -7,6 +7,7 @@ import { MesasService } from './../../servicios/mesas.service';
 import { Mesa } from './../../interfaces/mesa';
 import { Reserva } from 'src/app/interfaces/reserva';
 import { ReservasService } from 'src/app/servicios/reservas.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-cliente',
@@ -20,7 +21,7 @@ export class HomeClientePage {
   public pedido: any;
 
   constructor(private platform: Platform, private barcodeScanner: BarcodeScanner, private reservasService: ReservasService,
-    private mesasService: MesasService, private pedidosService: PedidosService) {
+    private mesasService: MesasService, private pedidosService: PedidosService, private router: Router) {
     this.usuario = JSON.parse(localStorage.getItem('usuario'));
 
     this.mesasService.getMesas().subscribe(mesas => {
@@ -50,7 +51,7 @@ export class HomeClientePage {
 
                 this.mesasService.asignarMesa({
                   cerrada: false,
-                  idCliente: this.usuario.uid,
+                  idCliente: this.usuario.id,
                   idMesa: mesa.id,
                   idMozo: '',
                   juegoBebida: false,
@@ -112,7 +113,9 @@ export class HomeClientePage {
     });
   }
 
-  public RealizarPedido() { }
+  public RealizarPedido() {
+    this.router.navigate(['/hacer-pedido']);
+  }
 
   public ConfirmarRecepcion() { }
 
