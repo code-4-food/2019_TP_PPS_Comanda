@@ -26,6 +26,7 @@ const routes: Routes = [
   { path: 'alta-cliente', loadChildren: './paginas/alta-cliente/alta-cliente.module#AltaClientePageModule' },
   { path: 'cuenta', loadChildren: './paginas/cuenta/cuenta.module#CuentaPageModule' },
   { path: 'home-cliente', loadChildren: './paginas/home-cliente/home-cliente.module#HomeClientePageModule' },
+  { path: 'home-metre', loadChildren: './paginas/home-metre/home-metre.module#HomeMetrePageModule' },
 
 ];
 

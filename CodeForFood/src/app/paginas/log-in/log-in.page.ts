@@ -22,7 +22,10 @@ export class LogInPage implements OnInit {
   }
 
   OnSubmitLogIn(){
+    console.log(this.email)
+    console.log(this.password)
     this.auth.LogIn(this.email, this.password).then(res => {
+      console.log(res)
       this.publicRouter.navigate(['/home'])
     }).catch(err =>{
       alert(err)

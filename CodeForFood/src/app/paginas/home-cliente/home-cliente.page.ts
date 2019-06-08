@@ -1,12 +1,14 @@
 import { PedidosService } from './../../servicios/pedidos.service';
 import { Pedido } from 'src/app/interfaces/pedido';
 import { Component } from '@angular/core';
-import { Platform } from '@ionic/angular';
+import { Platform, AlertController } from '@ionic/angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { MesasService } from './../../servicios/mesas.service';
 import { Mesa } from './../../interfaces/mesa';
 import { Reserva } from 'src/app/interfaces/reserva';
 import { ReservasService } from 'src/app/servicios/reservas.service';
+import { AuthService } from 'src/app/servicios/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-cliente',
@@ -20,7 +22,8 @@ export class HomeClientePage {
   public pedido: any;
 
   constructor(private platform: Platform, private barcodeScanner: BarcodeScanner, private reservasService: ReservasService,
-    private mesasService: MesasService, private pedidosService: PedidosService) {
+    private mesasService: MesasService, private pedidosService: PedidosService, private authService: AuthService, private route:Router,
+    public alertController: AlertController) {
     this.usuario = JSON.parse(localStorage.getItem('usuario'));
 
     this.mesasService.getMesas().subscribe(mesas => {
@@ -32,9 +35,88 @@ export class HomeClientePage {
     });
   }
 
+  async presentAlertRadio() {
+    const alert = await this.alertController.create({
+      header: 'Cuantas personas son?',
+      inputs: [
+        {
+          name: 'Uno - - - - - 1',
+          type: 'radio',
+          label: 'Uno - - - - - 1',
+          value: 1,
+          checked: true
+        },
+        {
+          name: 'Dos - - - - - 2',
+          type: 'radio',
+          label: 'Dos - - - - - 2',
+          value: 2
+        },
+        {
+          name: 'Tres - - - - - 3',
+          type: 'radio',
+          label: 'Tres - - - - - 3',
+          value: 3
+        },
+        {
+          name: 'Cuatro - - - - - 4',
+          type: 'radio',
+          label: 'Cuatro - - - - - 4',
+          value: 4
+        },
+        {
+          name: 'Mas de 4',
+          type: 'radio',
+          label: 'Mas de 4',
+          value: '+4'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Ok',
+          handler: (cantidad) => {
+            let cliente = this.authService.getUsuario()
+
+            this.reservasService.entrarListaEspera(cliente['uid'], cliente['nombre'], cantidad)
+
+          }
+        }
+      ]
+    });
+
+      await alert.present();
+  }
+
   public EscannerQR() {
+
     this.barcodeScanner.scan().then(resultado => {
       let qrValido = false;
+      if(resultado.text == 'entrar al local'){
+        let esta_en_espera = false;
+        this.reservasService.getListaEspera().subscribe(esperas=>{
+          esperas.forEach(espera => {
+            if(espera.cliente == this.usuario['uid']){
+              /*
+                Poner aca lo de las encuestas
+              */
+              esta_en_espera = true;
+              return
+            }
+          });
+          if(!esta_en_espera){
+            this.presentAlertRadio().then()
+          }
+        })
+
+        return
+      }
 
       this.mesas.forEach(async mesa => {
         if (resultado.text === mesa.qr) {
@@ -107,7 +189,7 @@ export class HomeClientePage {
       });
 
       if (!qrValido) {
-        alert('Código QR inválido!');
+        alert(resultado.text);
       }
     });
   }
