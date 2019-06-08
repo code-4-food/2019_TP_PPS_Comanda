@@ -12,10 +12,27 @@ export class PedidosService {
 
   constructor(
     private firestore: AngularFirestore,
-    private productosService:ProductosService
+    private productosService: ProductosService
   ) { }
 
-
+  AddPedido(pedido) {
+    return new Promise((resolve, rejected) => {
+      this.firestore.collection('pedidos').add(pedido).then(ret => {
+        resolve(ret);
+      }).catch(err => {
+        rejected(err);
+      });
+    });
+  }
+  AddPedidoProducto(pedidoProducto) {
+    return new Promise((resolve, rejected) => {
+      this.firestore.collection('pedido-productos').add(pedidoProducto).then(ret => {
+        resolve(ret);
+      }).catch(err => {
+        rejected(err);
+      });
+    });
+  }
   getPedidos() {
     return this.firestore.collection('pedidos').snapshotChanges().pipe(map((pedidos) => {
       return pedidos.map((pedido) => {
