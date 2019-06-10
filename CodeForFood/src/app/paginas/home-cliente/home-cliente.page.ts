@@ -90,7 +90,7 @@ export class HomeClientePage {
           handler: (cantidad) => {
             let cliente = this.authService.getUsuario()
 
-            this.reservasService.entrarListaEspera(cliente['id'], cliente['nombre'], cantidad)
+            this.reservasService.entrarListaEspera(cliente['id'], cliente['nombre'], cantidad);
 
           }
         }
@@ -101,25 +101,24 @@ export class HomeClientePage {
   }
 
   public EscannerQR() {
-
     this.barcodeScanner.scan().then(resultado => {
       let qrValido = false;
-      if(resultado.text == 'entrar al local'){
+      if (resultado.text == 'entrar al local') {
         let esta_en_espera = false;
         this.listaEspera.forEach(espera => {
-          if(espera.cliente == this.usuario['id']){
+          if (espera.cliente == this.usuario['id']) {
             /*
               Poner aca lo de las encuestas
             */
             esta_en_espera = true;
-            return
+            return;
           }
         });
-        if(!esta_en_espera){
-          this.presentAlertRadio().then()
+        if (!esta_en_espera) {
+          this.presentAlertRadio().then();
         }
 
-        return
+        return;
       }
 
       this.mesas.forEach(async mesa => {
@@ -155,9 +154,11 @@ export class HomeClientePage {
               alert('Esta mesa se encuentra reservada');
               break;
             case 'realizando pedido':
+              // Verificar si el que escanea el QR tiene la mesa asignada o no
               alert('Ya puede realizar su pedido!');
               break;
             case 'esperando pedido':
+              // Verificar si el que escanea el QR tiene la mesa asignada o no
               // Falta mostrar todo el detalle de cada producto del pedido
               await this.pedidosService.getPedido(mesa.id).then(pedidos => {
                 pedidos.map(pedido => {
@@ -179,12 +180,14 @@ export class HomeClientePage {
 
               break;
             case 'comiendo':
+              // Verificar si el que escanea el QR tiene la mesa asignada o no
               if (confirm('Espero que esté disfrutando su pedido. Desea dejarnos comentarios acerca de su experiencia?')) {
                 // Mostrar encuesta
               }
 
               break;
             case 'esperando cuenta':
+              // Verificar si el que escanea el QR tiene la mesa asignada o no
               if (confirm('Espero que haya disfrutado de su pedido. Desea dejarnos comentarios acerca de su experiencia?')) {
                 // Mostrar encuesta
               }
