@@ -132,7 +132,7 @@ export class HomeClientePage {
 
                 this.mesasService.asignarMesa({
                   cerrada: false,
-                  idCliente: this.usuario.uid,
+                  idCliente: this.usuario.id,
                   idMesa: mesa.id,
                   idMozo: '',
                   juegoBebida: false,
@@ -194,7 +194,9 @@ export class HomeClientePage {
     });
   }
 
-  public RealizarPedido() { }
+  public RealizarPedido() {
+    this.route.navigate(['/hacer-pedido']);
+  }
 
   public ConfirmarRecepcion() { }
 

@@ -14,6 +14,10 @@ export class MesasService {
     return this.db.collection('mesas').doc(mesa.qr).set(mesa);
   }
 
+  updateMesaCliente(mesa: MesaCliente) {
+    return this.db.collection('mesa-cliente').doc(mesa.id).set(mesa);
+  }
+
   getMesas() {
     return this.db.collection('mesas').snapshotChanges().pipe(map(mesas => {
       return mesas.map(mesa => {
@@ -22,6 +26,35 @@ export class MesasService {
         return data;
       });
     }));
+  }
+  getMesaPorID(idMesa: string) {
+    return this.db.collection('mesas').ref.where('id', '==', idMesa).get()
+    .then(async pedidos => {
+       return await pedidos.docs.map(documento => {
+        const data = documento.data() as Mesa;
+        data.id = documento.id;
+        return data;
+      });
+    });
+  }
+  getMesasClientes() {
+    return this.db.collection('mesa-cliente').snapshotChanges().pipe(map(mesas => {
+      return mesas.map(mesa => {
+        const data = mesa.payload.doc.data() as MesaCliente;
+        data.id = mesa.payload.doc.id;
+        return data;
+      });
+    }));
+  }
+  getMesaClientePorID(idMesa: string) {
+    return this.db.collection('mesa-cliente').ref.where('id', '==', idMesa).get()
+    .then(async pedidos => {
+       return await pedidos.docs.map(documento => {
+        const data = documento.data() as MesaCliente;
+        data.id = documento.id;
+        return data;
+      });
+    });
   }
 
   asignarMesa(mesaCliente: MesaCliente) {

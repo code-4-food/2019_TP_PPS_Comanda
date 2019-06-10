@@ -61,9 +61,13 @@ export class BarCocinaPage implements OnInit {
     pedidos.forEach(p => {
       let pedido:any=false
       pedidoproductos.forEach(pp => {
-        if (p['id'] == pp['id-pedido'] && pp['estado'] == 'esperando') {
-          productos.forEach(prod => {
-            if (prod['id'] == pp['id-producto'] && prod['sector'] == this.empleado['perfil']) {
+        if (p['id'] == pp['id_pedido'] && pp['estado'] == 'esperando') {
+              console.log(pp)
+              console.log(p)
+              productos.forEach(prod => {
+            if (prod['id'] == pp['id_producto'] && prod['sector'] == this.empleado['perfil']) {
+              console.log(prod)
+
               if(pedido == false){
                 pedido = {
                   id: p['id'],
@@ -95,7 +99,7 @@ export class BarCocinaPage implements OnInit {
     let array_pedidos = [];
     for (const pp of aux_pedido['pedido_productos']) {
       for (const prod of aux_pedido['productos']) {
-        if(prod['id'] == pp['id-producto'] && prod['sector'] == this.empleado['perfil']){
+        if(prod['id'] == pp['id_producto'] && prod['sector'] == this.empleado['perfil']){
           pp['comanda'] = this.empleado['uid'];
           pp['estado'] = 'preparacion'
           array_pedidos.push(pp)

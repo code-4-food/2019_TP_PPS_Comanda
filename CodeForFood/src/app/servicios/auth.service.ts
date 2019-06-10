@@ -40,6 +40,7 @@ export class AuthService {
         this.GetUsuarios().then(usrs => {
           usrs.forEach(element => {
             let obj_element = element.data();
+            obj_element.id = element.id;
             if (obj_element.activo && obj_element.uid == uid) {
               switch (obj_element.perfil) {
                 case 'bar':
