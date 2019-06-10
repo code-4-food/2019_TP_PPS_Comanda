@@ -20,23 +20,23 @@ export class ReservasService {
     }));
   }
 
-  entrarListaEspera(uid, nombre, cantidad){
-    let fecha = new Date();
-    let anio = fecha.getFullYear().toString();
-    let mes = fecha.getMonth().toString()
-    let dia = fecha.getDate().toString()
-    let hora = fecha.getHours().toString()
-    let minuto = fecha.getMinutes().toString()
+  entrarListaEspera(id, nombre, cantidad) {
+    const fecha = new Date();
+    const anio = fecha.getFullYear().toString();
+    const mes = fecha.getMonth().toString();
+    const dia = fecha.getDate().toString();
+    const hora = fecha.getHours().toString();
+    const minuto = fecha.getMinutes().toString();
 
     this.db.collection('lista-espera').add({
       nombre: nombre,
-      ingreso: anio+'-'+mes+'-'+dia+' '+hora+':'+minuto,
-      cliente: uid,
+      ingreso: anio + '-' + mes + '-' + dia + ' ' + hora + ':' + minuto,
+      cliente: id,
       cantidad: cantidad
-    }).then(ret=>{console.log(ret)}).catch(err=>{console.log(err)})
+    }).then(ret => { console.log(ret); }).catch(err => { console.log(err); });
   }
 
-  getListaEspera(){
+  getListaEspera() {
     return this.db.collection('lista-espera').snapshotChanges().pipe(map(esperas => {
       return esperas.map(espera => {
         const data = espera.payload.doc.data() as Espera;
@@ -46,9 +46,15 @@ export class ReservasService {
     }));
   }
 
-  EliminarListaEspera(id){
-    this.db.doc('lista-espera/'+id).delete().then(ret=>{console.log(ret)});
+  EliminarListaEspera(id) {
+    this.db.doc('lista-espera/' + id).delete().then(ret => { console.log(ret); });
   }
 
-
+  EliminarDeListaEsperaByIdCliente(idCliente: string, listaEspera: Espera[]) {
+    listaEspera.map(espera => {
+      if (espera.cliente === idCliente) {
+        this.db.doc('lista-espera/' + espera.id).delete();
+      }
+    });
+  }
 }

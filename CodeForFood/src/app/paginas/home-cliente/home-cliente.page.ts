@@ -1,3 +1,4 @@
+import { Espera } from './../../interfaces/reserva';
 import { PedidosService } from './../../servicios/pedidos.service';
 import { Pedido } from 'src/app/interfaces/pedido';
 import { Component } from '@angular/core';
@@ -18,6 +19,7 @@ import { Router } from '@angular/router';
 export class HomeClientePage {
   public mesas: Mesa[];
   public reservas: Reserva[];
+  public listaEspera: Espera[];
   public usuario: any;
   public pedido: any;
 
@@ -32,6 +34,10 @@ export class HomeClientePage {
 
     this.reservasService.getReservas().subscribe(reservas => {
       this.reservas = reservas;
+    });
+
+    this.reservasService.getListaEspera().subscribe(listaEspera => {
+      this.listaEspera = listaEspera;
     });
   }
 
@@ -84,7 +90,7 @@ export class HomeClientePage {
           handler: (cantidad) => {
             let cliente = this.authService.getUsuario()
 
-            this.reservasService.entrarListaEspera(cliente['uid'], cliente['nombre'], cantidad)
+            this.reservasService.entrarListaEspera(cliente['id'], cliente['nombre'], cantidad);
 
           }
         }
@@ -95,27 +101,24 @@ export class HomeClientePage {
   }
 
   public EscannerQR() {
-
     this.barcodeScanner.scan().then(resultado => {
       let qrValido = false;
-      if(resultado.text == 'entrar al local'){
+      if (resultado.text == 'entrar al local') {
         let esta_en_espera = false;
-        this.reservasService.getListaEspera().subscribe(esperas=>{
-          esperas.forEach(espera => {
-            if(espera.cliente == this.usuario['uid']){
-              /*
-                Poner aca lo de las encuestas
-              */
-              esta_en_espera = true;
-              return
-            }
-          });
-          if(!esta_en_espera){
-            this.presentAlertRadio().then()
+        this.listaEspera.forEach(espera => {
+          if (espera.cliente == this.usuario['id']) {
+            /*
+              Poner aca lo de las encuestas
+            */
+            esta_en_espera = true;
+            return;
           }
-        })
+        });
+        if (!esta_en_espera) {
+          this.presentAlertRadio().then();
+        }
 
-        return
+        return;
       }
 
       this.mesas.forEach(async mesa => {
@@ -130,7 +133,7 @@ export class HomeClientePage {
                   alert(error);
                 });
 
-                this.mesasService.asignarMesa({
+                await this.mesasService.asignarMesa({
                   cerrada: false,
                   idCliente: this.usuario.id,
                   idMesa: mesa.id,
@@ -140,6 +143,8 @@ export class HomeClientePage {
                   juegoPostre: false,
                   propina: 0
                 });
+
+                this.reservasService.EliminarDeListaEsperaByIdCliente(this.usuario.id, this.listaEspera);
               }
 
               break;
@@ -149,9 +154,11 @@ export class HomeClientePage {
               alert('Esta mesa se encuentra reservada');
               break;
             case 'realizando pedido':
+              // Verificar si el que escanea el QR tiene la mesa asignada o no
               alert('Ya puede realizar su pedido!');
               break;
             case 'esperando pedido':
+              // Verificar si el que escanea el QR tiene la mesa asignada o no
               // Falta mostrar todo el detalle de cada producto del pedido
               await this.pedidosService.getPedido(mesa.id).then(pedidos => {
                 pedidos.map(pedido => {
@@ -173,12 +180,14 @@ export class HomeClientePage {
 
               break;
             case 'comiendo':
+              // Verificar si el que escanea el QR tiene la mesa asignada o no
               if (confirm('Espero que esté disfrutando su pedido. Desea dejarnos comentarios acerca de su experiencia?')) {
                 // Mostrar encuesta
               }
 
               break;
             case 'esperando cuenta':
+              // Verificar si el que escanea el QR tiene la mesa asignada o no
               if (confirm('Espero que haya disfrutado de su pedido. Desea dejarnos comentarios acerca de su experiencia?')) {
                 // Mostrar encuesta
               }
