@@ -1,3 +1,4 @@
+import { Espera } from './../../interfaces/reserva';
 import { PedidosService } from './../../servicios/pedidos.service';
 import { Pedido } from 'src/app/interfaces/pedido';
 import { Component } from '@angular/core';
@@ -18,6 +19,7 @@ import { Router } from '@angular/router';
 export class HomeClientePage {
   public mesas: Mesa[];
   public reservas: Reserva[];
+  public listaEspera: Espera[];
   public usuario: any;
   public pedido: any;
 
@@ -32,6 +34,10 @@ export class HomeClientePage {
 
     this.reservasService.getReservas().subscribe(reservas => {
       this.reservas = reservas;
+    });
+
+    this.reservasService.getListaEspera().subscribe(listaEspera => {
+      this.listaEspera = listaEspera;
     });
   }
 
@@ -84,7 +90,7 @@ export class HomeClientePage {
           handler: (cantidad) => {
             let cliente = this.authService.getUsuario()
 
-            this.reservasService.entrarListaEspera(cliente['uid'], cliente['nombre'], cantidad)
+            this.reservasService.entrarListaEspera(cliente['id'], cliente['nombre'], cantidad)
 
           }
         }
@@ -100,20 +106,18 @@ export class HomeClientePage {
       let qrValido = false;
       if(resultado.text == 'entrar al local'){
         let esta_en_espera = false;
-        this.reservasService.getListaEspera().subscribe(esperas=>{
-          esperas.forEach(espera => {
-            if(espera.cliente == this.usuario['uid']){
-              /*
-                Poner aca lo de las encuestas
-              */
-              esta_en_espera = true;
-              return
-            }
-          });
-          if(!esta_en_espera){
-            this.presentAlertRadio().then()
+        this.listaEspera.forEach(espera => {
+          if(espera.cliente == this.usuario['id']){
+            /*
+              Poner aca lo de las encuestas
+            */
+            esta_en_espera = true;
+            return
           }
-        })
+        });
+        if(!esta_en_espera){
+          this.presentAlertRadio().then()
+        }
 
         return
       }
@@ -130,7 +134,7 @@ export class HomeClientePage {
                   alert(error);
                 });
 
-                this.mesasService.asignarMesa({
+                await this.mesasService.asignarMesa({
                   cerrada: false,
                   idCliente: this.usuario.id,
                   idMesa: mesa.id,
@@ -140,6 +144,8 @@ export class HomeClientePage {
                   juegoPostre: false,
                   propina: 0
                 });
+
+                this.reservasService.EliminarDeListaEsperaByIdCliente(this.usuario.id, this.listaEspera);
               }
 
               break;
