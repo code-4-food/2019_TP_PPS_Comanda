@@ -20,12 +20,14 @@ export class AuthService {
     private fireStorage: AngularFireStorage,
     ) { }
 
-  loginAnonimo(usuario) {
+  loginAnonimo(usuario, foto) {
     return new Promise((resolved, rejected) => {
       this.AFauth.auth.signInAnonymously().then(usuarioAnonimo => {
-        usuario.uid = usuarioAnonimo.user.uid + usuario.foto;
-        localStorage.setItem('usuario', JSON.stringify(usuario));
-        resolved(usuario);
+        usuario.uid = usuarioAnonimo.user.uid;
+        this.CrearUsuario(usuario, foto).then(usr => {
+          localStorage.setItem('usuario', JSON.stringify(usr));
+          resolved(usr);
+        });
       }).catch(error => {
         rejected(error);
       });

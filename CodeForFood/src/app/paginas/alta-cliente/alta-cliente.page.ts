@@ -100,12 +100,9 @@ export class AltaClientePage {
         apellido: this.apellidoUsuario,
         mail: this.correoUsuario,
         dni: this.dniUsuario,
-        genero: '',
-        nacimiento: '',
-        nacionalidad: '',
         activo: false,
         perfil: 'cliente'
-      }, this.dataFotoUsuario).then(() => {
+      }, this.dataFotoUsuario).then(usuario => {
         alert('Usuario registrado exitosamente!');
       }).catch(error => {
         alert('ERROR: ' + error);
@@ -116,9 +113,8 @@ export class AltaClientePage {
         foto: this.urlFotoUsuario,
         nombre: this.nombreUsuario,
         perfil: 'anonimo'
-      }).then(usuario => {
+      }, this.dataFotoUsuario).then(usuario => {
         alert('Usuario anónimo registrado exitosamente!');
-        const usuarito = JSON.parse(localStorage.getItem('usuario'));
       }).catch(error => {
         alert('ERROR: ' + error);
       });
