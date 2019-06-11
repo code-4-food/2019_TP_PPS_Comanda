@@ -37,6 +37,7 @@ export class MesasService {
       });
     });
   }
+
   getMesasClientes() {
     return this.db.collection('mesa-cliente').snapshotChanges().pipe(map(mesas => {
       return mesas.map(mesa => {
@@ -64,5 +65,4 @@ export class MesasService {
       alert(error);
     });
   }
-
 }

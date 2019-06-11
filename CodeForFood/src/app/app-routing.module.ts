@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'alta-supervisor',
     pathMatch: 'full'
   },
   {
@@ -30,6 +30,7 @@ const routes: Routes = [
   { path: 'home-metre', loadChildren: './paginas/home-metre/home-metre.module#HomeMetrePageModule' },
 
 ];
+
 
 @NgModule({
   imports: [
