@@ -8,4 +8,5 @@ export interface Producto {
     foto_3:any;
     qr:string;
     sector:string;
+    id:string;
 }

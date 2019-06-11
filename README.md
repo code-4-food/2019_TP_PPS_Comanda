@@ -30,3 +30,38 @@ Registrate en: https://forms.gle/yZ8xsdWj7W7ECWAG8
 - git status
 - git diff
 - git add **archivos a agregar**
+
+# Trabajo de Integrantes:
+
+## Marcos Ivan Rey:
+
+| Branch | Descripcion del trabajo | Fecha Finalizacion |
+|---|---|---|
+| organizacion-proyecto | Creacion de servicion (sin funcionalidad), interfaces y paginas para empezar a trabajar. Esqueleto del proyecto | 17/5 |
+| CFF-35/Crear-Auth-Service | Log In y auth service para creacion de usuarios | 25/5 |
+| CFF-2/Alta-producto | Creacion de un producto | 30/5 |
+| tomar-aceptar-pedidos | Bar o Cocina aceptan un pedido o lo terminan + el home (falta darle detalles) | 05/6 |
+| entrada-local-lista-espera | Agregarce a la lista de espera Y el metre puede ver la lista de espera | 07/6 |
+
+
+## Micaela Saez:
+
+| Branch | Descripcion del trabajo | Fecha Finalizacion |
+|---|---|---|
+| CFF-4-alta-empleados | Registro de empleado, dueño y supervisor | 28/5 |
+| cuenta | Cuenta de la mesa / cerrar mesa | 05/6 |
+| hacer-pedido | Hacer pedido | - - |
+
+## Ezequiel Mahafud:
+
+| Branch | Descripcion del trabajo | Fecha Finalizacion |
+|---|---|---|
+| Alta-mesa | Registro una nueva mesa | 26/5 |
+| Firestorage-service | Arregla errores por el merge de la rama 'Alta-mesa' | 26/5 |
+| Fix-app-module | Arregla errores por el merge de la rama 'Alta-mesa' | 26/5 |
+| Alta-cliente | Registro de Cliente | 03/6 |
+| Fix-routing | Arreglar al app.routing | 03/6 |
+| Home-cliente | Creacion del inicio para el cliente | 05/6 |
+| Scanner-mesa | Logica para el qr de la mesa | 07/6 |
+| Auth-anonimo | Registrar cliente anonimo | 07/6 |
+
