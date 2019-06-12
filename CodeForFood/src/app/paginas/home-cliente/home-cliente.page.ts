@@ -221,7 +221,9 @@ export class HomeClientePage {
 
   public PedirCuenta() { }
 
-  public RealizarReserva() { }
+  public RealizarReserva() { 
+    this.route.navigate(['/solicitar-reserva']);
+  }
 
   public Jugar() { }
 }

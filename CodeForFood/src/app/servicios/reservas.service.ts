@@ -20,6 +20,16 @@ export class ReservasService {
     }));
   }
 
+  addReserva(reserva: Reserva) {
+    return new Promise((resolve, rejected) => {
+      this.db.collection('reservas').add(reserva).then(ret => {
+        resolve(ret);
+      }).catch(err => {
+        rejected(err);
+      });
+    });
+  }
+
   entrarListaEspera(id, nombre, cantidad) {
     const fecha = new Date();
     const anio = fecha.getFullYear().toString();
