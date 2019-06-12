@@ -18,11 +18,23 @@ export class SolicitarReservaPage {
   public fechaReserva: string;
   public horaReserva: string;
   public usuario: Cliente;
+  public verMisReservas: boolean;
 
   constructor(private mesasService: MesasService, private reservasService: ReservasService) {
-    this.mesasService.getMesas().subscribe(mesas => { this.mesas = mesas; });
-    this.reservasService.getReservas().subscribe(reservas => { this.reservas = reservas; });
+    this.verMisReservas = true;
+    this.misReservas = [];
     this.usuario = JSON.parse(localStorage.getItem('usuario'));
+    this.mesasService.getMesas().subscribe(mesas => { this.mesas = mesas; });
+    this.reservasService.getReservas().subscribe(reservas => {
+      this.reservas = reservas;
+      this.misReservas = [];
+
+      this.reservas.forEach(reserva => {
+        if (reserva.idCliente === this.usuario.id) {
+          this.misReservas.push(reserva);
+        }
+      });
+    });
   }
 
   solicitarReserva() {
@@ -65,5 +77,9 @@ export class SolicitarReservaPage {
         alert(error);
       });
     }
+  }
+
+  public dejarDeVerMisReservas() {
+    this.verMisReservas = false;
   }
 }

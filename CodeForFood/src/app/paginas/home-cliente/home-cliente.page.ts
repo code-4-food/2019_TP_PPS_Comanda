@@ -174,11 +174,17 @@ export class HomeClientePage {
                     this.pedido = pedido;
 
                     switch (pedido.estado) {
+                      case 'sconfirmar':
+                        alert('Su pedido se encuentra pendiente de confirmación del mozo');
+                        break;
                       case 'preparacion':
                         alert('Su pedido se encuentra en preparación');
                         break;
-                      case 'finalizado':
+                      case 'terminado':
                         alert('Su pedido ya fue preparado y el mozo está por llevarselo a su mesa');
+                        break;
+                      case 'entregadosconfirmar':
+                        alert('Su pedido ya fue entregado y necesita su confirmación');
                         break;
                       case 'entregado':
                         alert('Su pedido ya fue entregado');
