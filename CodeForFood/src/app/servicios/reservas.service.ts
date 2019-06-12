@@ -20,6 +20,30 @@ export class ReservasService {
     }));
   }
 
+  getReservasPendientes() {
+    return this.db.collection('reservas', ref => ref.where('estado', '==', 'pendiente')).snapshotChanges().pipe(map(reservas => {
+      return reservas.map(reserva => {
+        const data = reserva.payload.doc.data() as Reserva;
+        data.id = reserva.payload.doc.id;
+        return data;
+      });
+    }));
+  }
+
+  addReserva(reserva: Reserva) {
+    return new Promise((resolve, rejected) => {
+      this.db.collection('reservas').add(reserva).then(ret => {
+        resolve(ret);
+      }).catch(err => {
+        rejected(err);
+      });
+    });
+  }
+
+  updateReserva(reserva: Reserva) {
+    return this.db.collection('reservas').doc(reserva.id).set(reserva);
+  }
+
   entrarListaEspera(id, nombre, cantidad) {
     const fecha = new Date();
     const anio = fecha.getFullYear().toString();
