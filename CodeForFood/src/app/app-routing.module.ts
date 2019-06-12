@@ -28,6 +28,7 @@ const routes: Routes = [
   { path: 'home-cliente', loadChildren: './paginas/home-cliente/home-cliente.module#HomeClientePageModule' },
   { path: 'hacer-pedido', loadChildren: './paginas/hacer-pedido/hacer-pedido.module#HacerPedidoPageModule' },
   { path: 'home-metre', loadChildren: './paginas/home-metre/home-metre.module#HomeMetrePageModule' },  { path: 'solicitar-reserva', loadChildren: './paginas/solicitar-reserva/solicitar-reserva.module#SolicitarReservaPageModule' },
+  { path: 'confirmar-reserva', loadChildren: './paginas/confirmar-reserva/confirmar-reserva.module#ConfirmarReservaPageModule' },
 
 
 ];
