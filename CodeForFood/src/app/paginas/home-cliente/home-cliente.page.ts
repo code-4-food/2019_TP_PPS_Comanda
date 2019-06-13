@@ -25,7 +25,6 @@ export class HomeClientePage {
   public usuario: any;
   public pedido: any;
   private pedidos = [];
-  private mesasClientes = [];
 
   constructor(private platform: Platform, private barcodeScanner: BarcodeScanner, private reservasService: ReservasService,
     private mesasService: MesasService, private pedidosService: PedidosService, private authService: AuthService, private route:Router,
@@ -38,9 +37,6 @@ export class HomeClientePage {
     this.reservasService.getListaEspera().subscribe(listaEspera => { this.listaEspera = listaEspera; });
     this.pedidosService.getPedidos().subscribe( (data) => {
       this.pedidos = data;
-    });
-    this.mesasService.getMesasClientes().subscribe( (data) => {
-      this.mesasClientes = data;
     });
   }
 
