@@ -17,9 +17,8 @@ export class HacerPedidoPage implements OnInit {
   public cantidad: number;
   private pedido = {
     comienzo: (new Date()).toString(),
-    estado: 'preparacion',
-    id_mesa_cliente: '',
-    id_mozo: ''
+    estado: 'sconfirmar',
+    id_mesa_cliente: ''
   };
   private pedidosProductos = [];
   private mesasClientes = [];
@@ -32,13 +31,13 @@ export class HacerPedidoPage implements OnInit {
       console.log(data);
     });
     this.cantidad = 1;
-    this.idUsusario = this.authServ.getUsuario()['id']
+    this.idUsusario = this.authServ.getUsuario()['id'];
     this.mesaServ.getMesasClientes().subscribe( (data) => {
       this.mesasClientes = data;
-      for (let item of this.mesasClientes) {
-        if (item.idCliente == this.idUsusario) {
+      for (const item of this.mesasClientes) {
+        if (item.idCliente === this.idUsusario) {
           this.pedido.id_mesa_cliente = item.id;
-          this.pedido.id_mozo = item.idMozo;
+          // console.log('encontro id mesa cliente', this.pedido);
           break;
         }
       }
@@ -53,7 +52,7 @@ export class HacerPedidoPage implements OnInit {
       for (let index = 0; index < this.cantidad; index++) {
         const pedidoProd = {
           id_pedido: this.pedido['id'],
-          estado: 'esperando',
+          estado: 'sconfirmar',
           id_producto: idProd,
           id_comanda: ''
         };
@@ -72,8 +71,8 @@ export class HacerPedidoPage implements OnInit {
             console.log('agregado');
           });
         }
+        // router.navigate
       });
-      
     }
   }
   public LeerQR() {

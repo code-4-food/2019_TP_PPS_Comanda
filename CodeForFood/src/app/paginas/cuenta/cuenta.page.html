@@ -5,11 +5,11 @@
 </ion-header>
 
 <ion-content>
-  <div>
+  <div *ngIf="esMozo">
     <ion-label>Mesas con pedidos:</ion-label>
     <ion-select [(ngModel)]="id" placeholder="Seleccione mesa">
-      <ng-container  *ngFor="let item of mesas">
-        <ion-select-option>{{item.numero}}</ion-select-option>
+      <ng-container *ngFor="let item of mesasClientes">
+        <ion-select-option *ngIf="!item.cerrada">{{item.idMesa}}</ion-select-option>
       </ng-container>
     </ion-select>
     <ion-button color="danger" (click)="CargarCuenta()">Cargar Cuenta</ion-button>
@@ -30,6 +30,17 @@
     </table>
     <br>
     <h1>Total: {{total}}</h1>
-    <ion-button color="danger" expand="block" (click)="Pagada()">Pagar</ion-button>
+    <br>
+    <ion-button *ngIf="empleado.perfil == 'cliente'" (click)="Propina()">Sumar Propina</ion-button>
+    <ng-container *ngIf="empleado.perfil != 'cliente'">
+      <ion-item *ngIf="propina == 0 && total != 0">
+        <h2>Falta ingresar la propina!</h2>
+      </ion-item>
+      <ion-item *ngIf="propina != 0">
+        <ion-item>
+          <ion-button color="danger" expand="block" (click)="Pagada()">Pagada</ion-button>
+        </ion-item>  
+      </ion-item>  
+    </ng-container>    
   </div>
 </ion-content>
