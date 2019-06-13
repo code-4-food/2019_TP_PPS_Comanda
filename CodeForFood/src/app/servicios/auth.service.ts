@@ -18,7 +18,21 @@ export class AuthService {
     private AFauth: AngularFireAuth,
     private firestore: AngularFirestore,
     private fireStorage: AngularFireStorage,
-    ) { }
+  ) { }
+
+  loginAnonimo(usuario, foto) {
+    return new Promise((resolved, rejected) => {
+      this.AFauth.auth.signInAnonymously().then(usuarioAnonimo => {
+        usuario.uid = usuarioAnonimo.user.uid;
+        this.CrearUsuario(usuario, foto).then(usr => {
+          localStorage.setItem('usuario', JSON.stringify(usr));
+          resolved(usr);
+        });
+      }).catch(error => {
+        rejected(error);
+      });
+    });
+  }
 
   loginAnonimo(usuario, foto) {
     return new Promise((resolved, rejected) => {
@@ -84,7 +98,7 @@ export class AuthService {
     this.AFauth.auth.signOut();
   }
 
-  private GetUsuarios() {
+  GetUsuarios() {
     this.AFauth.auth.currentUser
     return this.firestore.collection('usuarios').get().toPromise();
   }
@@ -127,5 +141,8 @@ export class AuthService {
         });
       });
     });
+  }
+  ModificarUsuario(cliente: Cliente) {
+    this.firestore.doc('usuarios/' + cliente.id).update(cliente)
   }
 }

@@ -97,6 +97,7 @@ export class PedidosService {
           comienzo: pedido.comienzo,
           id_mesa_cliente: pedido.id_mesa_cliente,
           id_mozo: pedido.id_mozo,
+
           estado: 'pagado'
       })
       .catch(err => {

@@ -23,4 +23,8 @@ export class HomeMetrePage implements OnInit {
     this.reservasService.EliminarListaEspera(id);
   }
 
+  AltaCliente(){
+    this.route.navigate(['alta-cliente'])
+  }
+
 }
