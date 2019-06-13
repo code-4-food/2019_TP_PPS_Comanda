@@ -34,20 +34,6 @@ export class AuthService {
     });
   }
 
-  loginAnonimo(usuario, foto) {
-    return new Promise((resolved, rejected) => {
-      this.AFauth.auth.signInAnonymously().then(usuarioAnonimo => {
-        usuario.uid = usuarioAnonimo.user.uid;
-        this.CrearUsuario(usuario, foto).then(usr => {
-          localStorage.setItem('usuario', JSON.stringify(usr));
-          resolved(usr);
-        });
-      }).catch(error => {
-        rejected(error);
-      });
-    });
-  }
-
   LogIn(mail, pass) {
     return new Promise((resolve, rejected) => {
       this.AFauth.auth.signInWithEmailAndPassword(mail, pass).then(usuarioLogeado => {
