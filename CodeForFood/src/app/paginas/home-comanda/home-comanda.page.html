@@ -1,8 +1,13 @@
 <ion-content>
-  <ion-card class="mitad" (click)="this.Mover('bar-cocina')">
-    <h1>Aceptar Pedidos</h1>
+  <ion-card class="ion-activatable" (click)="this.Mover('bar-cocina')">
+    <ion-ripple-effect></ion-ripple-effect>
+    <ion-icon name="logo-usd"></ion-icon>
+    <h2>Aceptar Pedidos</h2>
   </ion-card>
-  <ion-card class="mitad" (click)="this.Mover('bar-cocina-aceptados')">
-    <h1>Mis Pedidos</h1>
+
+  <ion-card class="ion-activatable" (click)="this.Mover('bar-cocina-aceptados')">
+    <ion-ripple-effect></ion-ripple-effect>
+    <ion-icon name="restaurant"></ion-icon>
+    <h2>Mis Pedidos</h2>
   </ion-card>
 </ion-content>
