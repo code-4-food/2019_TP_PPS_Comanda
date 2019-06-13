@@ -38,4 +38,10 @@ export class LogInPage implements OnInit {
     this.email=usr;
     this.password = password;
   }
+
+  Registrarse(){
+    this.publicRouter.navigate(['alta-cliente'])
+
+    
+  }
 }
