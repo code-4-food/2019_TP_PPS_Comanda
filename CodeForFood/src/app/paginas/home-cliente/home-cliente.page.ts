@@ -1,3 +1,4 @@
+import { MesaCliente } from './../../interfaces/mesa-cliente';
 import { Espera } from './../../interfaces/reserva';
 import { PedidosService } from './../../servicios/pedidos.service';
 import { Pedido } from 'src/app/interfaces/pedido';
@@ -20,6 +21,7 @@ export class HomeClientePage {
   public mesas: Mesa[];
   public reservas: Reserva[];
   public listaEspera: Espera[];
+  public mesasClientes: MesaCliente[];
   public usuario: any;
   public pedido: any;
 
@@ -28,17 +30,10 @@ export class HomeClientePage {
     public alertController: AlertController) {
     this.usuario = JSON.parse(localStorage.getItem('usuario'));
 
-    this.mesasService.getMesas().subscribe(mesas => {
-      this.mesas = mesas;
-    });
-
-    this.reservasService.getReservas().subscribe(reservas => {
-      this.reservas = reservas;
-    });
-
-    this.reservasService.getListaEspera().subscribe(listaEspera => {
-      this.listaEspera = listaEspera;
-    });
+    this.mesasService.getMesas().subscribe(mesas => { this.mesas = mesas; });
+    this.mesasService.getMesasClientes().subscribe(mesasClientes => { this.mesasClientes = mesasClientes; });
+    this.reservasService.getReservas().subscribe(reservas => { this.reservas = reservas; });
+    this.reservasService.getListaEspera().subscribe(listaEspera => { this.listaEspera = listaEspera; });
   }
 
   async presentAlertRadio() {
@@ -103,6 +98,8 @@ export class HomeClientePage {
   public EscannerQR() {
     this.barcodeScanner.scan().then(resultado => {
       let qrValido = false;
+      let mesaOcupada = false;
+
       if (resultado.text == 'entrar al local') {
         let esta_en_espera = false;
         this.listaEspera.forEach(espera => {
@@ -125,74 +122,91 @@ export class HomeClientePage {
         if (resultado.text === mesa.qr) {
           qrValido = true;
 
-          switch (mesa.estado) {
-            case 'disponible':
-              if (confirm('La mesa se encuentra disponible! Desea solicitar esta mesa?')) {
-                mesa.estado = 'realizando pedido';
-                await this.mesasService.updateMesa(mesa).catch(error => {
-                  alert(error);
-                });
-
-                await this.mesasService.asignarMesa({
-                  cerrada: false,
-                  idCliente: this.usuario.id,
-                  idMesa: mesa.id,
-                  idMozo: '',
-                  juegoBebida: false,
-                  juegoDescuento: false,
-                  juegoPostre: false,
-                  propina: 0
-                });
-
-                this.reservasService.EliminarDeListaEsperaByIdCliente(this.usuario.id, this.listaEspera);
+          if (mesa.estado !== 'disponible') {
+            this.mesasClientes.map(mesaCliente => {
+              if (mesaCliente.idMesa === mesa.id && mesaCliente.cerrada === false) {
+                if (mesaCliente.idCliente !== this.usuario.id) {
+                  alert('Esta mesa se encuentra ocupada');
+                  mesaOcupada = true;
+                }
               }
+            });
+          }
 
-              break;
-            case 'reservada':
-              // Falta verificar si hay una reserva en los próximos 40 minutos de esta mesa
-              // Si hay reserva, verificar si está a nombre del usuario que scanea el código
-              alert('Esta mesa se encuentra reservada');
-              break;
-            case 'realizando pedido':
-              // Verificar si el que escanea el QR tiene la mesa asignada o no
-              alert('Ya puede realizar su pedido!');
-              break;
-            case 'esperando pedido':
-              // Verificar si el que escanea el QR tiene la mesa asignada o no
-              // Falta mostrar todo el detalle de cada producto del pedido
-              await this.pedidosService.getPedido(mesa.id).then(pedidos => {
-                pedidos.map(pedido => {
-                  this.pedido = pedido;
+          if (mesaOcupada === false) {
+            switch (mesa.estado) {
+              case 'disponible':
+                let mesaDisponible = true;
 
-                  switch (pedido.estado) {
-                    case 'preparacion':
-                      alert('Su pedido se encuentra en preparación');
-                      break;
-                    case 'finalizado':
-                      alert('Su pedido ya fue preparado y el mozo está por llevarselo a su mesa');
-                      break;
-                    case 'entregado':
-                      alert('Su pedido ya fue entregado');
-                      break;
+                this.reservas.forEach(reserva => {
+                  const milisegundosReserva = JSON.parse(JSON.stringify(reserva.fecha)).seconds * 1000;
+                  const milisegundosActuales = Date.now();
+
+                  if (reserva.estado === 'confirmada' && reserva.idMesa === mesa.id) {
+                    // Si faltan menos de 40 minutos para la reserva o todavía no pasaron 15 de la misma
+                    if ((milisegundosReserva - 2400000) <= milisegundosActuales &&
+                    (milisegundosReserva + 900000) >= milisegundosActuales) {
+                      mesaDisponible = false;
+
+                      if (reserva.idCliente === this.usuario.id) {
+                        this.solicitarMesa(mesa, `Bienvenido a su mesa ${this.usuario.nombre} ${this.usuario.apellido}! ` +
+                        'Pulse OK para confirmar su llegada');
+                      }
+                      else {
+                        alert('Esta mesa se encuentra reservada');
+                      }
+                    }
                   }
                 });
-              });
 
-              break;
-            case 'comiendo':
-              // Verificar si el que escanea el QR tiene la mesa asignada o no
-              if (confirm('Espero que esté disfrutando su pedido. Desea dejarnos comentarios acerca de su experiencia?')) {
-                // Mostrar encuesta
-              }
+                if (mesaDisponible) {
+                  this.solicitarMesa(mesa, 'La mesa se encuentra disponible! Desea solicitar esta mesa?');
+                }
 
-              break;
-            case 'esperando cuenta':
-              // Verificar si el que escanea el QR tiene la mesa asignada o no
-              if (confirm('Espero que haya disfrutado de su pedido. Desea dejarnos comentarios acerca de su experiencia?')) {
-                // Mostrar encuesta
-              }
+                break;
+              case 'realizando pedido':
+                alert('Ya puede realizar su pedido!');
+                break;
+              case 'esperando pedido':
+                // Falta mostrar todo el detalle de cada producto del pedido
+                await this.pedidosService.getPedido(mesa.id).then(pedidos => {
+                  pedidos.map(pedido => {
+                    this.pedido = pedido;
 
-              break;
+                    switch (pedido.estado) {
+                      case 'sconfirmar':
+                        alert('Su pedido se encuentra pendiente de confirmación del mozo');
+                        break;
+                      case 'preparacion':
+                        alert('Su pedido se encuentra en preparación');
+                        break;
+                      case 'terminado':
+                        alert('Su pedido ya fue preparado y el mozo está por llevarselo a su mesa');
+                        break;
+                      case 'entregadosconfirmar':
+                        alert('Su pedido ya fue entregado y necesita su confirmación');
+                        break;
+                      case 'entregado':
+                        alert('Su pedido ya fue entregado');
+                        break;
+                    }
+                  });
+                });
+
+                break;
+              case 'comiendo':
+                if (confirm('Espero que esté disfrutando su pedido. Desea dejarnos comentarios acerca de su experiencia?')) {
+                  // Mostrar encuesta
+                }
+
+                break;
+              case 'esperando cuenta':
+                if (confirm('Espero que haya disfrutado de su pedido. Desea dejarnos comentarios acerca de su experiencia?')) {
+                  // Mostrar encuesta
+                }
+
+                break;
+            }
           }
         }
       });
@@ -203,6 +217,28 @@ export class HomeClientePage {
     });
   }
 
+  private async solicitarMesa(mesa, mensaje: string) {
+    if (confirm(mensaje)) {
+      mesa.estado = 'realizando pedido';
+      await this.mesasService.updateMesa(mesa).catch(error => {
+        alert(error);
+      });
+
+      await this.mesasService.asignarMesa({
+        cerrada: false,
+        idCliente: this.usuario.id,
+        idMesa: mesa.id,
+        idMozo: '',
+        juegoBebida: false,
+        juegoDescuento: false,
+        juegoPostre: false,
+        propina: 0
+      });
+
+      this.reservasService.EliminarDeListaEsperaByIdCliente(this.usuario.id, this.listaEspera);
+    }
+  }
+
   public RealizarPedido() {
     this.route.navigate(['/hacer-pedido']);
   }
@@ -211,7 +247,9 @@ export class HomeClientePage {
 
   public PedirCuenta() { }
 
-  public RealizarReserva() { }
+  public RealizarReserva() { 
+    this.route.navigate(['/solicitar-reserva']);
+  }
 
   public Jugar() { }
 }
