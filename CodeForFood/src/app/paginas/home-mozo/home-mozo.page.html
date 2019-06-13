@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Home Empleados</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <br>
+  <ion-button (click)="HacerPedido()" expand="full" color="dark">Hacer Pedido</ion-button>
+  <ion-button (click)="ConfirmarPago()" expand="full" color="dark">Confirmar Pagos</ion-button>
+  <br>
+  <div style="border: 2px soldid red;">
+    <ion-item>
+      <h2>Pedidos para aceptar:</h2>
+    </ion-item>
+    <ng-container *ngFor="let item of pedidos">
+      <ng-container *ngFor="let mesa of mesasClientes">
+        <ng-container *ngIf="mesa['id'] == item['id_mesa_cliente'] && item['estado'] == 'sconfirmar'">
+          <ion-item>
+            Mesa:  {{mesa.idMesa}} <ion-button (click)="AceptarPedido(item.id)" slot="end">Aceptar Pedido</ion-button>
+          </ion-item>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+  <br>
+  <div style="border: 2px soldid red;">
+    <ion-item>
+      <h2>Pedidos terminados:</h2>
+    </ion-item>
+    <ng-container *ngFor="let item of pedidos">
+      <ng-container *ngFor="let mesa of mesasClientes">
+        <ng-container *ngIf="mesa['id'] == item['id_mesa_cliente'] && item['estado'] == 'terminado'">
+          <ion-item>
+            Mesa:  {{mesa.idMesa}} <ion-button (click)="TerminarPedido(item.id)" slot="end">Entregar Pedido</ion-button>
+          </ion-item>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+</ion-content>
