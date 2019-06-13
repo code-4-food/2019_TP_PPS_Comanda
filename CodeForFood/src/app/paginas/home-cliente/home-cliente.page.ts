@@ -24,6 +24,8 @@ export class HomeClientePage {
   public mesasClientes: MesaCliente[];
   public usuario: any;
   public pedido: any;
+  private pedidos = [];
+  private mesasClientes = [];
 
   constructor(private platform: Platform, private barcodeScanner: BarcodeScanner, private reservasService: ReservasService,
     private mesasService: MesasService, private pedidosService: PedidosService, private authService: AuthService, private route:Router,
@@ -34,6 +36,12 @@ export class HomeClientePage {
     this.mesasService.getMesasClientes().subscribe(mesasClientes => { this.mesasClientes = mesasClientes; });
     this.reservasService.getReservas().subscribe(reservas => { this.reservas = reservas; });
     this.reservasService.getListaEspera().subscribe(listaEspera => { this.listaEspera = listaEspera; });
+    this.pedidosService.getPedidos().subscribe( (data) => {
+      this.pedidos = data;
+    });
+    this.mesasService.getMesasClientes().subscribe( (data) => {
+      this.mesasClientes = data;
+    });
   }
 
   async presentAlertRadio() {
@@ -243,9 +251,39 @@ export class HomeClientePage {
     this.route.navigate(['/hacer-pedido']);
   }
 
-  public ConfirmarRecepcion() { }
+ public ConfirmarRecepcion() {
+    this.mesasClientes.forEach(mesacl => {
+      if (mesacl.idCliente === this.usuario.id) {
+        this.pedidos.forEach(pedido => {
+          if (pedido.id_mesa_cliente === mesacl.id) {
+            pedido.estado = 'entregado';
+            this.pedidosService.updatePedido(pedido.id, pedido);
+            this.mesas.forEach(mesa => {
+              if (mesa.id === mesacl.idMesa) {
+                mesa.estado = 'comiendo';
+                this.mesasService.updateMesa(mesa).then();
+                alert('confirmado');
+              }
+            });
+          }
+        });
+      }
+    });
+  }
 
-  public PedirCuenta() { }
+  public PedirCuenta() {
+    this.mesasClientes.forEach(mesa => {
+      if (mesa.idCliente === this.usuario.id) {
+        this.mesas.forEach(m => {
+          if (m.id === mesa.idMesa) {
+            m.estado = 'esperando cuenta';
+            this.mesasService.updateMesa(m);
+          }
+        });
+      }
+    });
+    this.route.navigate(['/cuenta']);
+  }
 
   public RealizarReserva() { 
     this.route.navigate(['/solicitar-reserva']);

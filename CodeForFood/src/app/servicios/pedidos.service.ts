@@ -75,12 +75,11 @@ export class PedidosService {
   }
 
   updatePedido(id, pedido){
-    this.firestore.doc('pedidos/'+id).update(pedido)
-
+    this.firestore.collection('pedidos').doc(id).set(pedido);
   }
 
   updatePedidoProducto(id, pedido){
-    this.firestore.doc('pedido-productos/'+id).update(pedido)
+    this.firestore.collection('pedido-productos').doc(id).set(pedido);
   }
 
   public getProductos() {
@@ -93,11 +92,12 @@ export class PedidosService {
     }));
   }
   public PagarPedido(pedido: Pedido) {
-    return this.firestore.collection('pedidos').ref.where('id', '==', pedido['id']).get().then(async (documento) => {
-      this.firestore.collection('pedidos').doc(pedido['id']).set({
+    return this.firestore.collection('pedidos').ref.where('id', '==', pedido.id).get().then(async (documento) => {
+      this.firestore.collection('pedidos').doc(pedido.id).set({
           comienzo: pedido.comienzo,
-          'id-mesa-cliente': pedido['id-mesa-cliente'],
-          'id-mozo': pedido['id-mozo'],
+          id_mesa_cliente: pedido.id_mesa_cliente,
+          id_mozo: pedido.id_mozo,
+
           estado: 'pagado'
       })
       .catch(err => {
