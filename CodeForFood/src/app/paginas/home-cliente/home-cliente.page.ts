@@ -199,14 +199,14 @@ export class HomeClientePage {
 
                 break;
               case 'comiendo':
-                if (confirm('Espero que esté disfrutando su pedido. Desea dejarnos comentarios acerca de su experiencia?')) {
-                  // Mostrar encuesta
+                if (confirm('Espero que esté disfrutando su pedido. Desea completar una breve encuesta acerca de su experiencia?')) {
+                  this.route.navigate(['/encuesta-cliente']);
                 }
 
                 break;
               case 'esperando cuenta':
-                if (confirm('Espero que haya disfrutado de su pedido. Desea dejarnos comentarios acerca de su experiencia?')) {
-                  // Mostrar encuesta
+                if (confirm('Espero que haya disfrutado de su pedido. Desea completar una breve encuesta acerca de su experiencia?')) {
+                  this.route.navigate(['/encuesta-cliente']);
                 }
 
                 break;
