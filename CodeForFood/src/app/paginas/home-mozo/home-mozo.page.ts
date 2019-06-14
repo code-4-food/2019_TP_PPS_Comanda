@@ -32,16 +32,19 @@ export class HomeMozoPage implements OnInit {
         this.pedprod = pedproduc;
         console.log('pedprod: ', this.pedprod);
         this.pedidos.forEach(pedido => {
-          let noterminado = true;
+          let ppigual = 0;
+          let ppterminado = -1;
           this.pedprod.forEach(pp => {
             if (pedido.id == pp.id_pedido) {
+              ppigual++;
               if (pp.estado != 'terminado') {
-                noterminado = false;
+                ppterminado++;
               }
             }
           });
-          if (noterminado) {
+          if (ppigual == ppterminado-1 && ppterminado>-1) {
             pedido.estado = 'terminado';
+            console.log('terminado');
             this.pedidosServ.updatePedido(pedido.id, pedido);
           }
         });

@@ -5,6 +5,14 @@
 </ion-header>
 
 <ion-content>
+  <ng-container *ngIf="esMozo">
+    <ion-item><ion-label>Seleccione Nro de Mesa:</ion-label></ion-item>
+    <ion-select [(ngModel)]="pedido['id_mesa_cliente']" placeholder="Seleccione Nro Mesa">
+      <ng-container *ngFor="let m of mesasClientes">
+        <ion-select-option value="{{m.id}}">{{m.idMesa}}</ion-select-option>
+      </ng-container>
+    </ion-select>
+  </ng-container>  
   <ion-list *ngFor="let item of productos">
     <div style="width:100%;">
       <ion-item><h2>{{item.nombre}}</h2></ion-item>

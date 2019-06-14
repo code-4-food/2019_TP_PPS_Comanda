@@ -5,10 +5,18 @@
 </ion-header>
 
 <ion-content>
-  <br>
-  <ion-button (click)="HacerPedido()" expand="full" color="dark">Hacer Pedido</ion-button>
-  <ion-button (click)="ConfirmarPago()" expand="full" color="dark">Confirmar Pagos</ion-button>
-  <br>
+  <ion-card class="ion-activatable" (click)="this.HacerPedido()">
+    <ion-ripple-effect></ion-ripple-effect>
+    <ion-icon name="restaurant"></ion-icon>
+    <h2>Hacer Pedido</h2>
+  </ion-card>
+
+  <ion-card class="ion-activatable" (click)="this.ConfirmarPago()">
+    <ion-ripple-effect></ion-ripple-effect>
+    <ion-icon name="list"></ion-icon>
+    <h2>Confirmar Pagos</h2>
+  </ion-card>
+
   <div style="border: 2px soldid red;">
     <ion-item>
       <h2>Pedidos para aceptar:</h2>
