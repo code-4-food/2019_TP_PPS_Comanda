@@ -8,6 +8,7 @@ import { Mesa } from 'src/app/interfaces/mesa';
 import { AuthService } from 'src/app/servicios/auth.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { ErrorService } from 'src/app/servicios/error.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cuenta',
@@ -29,7 +30,8 @@ export class CuentaPage implements OnInit {
   public propina = 0;
 
   constructor(private pedidosServ: PedidosService, private mesasServ: MesasService,
-    private authService: AuthService, private barcodeScanner: BarcodeScanner, private errorHand: ErrorService) {
+    private authService: AuthService, private barcodeScanner: BarcodeScanner,
+    private errorHand: ErrorService, private router: Router) {
     this.empleado = this.authService.getUsuario();
     this.pedidosServ.getPedidos().subscribe( (data) => {
       this.pedidos = data;
@@ -53,9 +55,11 @@ export class CuentaPage implements OnInit {
         this.mesasClientes.forEach(m => {
           if (m.idCliente === this.empleado.id) {
             this.id = m.idMesa;
+            console.log(this.id);
           }
         });
         this.CargarCuenta();
+        console.log(this.productosCuenta);
       }
     });
     this.mesasServ.getMesas().subscribe( (data) => {
@@ -108,7 +112,8 @@ export class CuentaPage implements OnInit {
             mesa.estado = 'disponible';
             this.mesasServ.updateMesa(mesa);
             console.log(mesa);
-            alert('listo, mesa liberada');
+            alert('listo, mesa disponible y mesacliente cerrada');
+            this.router.navigate(['/home-mozo']);
           }
         });
       }
@@ -140,6 +145,7 @@ export class CuentaPage implements OnInit {
     });
   }
   private GuardarPropina(propina: number) {
+    this.propina = propina;
     this.mesasClientes.forEach(mesaCl => {
       if (mesaCl.idCliente === this.empleado.id) {
         mesaCl.propina = propina;

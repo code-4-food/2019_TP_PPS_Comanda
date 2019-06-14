@@ -28,19 +28,26 @@
         </tr>
       </tbody>
     </table>
-    <br>
-    <h1>Total: {{total}}</h1>
-    <br>
-    <ion-button *ngIf="empleado.perfil == 'cliente'" (click)="Propina()">Sumar Propina</ion-button>
+    <ng-container *ngIf="empleado.perfil == 'cliente'">
+      <br>
+      <h1>Total: {{total}}</h1>
+      <br>
+      <ion-item *ngIf="propina != 0">
+        <h1>Total más propina: {{total*propina}}</h1>
+      </ion-item>
+      <ion-button *ngIf="propina == 0" (click)="Propina()">Sumar Propina</ion-button>
+    </ng-container>
+    
     <ng-container *ngIf="empleado.perfil != 'cliente'">
       <ion-item *ngIf="propina == 0 && total != 0">
         <h2>Falta ingresar la propina!</h2>
       </ion-item>
-      <ion-item *ngIf="propina != 0">
+      <ng-container *ngIf="propina != 0">
         <ion-item>
-          <ion-button color="danger" expand="block" (click)="Pagada()">Pagada</ion-button>
+          <h1>Total más propina: {{total}}</h1>
         </ion-item>  
-      </ion-item>  
+        <ion-button color="danger" expand="block" (click)="Pagada()">Pagada</ion-button>
+      </ng-container>  
     </ng-container>    
   </div>
 </ion-content>
