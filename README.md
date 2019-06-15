@@ -70,9 +70,6 @@ Registrate en: https://forms.gle/yZ8xsdWj7W7ECWAG8
 | Home-cliente | Creacion del inicio para el cliente | 05/6 |
 | Scanner-mesa | Logica para el qr de la mesa | 07/6 |
 | Auth-anonimo | Registrar cliente anonimo | 07/6 |
-| Auth-anonimo | Registrar cliente anonimo | 07/6 |
-| Auth-anonimo | Registrar cliente anonimo | 07/6 |
-| Auth-anonimo | Registrar cliente anonimo | 07/6 |
 | Fix-auth-anonimo | Fix en usuarios anonimos | 07/6 |
 | Reservas-agendadas | Cliente puede hacer reserva y el supervisor puede confirmarlas | 12/6 |
 | Encuesta-cliente | Encuesta cliente | 14/6 |
