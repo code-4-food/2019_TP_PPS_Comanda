@@ -37,12 +37,13 @@ export class HomeMozoPage implements OnInit {
           this.pedprod.forEach(pp => {
             if (pedido.id == pp.id_pedido) {
               ppigual++;
-              if (pp.estado != 'terminado') {
+              if (pp.estado == 'terminado') {
                 ppterminado++;
               }
             }
           });
-          if (ppigual == ppterminado-1 && ppterminado>-1) {
+          console.log()
+          if (ppterminado == (ppigual-1) && ppterminado>-1) {
             pedido.estado = 'terminado';
             console.log('terminado');
             this.pedidosServ.updatePedido(pedido.id, pedido);

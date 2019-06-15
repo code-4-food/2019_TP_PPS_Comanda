@@ -71,7 +71,7 @@ export class HacerPedidoPage implements OnInit {
   }
   public TerminarPedido() {
     if (this.pedidosProductos.length > 0 ) {
-      if (this.usuario.perfil != 'cliente' && this.pedido.id_mesa_cliente != '') {
+      if (this.usuario.perfil == 'cliente' && this.pedido.id_mesa_cliente != '') {
         this.pedidoServ.AddPedido(this.pedido).then( (res) => {
           this.pedido['id'] = res['id'];
           console.log(this.pedido);

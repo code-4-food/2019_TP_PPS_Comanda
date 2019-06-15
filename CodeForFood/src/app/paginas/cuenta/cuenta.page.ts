@@ -32,20 +32,24 @@ export class CuentaPage implements OnInit {
   constructor(private pedidosServ: PedidosService, private mesasServ: MesasService,
     private authService: AuthService, private barcodeScanner: BarcodeScanner,
     private errorHand: ErrorService, private router: Router) {
+  }
+
+  ngOnInit() {
+
     this.empleado = this.authService.getUsuario();
-    this.pedidosServ.getPedidos().subscribe( (data) => {
+    this.pedidosServ.getPedidos().subscribe((data) => {
       this.pedidos = data;
       console.log('pedidos: ', this.pedidos);
     });
-    this.pedidosServ.getPedidosProductos().subscribe( (data) => {
+    this.pedidosServ.getPedidosProductos().subscribe((data) => {
       this.pedidosproductos = data;
       console.log('pedidos-productos: ', this.pedidosproductos);
     });
-    this.pedidosServ.getProductos().subscribe( (data) => {
+    this.pedidosServ.getProductos().subscribe((data) => {
       this.productos = data;
       console.log('productos: ', this.productos);
     });
-    this.mesasServ.getMesasClientes().subscribe( (data) => {
+    this.mesasServ.getMesasClientes().subscribe((data) => {
       this.mesasClientes = data;
       console.log('mesas-clientes: ', this.mesasClientes);
       if (this.empleado.perfil !== 'cliente') {
@@ -62,26 +66,25 @@ export class CuentaPage implements OnInit {
         console.log(this.productosCuenta);
       }
     });
-    this.mesasServ.getMesas().subscribe( (data) => {
+    this.mesasServ.getMesas().subscribe((data) => {
       this.mesas = data;
     });
-  }
-
-  ngOnInit() {
   }
 
   public CargarCuenta() {
     this.total = 0;
     this.productosCuenta = [];
     if (this.id !== '') {
-      this.mesasClientes.forEach( m => {
+      this.mesasClientes.forEach(m => {
         if (m.idMesa === this.id) {
-          this.pedidos.forEach( p => {
+          this.pedidos.forEach(p => {
+            console.log(p.id_mesa_cliente + " - - - - " + m.id)
             if (p.id_mesa_cliente === m.id) {
               this.pedidoSelecc = p;
-              this.pedidosproductos.forEach( pp => {
+              this.pedidosproductos.forEach(pp => {
+                console.log(p.id + " - - - - " + pp.id_pedido)
                 if (p.id === pp.id_pedido) {
-                  this.productos.forEach( prod => {
+                  this.productos.forEach(prod => {
                     if (prod.id === pp.id_producto) {
                       this.productosCuenta.push(prod);
                       this.total += Number.parseInt(prod['precio']);
@@ -98,6 +101,9 @@ export class CuentaPage implements OnInit {
         this.total *= this.propina;
       }
       console.log(this.productosCuenta);
+    }
+    else {
+      console.log('faljslgfiguds')
     }
   }
   public Pagada() {
