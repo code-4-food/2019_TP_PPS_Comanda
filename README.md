@@ -42,6 +42,8 @@ Registrate en: https://forms.gle/yZ8xsdWj7W7ECWAG8
 | CFF-2/Alta-producto | Creacion de un producto | 30/5 |
 | tomar-aceptar-pedidos | Bar o Cocina aceptan un pedido o lo terminan + el home (falta darle detalles) | 05/6 |
 | entrada-local-lista-espera | Agregarce a la lista de espera Y el metre puede ver la lista de espera | 07/6 |
+| home+email | Redirecciopn a los homes necesarios  | 13/6 |
+| fix/Mozo+Dueño+pedido | Agrego mas funcionalidad a los homes  | 14/6 |
 
 
 ## Micaela Saez:
@@ -50,7 +52,11 @@ Registrate en: https://forms.gle/yZ8xsdWj7W7ECWAG8
 |---|---|---|
 | CFF-4-alta-empleados | Registro de empleado, dueño y supervisor | 28/5 |
 | cuenta | Cuenta de la mesa / cerrar mesa | 05/6 |
-| hacer-pedido | Hacer pedido | - - |
+| hacer-pedido | Hacer pedido | 09/6 |
+| cuenta | Cuenta de la mesa / cerrar mesa | 05/6 |
+| home-mozo | Inicio del mozo | 13/6 |
+| cerrar-pedido | Cliente pide cuenta y mozo cierra pedido | 13/6 |
+| home-mozo-arreglado | Arreglo el home del mozo | 14/6 |
 
 ## Ezequiel Mahafud:
 
@@ -64,4 +70,10 @@ Registrate en: https://forms.gle/yZ8xsdWj7W7ECWAG8
 | Home-cliente | Creacion del inicio para el cliente | 05/6 |
 | Scanner-mesa | Logica para el qr de la mesa | 07/6 |
 | Auth-anonimo | Registrar cliente anonimo | 07/6 |
+| Auth-anonimo | Registrar cliente anonimo | 07/6 |
+| Auth-anonimo | Registrar cliente anonimo | 07/6 |
+| Auth-anonimo | Registrar cliente anonimo | 07/6 |
+| Fix-auth-anonimo | Fix en usuarios anonimos | 07/6 |
+| Reservas-agendadas | Cliente puede hacer reserva y el supervisor puede confirmarlas | 12/6 |
+| Encuesta-cliente | Encuesta cliente | 14/6 |
 
