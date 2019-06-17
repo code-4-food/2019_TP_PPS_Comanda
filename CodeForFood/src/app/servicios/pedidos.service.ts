@@ -105,4 +105,7 @@ export class PedidosService {
       });
     });
   }
+  public DeletePedido(idPedido: string) {
+    return this.firestore.collection('pedidos').doc(idPedido).delete();
+  }
 }

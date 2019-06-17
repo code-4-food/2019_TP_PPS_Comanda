@@ -84,31 +84,13 @@ export class HomeMozoPage implements OnInit {
       }
     });
   }
-  public AceptarPedido(idPedido: string) {
-    this.pedidos.forEach(pedido => {
-      if (pedido.id === idPedido) {
-        pedido.estado = 'preparacion';
-        this.mesasClientes.forEach(mesaCl => {
-          if (mesaCl.id === pedido.id_mesa_cliente) {
-            this.mesas.forEach(mesas => {
-              if (mesas.id === mesaCl.idMesa) {
-                mesas.estado = 'esperando pedido';
-                this.mesasServ.updateMesa(mesas).then( () => { console.log('mesa updated'); } );
-              }
-            });
-          }
-        });
-        this.pedprod.forEach(pp => {
-          if (pp['id_pedido'] === pedido.id) {
-            pp.estado = 'esperando';
-            this.pedidosServ.updatePedidoProducto(pp.id, pp);
-          }
-        });
-        this.pedidosServ.updatePedido(idPedido, pedido);
-      }
-    });
-  }
   public ConfirmarPago() {
     this.router.navigate(['/cuenta']);
+  }
+  public ConfirmarPedidos() {
+    this.router.navigate(['/mozo-aceptar']);
+  }
+  public TerminarPedidos() {
+    this.router.navigate(['/mozo-terminar']);
   }
 }
