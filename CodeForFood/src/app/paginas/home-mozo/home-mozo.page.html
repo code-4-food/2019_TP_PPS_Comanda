@@ -1,49 +1,26 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Home Empleados</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <ion-card class="ion-activatable" (click)="this.HacerPedido()">
-    <ion-ripple-effect></ion-ripple-effect>
-    <ion-icon name="restaurant"></ion-icon>
-    <h2>Hacer Pedido</h2>
-  </ion-card>
-
-  <ion-card class="ion-activatable" (click)="this.ConfirmarPago()">
-    <ion-ripple-effect></ion-ripple-effect>
-    <ion-icon name="list"></ion-icon>
-    <h2>Confirmar Pagos</h2>
-  </ion-card>
-
-  <div style="border: 2px soldid red;">
-    <ion-item>
-      <h2>Pedidos para aceptar:</h2>
-    </ion-item>
-    <ng-container *ngFor="let item of pedidos">
-      <ng-container *ngFor="let mesa of mesasClientes">
-        <ng-container *ngIf="mesa['id'] == item['id_mesa_cliente'] && item['estado'] == 'sconfirmar'">
-          <ion-item>
-            Mesa:  {{mesa.idMesa}} <ion-button (click)="AceptarPedido(item.id)" slot="end">Aceptar Pedido</ion-button>
-          </ion-item>
-        </ng-container>
-      </ng-container>
-    </ng-container>
-  </div>
-  <br>
-  <div style="border: 2px soldid red;">
-    <ion-item>
-      <h2>Pedidos terminados:</h2>
-    </ion-item>
-    <ng-container *ngFor="let item of pedidos">
-      <ng-container *ngFor="let mesa of mesasClientes">
-        <ng-container *ngIf="mesa['id'] == item['id_mesa_cliente'] && item['estado'] == 'terminado'">
-          <ion-item>
-            Mesa:  {{mesa.idMesa}} <ion-button (click)="TerminarPedido(item.id)" slot="end">Entregar Pedido</ion-button>
-          </ion-item>
-        </ng-container>
-      </ng-container>
-    </ng-container>
-  </div>
+    <ion-card class="ion-activatable" (click)="this.HacerPedido()">
+      <ion-ripple-effect></ion-ripple-effect>
+      <ion-icon name="add"></ion-icon>
+      <h2>Hacer Pedido</h2>
+    </ion-card>
+  
+    <ion-card class="ion-activatable" (click)="this.ConfirmarPago()">
+      <ion-ripple-effect></ion-ripple-effect>
+      <ion-icon name="cash"></ion-icon>
+      <h2>Confirmar Pagos</h2>
+    </ion-card>
+  
+    <ion-card class="ion-activatable" (click)="this.ConfirmarPedidos()">
+      <ion-ripple-effect></ion-ripple-effect>
+      <ion-icon name="list"></ion-icon>
+      <h2>Aceptar Pedidos</h2>
+    </ion-card>
+  
+    <ion-card class="ion-activatable" (click)="this.TerminarPedidos()">
+      <ion-ripple-effect></ion-ripple-effect>
+      <ion-icon name="restaurant"></ion-icon>
+      <h2>Estado de pedidos</h2>
+    </ion-card>
+  
 </ion-content>
