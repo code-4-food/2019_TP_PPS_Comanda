@@ -2,13 +2,14 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { Reserva, Espera } from '../interfaces/reserva';
 import { map } from 'rxjs/internal/operators/map';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReservasService {
 
-  constructor(private db: AngularFirestore) { }
+  constructor(private db: AngularFirestore, private authService:AuthService) { }
 
   getReservas() {
     return this.db.collection('reservas').snapshotChanges().pipe(map(reservas => {
@@ -44,7 +45,10 @@ export class ReservasService {
     return this.db.collection('reservas').doc(reserva.id).set(reserva);
   }
 
-  entrarListaEspera(id, nombre, cantidad) {
+  entrarListaEspera(cantidad) {
+    let usr = this.authService.getUsuario();
+    let id = usr['id'];
+    let nombre =usr['nombre'];
     const fecha = new Date();
     const anio = fecha.getFullYear().toString();
     const mes = fecha.getMonth().toString();

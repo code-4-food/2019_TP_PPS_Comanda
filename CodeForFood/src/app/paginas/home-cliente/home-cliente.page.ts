@@ -3,7 +3,7 @@ import { Espera } from './../../interfaces/reserva';
 import { PedidosService } from './../../servicios/pedidos.service';
 import { Pedido } from 'src/app/interfaces/pedido';
 import { Component } from '@angular/core';
-import { Platform, AlertController } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { MesasService } from './../../servicios/mesas.service';
 import { Mesa } from './../../interfaces/mesa';
@@ -11,6 +11,7 @@ import { Reserva } from 'src/app/interfaces/reserva';
 import { ReservasService } from 'src/app/servicios/reservas.service';
 import { AuthService } from 'src/app/servicios/auth.service';
 import { Router } from '@angular/router';
+import { AlertService } from 'src/app/servicios/alert.service';
 
 @Component({
   selector: 'app-home-cliente',
@@ -28,7 +29,7 @@ export class HomeClientePage {
 
   constructor(private platform: Platform, private barcodeScanner: BarcodeScanner, private reservasService: ReservasService,
     private mesasService: MesasService, private pedidosService: PedidosService, private authService: AuthService, private route:Router,
-    public alertController: AlertController) {
+    public alert: AlertService) {
     this.usuario = JSON.parse(localStorage.getItem('usuario'));
 
     this.mesasService.getMesas().subscribe(mesas => { this.mesas = mesas; });
@@ -38,65 +39,6 @@ export class HomeClientePage {
     this.pedidosService.getPedidos().subscribe( (data) => {
       this.pedidos = data;
     });
-  }
-
-  async presentAlertRadio() {
-    const alert = await this.alertController.create({
-      header: 'Cuantas personas son?',
-      inputs: [
-        {
-          name: 'Uno - - - - - 1',
-          type: 'radio',
-          label: 'Uno - - - - - 1',
-          value: 1,
-          checked: true
-        },
-        {
-          name: 'Dos - - - - - 2',
-          type: 'radio',
-          label: 'Dos - - - - - 2',
-          value: 2
-        },
-        {
-          name: 'Tres - - - - - 3',
-          type: 'radio',
-          label: 'Tres - - - - - 3',
-          value: 3
-        },
-        {
-          name: 'Cuatro - - - - - 4',
-          type: 'radio',
-          label: 'Cuatro - - - - - 4',
-          value: 4
-        },
-        {
-          name: 'Mas de 4',
-          type: 'radio',
-          label: 'Mas de 4',
-          value: '+4'
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-            console.log('Confirm Cancel');
-          }
-        }, {
-          text: 'Ok',
-          handler: (cantidad) => {
-            let cliente = this.authService.getUsuario()
-
-            this.reservasService.entrarListaEspera(cliente['id'], cliente['nombre'], cantidad);
-
-          }
-        }
-      ]
-    });
-
-      await alert.present();
   }
 
   public EscannerQR() {
@@ -116,7 +58,7 @@ export class HomeClientePage {
           }
         });
         if (!esta_en_espera) {
-          this.presentAlertRadio().then();
+          this.alert.clienteListaEspera().then();
         }
 
         return;
