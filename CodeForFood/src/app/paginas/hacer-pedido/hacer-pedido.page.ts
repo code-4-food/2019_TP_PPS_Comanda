@@ -95,7 +95,7 @@ export class HacerPedidoPage implements OnInit {
           if ( this.usuario.perfil == 'cliente' || this.usuario.perfil == 'anonimo') {
             this.router.navigate(['/home-cliente']);
           } else {
-            this.router.navigate(['/home-mozo']);
+            this.router.navigate(['/mozo-aceptar']);
           }
         });
       } else {
@@ -116,7 +116,7 @@ export class HacerPedidoPage implements OnInit {
   public LeerQR() {
     this.barcodeScanner.scan().then(resultado => {
       this.productos.forEach(producto => {
-        if (producto.id == resultado.text) {
+        if (producto.qr == resultado.text) {
           this.Agregar(producto.id);
         }
       });

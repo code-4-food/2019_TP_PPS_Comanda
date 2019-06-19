@@ -35,7 +35,9 @@ const routes: Routes = [
   { path: 'solicitar-reserva', loadChildren: './paginas/solicitar-reserva/solicitar-reserva.module#SolicitarReservaPageModule' },
   { path: 'confirmar-reserva', loadChildren: './paginas/confirmar-reserva/confirmar-reserva.module#ConfirmarReservaPageModule' },
   { path: 'home-mozo', loadChildren: './paginas/home-mozo/home-mozo.module#HomeMozoPageModule' },
-  { path: 'encuesta-cliente', loadChildren: './paginas/encuesta-cliente/encuesta-cliente.module#EncuestaClientePageModule' }
+  { path: 'encuesta-cliente', loadChildren: './paginas/encuesta-cliente/encuesta-cliente.module#EncuestaClientePageModule' },  { path: 'mozo-aceptar', loadChildren: './paginas/mozo-aceptar/mozo-aceptar.module#MozoAceptarPageModule' },
+  { path: 'mozo-terminar', loadChildren: './paginas/mozo-terminar/mozo-terminar.module#MozoTerminarPageModule' }
+
 
 ];
 

@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./cuenta.page.scss'],
 })
 export class CuentaPage implements OnInit {
-  public id = '';
+  public id = ''; // mesa cliente actual
   private pedidoSelecc: Pedido;
   private pedidosproductos: any;
   public pedidos: any;
@@ -28,6 +28,11 @@ export class CuentaPage implements OnInit {
   public empleado: any;
   public esMozo = false;
   public propina = 0;
+  public bebidaGratis = 0;
+  public postreGratis = 0;
+  public descPorcentaje = false;
+  public descBebida = false;
+  public descPostre = false;
 
   constructor(private pedidosServ: PedidosService, private mesasServ: MesasService,
     private authService: AuthService, private barcodeScanner: BarcodeScanner,
@@ -35,7 +40,6 @@ export class CuentaPage implements OnInit {
   }
 
   ngOnInit() {
-
     this.empleado = this.authService.getUsuario();
     this.pedidosServ.getPedidos().subscribe((data) => {
       this.pedidos = data;
@@ -49,46 +53,85 @@ export class CuentaPage implements OnInit {
       this.productos = data;
       console.log('productos: ', this.productos);
     });
+    this.mesasServ.getMesas().subscribe((data) => {
+      this.mesas = data;
+    });
     this.mesasServ.getMesasClientes().subscribe((data) => {
       this.mesasClientes = data;
       console.log('mesas-clientes: ', this.mesasClientes);
-      if (this.empleado.perfil !== 'cliente') {
+      if (this.empleado.perfil !== 'cliente' && this.empleado.perfil !== 'anonimo') {
         this.esMozo = true;
       } else {
         this.total = 0;
         this.mesasClientes.forEach(m => {
           if (m.idCliente === this.empleado.id) {
             this.id = m.idMesa;
-            console.log(this.id);
+            // console.log('id-mesa-cliente actual: ', this.id);
           }
         });
         this.CargarCuenta();
-        console.log(this.productosCuenta);
       }
     });
-    this.mesasServ.getMesas().subscribe((data) => {
-      this.mesas = data;
+  }
+
+
+  public SolicitarCuenta() {
+    this.mesasClientes.forEach(mesa => {
+      if (mesa.idCliente === this.empleado.id) {
+        this.mesas.forEach(m => {
+          if (m.id === mesa.idMesa) {
+            m.estado = 'esperando cuenta';
+            this.mesasServ.updateMesa(m);
+          }
+        });
+      }
     });
+    alert('un mozo se acercará a cobrarle');
   }
 
   public CargarCuenta() {
     this.total = 0;
+    this.propina = 0;
+    this.descBebida = false;
+    this.descPorcentaje = false;
+    this.descPostre = false;
     this.productosCuenta = [];
+    let auxB = true;
+    let auxP = true;
+    let auxD = true;
     if (this.id !== '') {
       this.mesasClientes.forEach(m => {
         if (m.idMesa === this.id) {
           this.pedidos.forEach(p => {
-            console.log(p.id_mesa_cliente + " - - - - " + m.id)
+            // console.log(p.id_mesa_cliente + " - - - - " + m.id)
             if (p.id_mesa_cliente === m.id) {
               this.pedidoSelecc = p;
               this.pedidosproductos.forEach(pp => {
-                console.log(p.id + " - - - - " + pp.id_pedido)
+                // console.log(p.id + " - - - - " + pp.id_pedido)
                 if (p.id === pp.id_pedido) {
                   this.productos.forEach(prod => {
                     if (prod.id === pp.id_producto) {
                       this.productosCuenta.push(prod);
-                      this.total += Number.parseInt(prod['precio']);
+                      this.total += Number.parseInt(prod.precio);
                       this.propina = m.propina;
+                      // descuentos:
+                      if (auxB && prod.sector == 'bar' && m.juegoBebida > 0) {
+                        this.bebidaGratis = prod.precio;
+                        this.descBebida = true;
+                        this.total -= Number.parseInt(prod.precio);
+                        auxB = false;
+                      }
+                      if (auxP && prod.esPostre && m.juegoPostre > 0) {
+                        this.postreGratis = prod.precio;
+                        this.descPostre = true;
+                        this.total -= Number.parseInt(prod.precio);
+                        auxP = false;
+                      }
+                      if (auxD && m.juegoDescuento) {
+                        this.descPorcentaje = true;
+                        this.total *= 0.9;
+                        auxD = false;
+                      }
                     }
                   });
                 }
@@ -97,13 +140,7 @@ export class CuentaPage implements OnInit {
           });
         }
       });
-      if (this.empleado.perfil !== 'cliente' && this.propina !== 0) {
-        this.total *= this.propina;
-      }
       console.log(this.productosCuenta);
-    }
-    else {
-      console.log('faljslgfiguds')
     }
   }
   public Pagada() {
@@ -118,7 +155,7 @@ export class CuentaPage implements OnInit {
             mesa.estado = 'disponible';
             this.mesasServ.updateMesa(mesa);
             console.log(mesa);
-            alert('listo, mesa disponible y mesacliente cerrada');
+            alert('se registró el pago');
             this.router.navigate(['/home-mozo']);
           }
         });

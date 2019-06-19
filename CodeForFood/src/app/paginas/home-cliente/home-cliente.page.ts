@@ -254,13 +254,15 @@ export class HomeClientePage {
           if (pedido.id_mesa_cliente === mesacl.id) {
             pedido.estado = 'entregado';
             this.pedidosService.updatePedido(pedido.id, pedido);
-            this.mesas.forEach(mesa => {
+            for (const mesa of this.mesas) {
               if (mesa.id === mesacl.idMesa) {
                 mesa.estado = 'comiendo';
-                this.mesasService.updateMesa(mesa).then();
-                alert('confirmado');
+                this.mesasService.updateMesa(mesa).then( () => {
+                  alert('confirmado');
+                });
+                break;
               }
-            });
+            }
           }
         });
       }
@@ -268,16 +270,6 @@ export class HomeClientePage {
   }
 
   public PedirCuenta() {
-    this.mesasClientes.forEach(mesa => {
-      if (mesa.idCliente === this.usuario.id) {
-        this.mesas.forEach(m => {
-          if (m.id === mesa.idMesa) {
-            m.estado = 'esperando cuenta';
-            this.mesasService.updateMesa(m);
-          }
-        });
-      }
-    });
     this.route.navigate(['/cuenta']);
   }
 
