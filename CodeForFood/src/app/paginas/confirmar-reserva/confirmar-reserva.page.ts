@@ -20,4 +20,11 @@ export class ConfirmarReservaPage {
       alert('Reserva confirmada!');
     }).catch(error => { alert(error); });
   }
+
+  public rechazarReserva(reserva) {
+    reserva.estado = 'rechazada';
+    this.reservasService.updateReserva(reserva).then(() => {
+      alert('Reserva rechazada!');
+    }).catch(error => { alert(error); });
+  }
 }
