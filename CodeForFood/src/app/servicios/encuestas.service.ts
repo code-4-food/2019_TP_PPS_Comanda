@@ -18,4 +18,13 @@ export class EncuestasService {
       });
     });
   }
+  public addEncuestaEmpleado(encuesta) {
+    return new Promise((resolve, rejected) => {
+      this.db.collection('encuestas-empleados').add(encuesta).then(ret => {
+        resolve(ret);
+      }).catch(err => {
+        rejected(err);
+      });
+    });
+  }
 }

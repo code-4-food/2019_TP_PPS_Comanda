@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/servicios/auth.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { ErrorService } from 'src/app/servicios/error.service';
 import { Router } from '@angular/router';
+import { AlertService } from 'src/app/servicios/alert.service';
 
 @Component({
   selector: 'app-cuenta',
@@ -36,29 +37,29 @@ export class CuentaPage implements OnInit {
 
   constructor(private pedidosServ: PedidosService, private mesasServ: MesasService,
     private authService: AuthService, private barcodeScanner: BarcodeScanner,
-    private errorHand: ErrorService, private router: Router) {
+    private errorHand: ErrorService, private router: Router, private alertServ: AlertService) {
   }
 
   ngOnInit() {
     this.empleado = this.authService.getUsuario();
     this.pedidosServ.getPedidos().subscribe((data) => {
       this.pedidos = data;
-      console.log('pedidos: ', this.pedidos);
+      // console.log('pedidos: ', this.pedidos);
     });
     this.pedidosServ.getPedidosProductos().subscribe((data) => {
       this.pedidosproductos = data;
-      console.log('pedidos-productos: ', this.pedidosproductos);
+      // console.log('pedidos-productos: ', this.pedidosproductos);
     });
     this.pedidosServ.getProductos().subscribe((data) => {
       this.productos = data;
-      console.log('productos: ', this.productos);
+      // console.log('productos: ', this.productos);
     });
     this.mesasServ.getMesas().subscribe((data) => {
       this.mesas = data;
     });
     this.mesasServ.getMesasClientes().subscribe((data) => {
       this.mesasClientes = data;
-      console.log('mesas-clientes: ', this.mesasClientes);
+      // console.log('mesas-clientes: ', this.mesasClientes);
       if (this.empleado.perfil !== 'cliente' && this.empleado.perfil !== 'anonimo') {
         this.esMozo = true;
       } else {
@@ -86,7 +87,7 @@ export class CuentaPage implements OnInit {
         });
       }
     });
-    alert('un mozo se acercará a cobrarle');
+    this.alertServ.mensaje('', 'Cuenta solicitada.');
   }
 
   public CargarCuenta() {
@@ -149,13 +150,13 @@ export class CuentaPage implements OnInit {
       if (mesaCl.id === this.pedidoSelecc.id_mesa_cliente) {
         mesaCl.cerrada = true;
         this.mesasServ.updateMesaCliente(mesaCl);
-        console.log(mesaCl);
+        // console.log(mesaCl);
         this.mesas.forEach(mesa => {
           if (mesa.id === mesaCl.idMesa) {
             mesa.estado = 'disponible';
             this.mesasServ.updateMesa(mesa);
-            console.log(mesa);
-            alert('se registró el pago');
+            // console.log(mesa);
+            this.alertServ.mensaje('', 'Se registró el pago.');
             this.router.navigate(['/home-mozo']);
           }
         });
@@ -180,7 +181,7 @@ export class CuentaPage implements OnInit {
         this.total *= 1.20;
         this.GuardarPropina(1.20);
       } else {
-        alert('codigo no valido');
+        this.alertServ.mensaje('', 'Código no válido!');
       }
     }).catch(err => {
       this.errorHand.MostrarErrorSoloLower('Error: ' + err);
