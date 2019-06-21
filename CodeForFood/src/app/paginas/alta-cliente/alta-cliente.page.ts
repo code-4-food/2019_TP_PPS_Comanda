@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { AuthService } from './../../servicios/auth.service';
 import { FirestorageService } from './../../servicios/firestorage.service';
 import { Component } from '@angular/core';
@@ -23,7 +24,7 @@ export class AltaClientePage {
   public dataDNI: string[];
 
   constructor(private barcodeScanner: BarcodeScanner, private camera: Camera,
-  private authService: AuthService, private firestorageService: FirestorageService) {
+  private authService: AuthService, private firestorageService: FirestorageService, private router: Router) {
     this.nombreUsuario = '';
     this.apellidoUsuario = '';
     this.dniUsuario = '';
@@ -114,6 +115,7 @@ export class AltaClientePage {
         nombre: this.nombreUsuario,
         perfil: 'anonimo'
       }, this.dataFotoUsuario).then(usuario => {
+        this.router.navigate(['/home-cliente']);
         alert('Usuario anónimo registrado exitosamente!');
       }).catch(error => {
         alert('ERROR: ' + error);

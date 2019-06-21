@@ -111,7 +111,9 @@ export class HomeClientePage {
 
                 break;
               case 'realizando pedido':
+                this.route.navigate(['/hacer-pedido']);
                 alert('Ya puede realizar su pedido!');
+
                 break;
               case 'esperando pedido':
                 // Falta mostrar todo el detalle de cada producto del pedido
