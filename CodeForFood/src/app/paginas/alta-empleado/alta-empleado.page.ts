@@ -6,6 +6,7 @@ import { ErrorService } from 'src/app/servicios/error.service';
 import { AuthService } from 'src/app/servicios/auth.service';
 import { Router } from '@angular/router';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { AlertService } from 'src/app/servicios/alert.service';
 
 @Component({
   selector: 'app-alta-empleado',
@@ -22,7 +23,8 @@ export class AltaEmpleadoPage implements OnInit {
 
   constructor(private camera: Camera, private fotosService: FirestorageService,
     private errorHand: ErrorService, private authService: AuthService,
-    private router: Router, private barcodeScanner: BarcodeScanner) {
+    private router: Router, private barcodeScanner: BarcodeScanner,
+    private alertServ: AlertService) {
       this.empleado  = {
         uid: '',
         nombre: '',
@@ -78,7 +80,7 @@ export class AltaEmpleadoPage implements OnInit {
       if (emailRegex.test(this.empleado.mail)) {
         if (this.empleado.foto !== '') {
           this.authService.CrearAuth(this.empleado.mail, this.password, this.empleado, this.imageData).then( () => {
-            this.errorHand.MostrarErrorSoloLower('Empleado agregado!');
+            this.alertServ.mensaje('', 'Empleado agregado!');
             this.router.navigate(['/home']);
           });
         } else {

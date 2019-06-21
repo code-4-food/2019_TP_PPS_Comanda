@@ -8,6 +8,7 @@ import { MesasService } from 'src/app/servicios/mesas.service';
 import { AuthService } from 'src/app/servicios/auth.service';
 import { Router } from '@angular/router';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { AlertService } from 'src/app/servicios/alert.service';
 
 @Component({
   selector: 'app-hacer-pedido',
@@ -31,10 +32,11 @@ export class HacerPedidoPage implements OnInit {
 
   constructor(private prodServ: ProductosService, private pedidoServ: PedidosService,
     private mesaServ: MesasService, private authServ: AuthService,
-    private router: Router, private barcodeScanner: BarcodeScanner) {
+    private router: Router, private barcodeScanner: BarcodeScanner, 
+    private alertServ: AlertService) {
     this.prodServ.getProductos().subscribe( (data) => {
       this.productos = data;
-      console.log(data);
+      // console.log(data);
     });
     this.cantidad = 1;
   }
@@ -75,7 +77,7 @@ export class HacerPedidoPage implements OnInit {
   }
   public TerminarPedido() {
     if (this.pedidosProductos.length > 0 ) {
-      console.log(this.pedido.id_mesa_cliente);
+      // console.log(this.pedido.id_mesa_cliente);
       if (this.pedido.id_mesa_cliente != '') {
         this.mesasClientes.forEach(mCliente => {
           if (mCliente.id == this.pedido.id_mesa_cliente) {
@@ -84,14 +86,14 @@ export class HacerPedidoPage implements OnInit {
         });
         this.pedidoServ.AddPedido(this.pedido).then( (res) => {
           this.pedido['id'] = res['id'];
-          console.log(this.pedido);
+          // console.log(this.pedido);
           for (const item of this.pedidosProductos) {
             item.id_pedido = res['id'];
             this.pedidoServ.AddPedidoProducto(item).then( (res) => {
               console.log('agregado');
             });
           }
-          alert('pedido agregado!');
+          this.alertServ.mensaje('', 'El pedido se agregó correctamente');
           if ( this.usuario.perfil == 'cliente' || this.usuario.perfil == 'anonimo') {
             this.router.navigate(['/home-cliente']);
           } else {
@@ -99,7 +101,7 @@ export class HacerPedidoPage implements OnInit {
           }
         });
       } else {
-        alert('No selecciono mesa para el pedido');
+        this.alertServ.mensaje('Empleado:', 'No seleccionó mesa para el pedido!');
       }
     }
   }
