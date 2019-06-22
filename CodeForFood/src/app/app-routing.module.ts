@@ -42,7 +42,6 @@ const routes: Routes = [
   { path: 'encuesta-supervisor', loadChildren: './paginas/encuesta-supervisor/encuesta-supervisor.module#EncuestaSupervisorPageModule' },
   { path: 'encuestas-clientes', loadChildren: './paginas/encuestas-clientes/encuestas-clientes.module#EncuestasClientesPageModule' }
 
-
 ];
 
 

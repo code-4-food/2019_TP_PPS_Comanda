@@ -65,6 +65,7 @@ Registrate en: https://forms.gle/yZ8xsdWj7W7ECWAG8
 | nuevo-home-mozo | Nuevo home para mozo | 21/6 |
 | arreglos-hacer-pedidos | Arreglo del pedido | 21/6 |
 
+
 ## Ezequiel Mahafud:
 
 | Branch | Descripcion del trabajo | Fecha Finalizacion |
