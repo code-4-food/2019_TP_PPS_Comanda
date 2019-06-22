@@ -6,6 +6,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ProductosService } from 'src/app/servicios/productos.service';
 import { timer } from 'rxjs';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { AuthService } from 'src/app/servicios/auth.service';
 
 @Component({
   selector: 'app-alta-producto',
@@ -31,10 +32,12 @@ export class AltaProductoPage implements OnInit {
     private camera: Camera,
     private route: Router,
     private producto_service: ProductosService,
-    private barcodeScanner: BarcodeScanner
+    private barcodeScanner: BarcodeScanner,
+    private auth:AuthService
   ) { }
 
   ngOnInit() {
+    this.producto.sector = this.auth.getUsuario()['perfil']
   }
 
 
@@ -48,8 +51,7 @@ export class AltaProductoPage implements OnInit {
       prod_aux.foto_1 != '' &&
       prod_aux.foto_2 != '' &&
       prod_aux.foto_3 != '' &&
-      prod_aux.qr != '' &&
-      prod_aux.sector != ''
+      prod_aux.qr != ''
     ) {
       this.producto_service.CrearProducto(prod_aux).then(ret => {
         this.route.navigate(['/home']);

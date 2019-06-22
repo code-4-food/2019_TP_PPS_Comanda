@@ -1,8 +1,20 @@
 <ion-content>
-  <ion-card class="mitad" (click)="this.Mover('bar-cocina')">
-    <h1>Aceptar Pedidos</h1>
+  <ion-card class="ion-activatable" (click)="this.Mover('bar-cocina')" [ngClass]="{ 'card-vertical': !this.platform.isLandscape(), 'card-horizontal': this.platform.isLandscape() }">
+    <ion-ripple-effect></ion-ripple-effect>
+    <ion-icon name="book" [ngClass]="{ 'icon-horizontal': this.platform.isLandscape(), 'icon-vertical': !this.platform.isLandscape() }"></ion-icon>
+    <h2>Aceptar Pedidos</h2>
   </ion-card>
-  <ion-card class="mitad" (click)="this.Mover('bar-cocina-aceptados')">
-    <h1>Mis Pedidos</h1>
+
+  <ion-card class="ion-activatable" (click)="this.Mover('bar-cocina-aceptados')" [ngClass]="{ 'card-vertical': !this.platform.isLandscape(), 'card-horizontal': this.platform.isLandscape() }">
+    <ion-ripple-effect></ion-ripple-effect>
+    <ion-icon name="restaurant" [ngClass]="{ 'icon-horizontal': this.platform.isLandscape(), 'icon-vertical': !this.platform.isLandscape() }"></ion-icon>
+    <h2>Mis Pedidos</h2>
   </ion-card>
+
+  <ion-card class="ion-activatable" (click)="this.Mover('alta-producto')" [ngClass]="{ 'card-vertical': !this.platform.isLandscape(), 'card-horizontal': this.platform.isLandscape() }">
+    <ion-ripple-effect></ion-ripple-effect>
+    <ion-icon name="checkbox-outline"></ion-icon>
+    <h2>Agregar Producto</h2>
+  </ion-card>
+
 </ion-content>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService  } from "../servicios/auth.service";
+import { AuthService } from "../servicios/auth.service";
 import { Anonimo, Cliente, Empleado } from '../interfaces/usuario';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
@@ -9,28 +9,18 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit{
-  url='';
+export class HomePage implements OnInit {
+  url = '';
   constructor(
-    private auth:AuthService,
-    private publicRouter:Router,
-    private camera:Camera
-  ){}
+    private auth: AuthService,
+    private publicRouter: Router,
+    private camera: Camera
+  ) { }
 
-  ngOnInit(){
-    // let data= {} as Anonimo;
-    // data.nombre='Marcos';
-    // data.mail = 'marcosTest1asd12@gmail.com';
-    // data.foto = 'ejemploErrone';
-    // data.activo = true;
-    // data.perfil = 'anonimo'
-    // this.tests = this.auth.getUsuario();
-    //   this.tomarFoto(data)
-      // this.auth.CrearAuth(data.mail,'1234567', data, '').then(aa=>{this.tests=aa}).catch(err=>{this.tests=err})
-
+  ngOnInit() {
   }
 
-  mover(url){
+  mover(url) {
     console.log(url)
     this.publicRouter.navigate([url])
   }

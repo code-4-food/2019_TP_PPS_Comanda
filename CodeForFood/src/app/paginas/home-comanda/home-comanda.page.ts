@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-home-comanda',
@@ -9,7 +10,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class HomeComandaPage implements OnInit {
 
   constructor(
-    private route: Router,    
+    private route: Router,
+    private platform:Platform   
   ) { }
 
   ngOnInit(

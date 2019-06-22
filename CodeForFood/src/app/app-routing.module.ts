@@ -1,15 +1,17 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { SepararGuard } from './guard/separar.guard';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'alta-supervisor',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
   {
     path: 'home',
-    loadChildren: './home/home.module#HomePageModule'
+    loadChildren: './home/home.module#HomePageModule',
+    canActivate:[SepararGuard]
   },
   {
     path: 'list',
@@ -28,6 +30,17 @@ const routes: Routes = [
   { path: 'home-cliente', loadChildren: './paginas/home-cliente/home-cliente.module#HomeClientePageModule' },
   { path: 'hacer-pedido', loadChildren: './paginas/hacer-pedido/hacer-pedido.module#HacerPedidoPageModule' },
   { path: 'home-metre', loadChildren: './paginas/home-metre/home-metre.module#HomeMetrePageModule' },
+  { path: 'home-supervisor', loadChildren: './paginas/home-supervisor/home-supervisor.module#HomeSupervisorPageModule' },
+  { path: 'aceptar-cliente', loadChildren: './paginas/aceptar-cliente/aceptar-cliente.module#AceptarClientePageModule' },
+  { path: 'solicitar-reserva', loadChildren: './paginas/solicitar-reserva/solicitar-reserva.module#SolicitarReservaPageModule' },
+  { path: 'confirmar-reserva', loadChildren: './paginas/confirmar-reserva/confirmar-reserva.module#ConfirmarReservaPageModule' },
+  { path: 'home-mozo', loadChildren: './paginas/home-mozo/home-mozo.module#HomeMozoPageModule' },
+  { path: 'encuesta-cliente', loadChildren: './paginas/encuesta-cliente/encuesta-cliente.module#EncuestaClientePageModule' },
+  { path: 'mozo-aceptar', loadChildren: './paginas/mozo-aceptar/mozo-aceptar.module#MozoAceptarPageModule' },
+  { path: 'mozo-terminar', loadChildren: './paginas/mozo-terminar/mozo-terminar.module#MozoTerminarPageModule' },
+  { path: 'encuesta-empleado', loadChildren: './paginas/encuesta-empleado/encuesta-empleado.module#EncuestaEmpleadoPageModule' },
+  { path: 'encuesta-supervisor', loadChildren: './paginas/encuesta-supervisor/encuesta-supervisor.module#EncuestaSupervisorPageModule' }
+
 
 ];
 

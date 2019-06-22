@@ -17,22 +17,16 @@
 
   <ion-item>
     <ion-label >Tiempo de Preparacion:</ion-label>
-    <ion-input class='input_blanco' type="text" [(ngModel)]="this.producto.tiempo"></ion-input>
+    <ion-input class='input_blanco' type="number" [(ngModel)]="this.producto.tiempo"></ion-input>
   </ion-item>
 
   <ion-item>
     <ion-label >Precio:</ion-label>
     <ion-label><ion-icon name="logo-usd"></ion-icon></ion-label>
-    <ion-input class='input_blanco' type="text" [(ngModel)]="this.producto.precio"></ion-input>
+    <ion-input class='input_blanco' type="number" [(ngModel)]="this.producto.precio"></ion-input>
   </ion-item>
 
-  <ion-item>
-    <ion-label >Sector:</ion-label>
-    <ion-select class='input_blanco todo' okText="Aceptar" cancelText="Cancelar" [(ngModel)]="this.producto.sector">
-      <ion-select-option  value='cocina'>Cocina</ion-select-option>
-      <ion-select-option  value='bar'>Bar</ion-select-option>
-    </ion-select>
-  </ion-item>
+
 
   <ion-item lines="full">
     <ion-label>

@@ -2,13 +2,14 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Injectable } from '@angular/core';
 import { Reserva, Espera } from '../interfaces/reserva';
 import { map } from 'rxjs/internal/operators/map';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReservasService {
 
-  constructor(private db: AngularFirestore) { }
+  constructor(private db: AngularFirestore, private authService:AuthService) { }
 
   getReservas() {
     return this.db.collection('reservas').snapshotChanges().pipe(map(reservas => {
@@ -20,7 +21,34 @@ export class ReservasService {
     }));
   }
 
-  entrarListaEspera(id, nombre, cantidad) {
+  getReservasPendientes() {
+    return this.db.collection('reservas', ref => ref.where('estado', '==', 'pendiente')).snapshotChanges().pipe(map(reservas => {
+      return reservas.map(reserva => {
+        const data = reserva.payload.doc.data() as Reserva;
+        data.id = reserva.payload.doc.id;
+        return data;
+      });
+    }));
+  }
+
+  addReserva(reserva: Reserva) {
+    return new Promise((resolve, rejected) => {
+      this.db.collection('reservas').add(reserva).then(ret => {
+        resolve(ret);
+      }).catch(err => {
+        rejected(err);
+      });
+    });
+  }
+
+  updateReserva(reserva: Reserva) {
+    return this.db.collection('reservas').doc(reserva.id).set(reserva);
+  }
+
+  entrarListaEspera(cantidad) {
+    let usr = this.authService.getUsuario();
+    let id = usr['id'];
+    let nombre =usr['nombre'];
     const fecha = new Date();
     const anio = fecha.getFullYear().toString();
     const mes = fecha.getMonth().toString();
