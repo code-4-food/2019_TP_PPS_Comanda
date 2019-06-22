@@ -39,6 +39,7 @@ export class AlertService {
         }, {
           text: 'Aceptar',
           handler: (data) => {
+            data=''
             this.reservaService.entrarListaEspera(data);
           }
         }
