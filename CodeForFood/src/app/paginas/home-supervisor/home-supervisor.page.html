@@ -42,7 +42,7 @@
     <h2>Agregar Mesa</h2>
   </ion-card>
 
-  <ion-card class="ion-activatable" (click)="this.Mover('')" [ngClass]="{ 'card-vertical': !this.platform.isLandscape(), 'card-horizontal': this.platform.isLandscape() }">
+  <ion-card class="ion-activatable" (click)="this.Mover('encuesta-supervisor')" [ngClass]="{ 'card-vertical': !this.platform.isLandscape(), 'card-horizontal': this.platform.isLandscape() }">
     <ion-ripple-effect></ion-ripple-effect>
     <ion-icon name="trending-up" [ngClass]="{ 'icon-horizontal': this.platform.isLandscape(), 'icon-vertical': !this.platform.isLandscape() }"></ion-icon>
     <h2>Estadisticas</h2>
