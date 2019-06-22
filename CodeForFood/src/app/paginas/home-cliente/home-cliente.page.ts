@@ -50,9 +50,7 @@ export class HomeClientePage {
         let esta_en_espera = false;
         this.listaEspera.forEach(espera => {
           if (espera.cliente == this.usuario['id']) {
-            /*
-              Poner aca lo de las encuestas
-            */
+            this.route.navigate(['encuestas-clientes'])
             esta_en_espera = true;
             return;
           }

@@ -44,6 +44,10 @@ Registrate en: https://forms.gle/yZ8xsdWj7W7ECWAG8
 | entrada-local-lista-espera | Agregarce a la lista de espera Y el metre puede ver la lista de espera | 07/6 |
 | home+email | Redirecciopn a los homes necesarios  | 13/6 |
 | fix/Mozo+Dueño+pedido | Agrego mas funcionalidad a los homes  | 14/6 |
+| encuestas-clientes | Mostrar encuestas de clientes  | 22/6 |
+| encuesta-dueño-y-aceptar-cliente | Agregar encuesta dueño  | 21/6 |
+| alerts-service | Service para mostrar mensajes  | 14/6 |
+
 
 
 ## Micaela Saez:
@@ -57,6 +61,10 @@ Registrate en: https://forms.gle/yZ8xsdWj7W7ECWAG8
 | home-mozo | Inicio del mozo | 13/6 |
 | cerrar-pedido | Cliente pide cuenta y mozo cierra pedido | 13/6 |
 | home-mozo-arreglado | Arreglo el home del mozo | 14/6 |
+| encuesta-empleado | Encuesta empleado | 21/6 |
+| nuevo-home-mozo | Nuevo home para mozo | 21/6 |
+| arreglos-hacer-pedidos | Arreglo del pedido | 21/6 |
+
 
 ## Ezequiel Mahafud:
 
@@ -73,4 +81,4 @@ Registrate en: https://forms.gle/yZ8xsdWj7W7ECWAG8
 | Fix-auth-anonimo | Fix en usuarios anonimos | 07/6 |
 | Reservas-agendadas | Cliente puede hacer reserva y el supervisor puede confirmarlas | 12/6 |
 | Encuesta-cliente | Encuesta cliente | 14/6 |
-
+| Modificaciones-confirmacion-reserva | Encuesta cliente | 21/6 |
