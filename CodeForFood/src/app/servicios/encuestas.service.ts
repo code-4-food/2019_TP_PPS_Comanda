@@ -27,4 +27,14 @@ export class EncuestasService {
       });
     });
   }
+
+  public addEncuestaDueño(encuesta) {
+    return new Promise((resolve, rejected) => {
+      this.db.collection('encuestas-dueño').add(encuesta).then(ret => {
+        resolve(ret);
+      }).catch(err => {
+        rejected(err);
+      });
+    });
+  }
 }

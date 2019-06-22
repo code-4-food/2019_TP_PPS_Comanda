@@ -21,9 +21,11 @@
           <ion-img [src]="cliente.foto"></ion-img>
         </ion-item>
 
+
         <ion-footer>
           <ion-toolbar>
-            <ion-button color='dark' expand="full" (click)='this.AceptarCliente(cliente)'>Aceptar Cliente</ion-button>
+            <ion-button color='danger' class="mitad" (click)='this.BorrarCliente(cliente)'>Cancelar</ion-button>
+            <ion-button color='success' class="mitad" (click)='this.AceptarCliente(cliente)'>Aceptar Cliente</ion-button>
           </ion-toolbar>
         </ion-footer>
       </ion-content>

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { ReservasService } from './reservas.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlertService {
 
-  constructor(private alertController: AlertController, private reservaService:ReservasService) { }
+  constructor(private alertController: AlertController, private reservaService:ReservasService, private authService:AuthService) { }
 
   async mensaje(titulo, mensaje) {
     const alert = await this.alertController.create({
