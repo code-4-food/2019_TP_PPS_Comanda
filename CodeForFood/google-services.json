@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "836033636378",
+    "firebase_url": "https://code-for-food.firebaseio.com",
+    "project_id": "code-for-food",
+    "storage_bucket": "code-for-food.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836033636378:android:ec59cbc5a75db1d6",
+        "android_client_info": {
+          "package_name": "com.company.codeforfoodutn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "836033636378-4r1hca7g8ctt3mglt0j12dck24p9ovpl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZTYq5huxLUrED_ccxK46AGcCVZ6cuE3k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "836033636378-4r1hca7g8ctt3mglt0j12dck24p9ovpl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

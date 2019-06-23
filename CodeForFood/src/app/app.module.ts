@@ -18,7 +18,14 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth'
 import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore'
 import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { EmailComposer } from '@ionic-native/email-composer/ngx';
+
+import { AsyncPipe } from '../../node_modules/@angular/common';
+import { MessagingService } from './servicios/messaging.service';
+
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,9 +37,13 @@ import { EmailComposer } from '@ionic-native/email-composer/ngx';
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    AngularFireMessagingModule,
+    AngularFireDatabaseModule
   ],
   providers: [
+    AsyncPipe,
+    MessagingService,
     StatusBar,
     SplashScreen,
     BarcodeScanner,
