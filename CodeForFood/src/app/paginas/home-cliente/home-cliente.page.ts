@@ -70,7 +70,7 @@ export class HomeClientePage {
             this.mesasClientes.map(mesaCliente => {
               if (mesaCliente.idMesa === mesa.id && mesaCliente.cerrada === false) {
                 if (mesaCliente.idCliente !== this.usuario.id) {
-                  alert('Esta mesa se encuentra ocupada');
+                  this.alert.mensaje('Mesa ocupada', 'Esta mesa se encuentra ocupada');
                   mesaOcupada = true;
                 }
               }
@@ -85,7 +85,7 @@ export class HomeClientePage {
                 // Si el usuario ya tiene una mesa asignada, no debe poder tomar otra
                 this.mesasClientes.map(mesaCliente => {
                   if (mesaCliente.idCliente === this.usuario.id && mesaCliente.cerrada === false) {
-                    alert('Usted ya tiene una mesa asignada');
+                    this.alert.mensaje('Atención!', 'Usted ya tiene una mesa asignada');
                     mesaDisponible = false;
                   }
                 });
@@ -106,7 +106,7 @@ export class HomeClientePage {
                           'Pulse OK para confirmar su llegada');
                         }
                         else {
-                          alert('Esta mesa se encuentra reservada');
+                          this.alert.mensaje('Mesa no disponible', 'Esta mesa se encuentra reservada');
                         }
                       }
                     }
@@ -120,7 +120,7 @@ export class HomeClientePage {
                 break;
               case 'realizando pedido':
                 this.route.navigate(['/hacer-pedido']);
-                alert('Ya puede realizar su pedido!');
+                this.alert.mensaje('Bienvenido!', 'Ya puede realizar su pedido');
 
                 break;
               case 'esperando pedido':
@@ -131,19 +131,20 @@ export class HomeClientePage {
 
                     switch (pedido.estado) {
                       case 'sconfirmar':
-                        alert('Su pedido se encuentra pendiente de confirmación del mozo');
+                        this.alert.mensaje('Esperando confirmación', 'Su pedido se encuentra pendiente de confirmación del mozo');
                         break;
                       case 'preparacion':
-                        alert('Su pedido se encuentra en preparación');
+                        this.alert.mensaje('En preparación', 'Su pedido se encuentra en preparación');
                         break;
                       case 'terminado':
-                        alert('Su pedido ya fue preparado y el mozo está por llevarselo a su mesa');
+                        this.alert.mensaje('Pedido finalizado', 'Su pedido ya fue preparado y el mozo se lo estará llevando a su mesa en ' +
+                        'unos instantes');
                         break;
                       case 'entregadosconfirmar':
-                        alert('Su pedido ya fue entregado y necesita su confirmación');
+                        this.alert.mensaje('Confirmar entrega', 'Su pedido ya fue entregado y necesita su confirmación');
                         break;
                       case 'entregado':
-                        alert('Su pedido ya fue entregado');
+                        this.alert.mensaje('Pedido entregado', 'Su pedido ya fue entregado');
                         break;
                     }
                   });
@@ -168,7 +169,7 @@ export class HomeClientePage {
       });
 
       if (!qrValido) {
-        alert(resultado.text);
+        this.alert.mensaje('Atención!', 'El QR escaneado no es válido');
       }
     });
   }
@@ -177,7 +178,7 @@ export class HomeClientePage {
     if (confirm(mensaje)) {
       mesa.estado = 'realizando pedido';
       await this.mesasService.updateMesa(mesa).catch(error => {
-        alert(error);
+        this.alert.mensaje('', error);
       });
 
       await this.mesasService.asignarMesa({
@@ -210,7 +211,7 @@ export class HomeClientePage {
               if (mesa.id === mesacl.idMesa) {
                 mesa.estado = 'comiendo';
                 this.mesasService.updateMesa(mesa).then( () => {
-                  alert('confirmado');
+                  this.alert.mensaje('Confirmado', 'Muchas gracias por confirmar la recepción de su pedido');
                 });
                 break;
               }
