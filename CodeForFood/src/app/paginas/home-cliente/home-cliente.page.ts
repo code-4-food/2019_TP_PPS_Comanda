@@ -82,26 +82,36 @@ export class HomeClientePage {
               case 'disponible':
                 let mesaDisponible = true;
 
-                this.reservas.forEach(reserva => {
-                  const milisegundosReserva = JSON.parse(JSON.stringify(reserva.fecha)).seconds * 1000;
-                  const milisegundosActuales = Date.now();
-
-                  if (reserva.estado === 'confirmada' && reserva.idMesa === mesa.id) {
-                    // Si faltan menos de 40 minutos para la reserva o todavía no pasaron 15 de la misma
-                    if ((milisegundosReserva - 2400000) <= milisegundosActuales &&
-                    (milisegundosReserva + 900000) >= milisegundosActuales) {
-                      mesaDisponible = false;
-
-                      if (reserva.idCliente === this.usuario.id) {
-                        this.solicitarMesa(mesa, `Bienvenido a su mesa ${this.usuario.nombre} ${this.usuario.apellido}! ` +
-                        'Pulse OK para confirmar su llegada');
-                      }
-                      else {
-                        alert('Esta mesa se encuentra reservada');
-                      }
-                    }
+                // Si el usuario ya tiene una mesa asignada, no debe poder tomar otra
+                this.mesasClientes.map(mesaCliente => {
+                  if (mesaCliente.idCliente === this.usuario.id && mesaCliente.cerrada === false) {
+                    alert('Usted ya tiene una mesa asignada');
+                    mesaDisponible = false;
                   }
                 });
+
+                if (mesaDisponible) {
+                  this.reservas.forEach(reserva => {
+                    const milisegundosReserva = JSON.parse(JSON.stringify(reserva.fecha)).seconds * 1000;
+                    const milisegundosActuales = Date.now();
+
+                    if (reserva.estado === 'confirmada' && reserva.idMesa === mesa.id) {
+                      // Si faltan menos de 40 minutos para la reserva o todavía no pasaron 15 de la misma
+                      if ((milisegundosReserva - 2400000) <= milisegundosActuales &&
+                      (milisegundosReserva + 900000) >= milisegundosActuales) {
+                        mesaDisponible = false;
+
+                        if (reserva.idCliente === this.usuario.id) {
+                          this.solicitarMesa(mesa, `Bienvenido a su mesa ${this.usuario.nombre} ${this.usuario.apellido}! ` +
+                          'Pulse OK para confirmar su llegada');
+                        }
+                        else {
+                          alert('Esta mesa se encuentra reservada');
+                        }
+                      }
+                    }
+                  });
+                }
 
                 if (mesaDisponible) {
                   this.solicitarMesa(mesa, 'La mesa se encuentra disponible! Desea solicitar esta mesa?');
