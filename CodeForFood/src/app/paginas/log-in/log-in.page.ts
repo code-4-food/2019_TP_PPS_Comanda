@@ -47,7 +47,16 @@ export class LogInPage implements OnInit {
 
   Registrarse(){
     this.publicRouter.navigate(['alta-cliente'])
+  }
 
-    
+  loginAnonimo() {
+    localStorage.setItem('usuario', JSON.stringify({
+      "foto":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Anonymous_emblem.svg/245px-Anonymous_emblem.svg.png",
+      "nombre":"Anonymous",
+      "perfil":"anonimo",
+      "uid":"QzCxmkSwajRVfyGgIe8M4WrohOu2",
+      "id":"anonimoNoBorrar"}));
+
+    this.publicRouter.navigate(['/home-cliente']);
   }
 }
