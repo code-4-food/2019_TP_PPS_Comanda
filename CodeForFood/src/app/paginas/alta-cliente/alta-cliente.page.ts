@@ -2,7 +2,7 @@ import { Router } from '@angular/router';
 import { AuthService } from './../../servicios/auth.service';
 import { FirestorageService } from './../../servicios/firestorage.service';
 import { Component } from '@angular/core';
-import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { BarcodeScannerOptions, BarcodeScanResult, BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 @Component({
@@ -38,16 +38,12 @@ export class AltaClientePage {
   }
 
   public tomarDatosDNI() {
-    this.barcodeScanner.scan().then(resultado => {
-      this.dataDNI = resultado.text.split('@');
-
-      if (this.dataDNI.length >= 7) {
-        this.dniUsuario = this.dataDNI[0];
-        this.apellidoUsuario = this.dataDNI[3];
-        this.nombreUsuario = this.dataDNI[4];
-        this.nacionalidadUsuario = this.dataDNI[5];
-        this.nacimientoUsuario = this.dataDNI[6];
-      }
+    const options: BarcodeScannerOptions = { prompt: 'Escanee el DNI', formats: 'PDF_417' };
+    this.barcodeScanner.scan(options).then((resultado: BarcodeScanResult) => {
+      this.dataDNI = (resultado.text).split('@');
+      this.dniUsuario = this.dataDNI[1].trim();
+      this.apellidoUsuario = this.dataDNI[4];
+      this.nombreUsuario = this.dataDNI[5];
     });
   }
 
