@@ -82,6 +82,12 @@ export class HacerPedidoPage implements OnInit {
         this.mesasClientes.forEach(mCliente => {
           if (mCliente.id == this.pedido.id_mesa_cliente) {
             this.pedido['id-mesa'] = mCliente.idMesa;
+
+            // By Eze
+            this.mesaServ.getMesaPorID(mCliente.idMesa).then(mesas => {
+              mesas[0].estado = 'esperando pedido';
+              this.mesaServ.updateMesa(mesas[0]);
+            });
           }
         });
         this.pedidoServ.AddPedido(this.pedido).then( (res) => {
