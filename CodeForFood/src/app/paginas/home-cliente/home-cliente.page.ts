@@ -128,7 +128,7 @@ export class HomeClientePage {
                   pedidos.map(pedido => {
                     switch (pedido.estado) {
                       case 'sconfirmar':
-                        this.alert.mensaje('Esperando confirmación', 'Su pedido se encuentra pendiente de confirmación del mozo');
+                        this.alert.mensaje('Esperando confirmación', 'Su pedido se encuentra pendiente de confirmación por parte del mozo');
                         break;
                       case 'preparacion':
                         this.alert.mensaje('En preparación', 'Su pedido se encuentra en preparación');
@@ -139,9 +139,6 @@ export class HomeClientePage {
                         break;
                       case 'entregadosconfirmar':
                         this.alert.mensaje('Confirmar entrega', 'Su pedido ya fue entregado y necesita su confirmación');
-                        break;
-                      case 'entregado':
-                        this.alert.mensaje('Pedido entregado', 'Su pedido ya fue entregado');
                         break;
                     }
                   });
