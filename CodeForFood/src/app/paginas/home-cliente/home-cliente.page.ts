@@ -24,7 +24,6 @@ export class HomeClientePage {
   public listaEspera: Espera[];
   public mesasClientes: MesaCliente[];
   public usuario: any;
-  public pedido: any;
   private pedidos = [];
 
   constructor(private platform: Platform, private barcodeScanner: BarcodeScanner, private reservasService: ReservasService,
@@ -127,8 +126,6 @@ export class HomeClientePage {
                 // Falta mostrar todo el detalle de cada producto del pedido
                 await this.pedidosService.getPedido(mesa.id).then(pedidos => {
                   pedidos.map(pedido => {
-                    this.pedido = pedido;
-
                     switch (pedido.estado) {
                       case 'sconfirmar':
                         this.alert.mensaje('Esperando confirmación', 'Su pedido se encuentra pendiente de confirmación del mozo');

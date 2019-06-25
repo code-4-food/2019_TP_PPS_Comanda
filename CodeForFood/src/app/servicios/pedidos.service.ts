@@ -44,7 +44,8 @@ export class PedidosService {
   }
 
   getPedido(idMesa: string) {
-    return this.firestore.collection('pedidos').ref.where('id-mesa', '==', idMesa).where('estado', '==', 'preparacion').get()
+    // ACÁ ESTÁ EL ERROR, TRAE ÚNICAMENTE LOS REGISTROS QUE ESTÁN CON EL ESTADO "PREPARACIÓN"
+    return this.firestore.collection('pedidos').ref.where('id-mesa', '==', idMesa)/*.where('estado', '==', 'preparacion')*/.get()
     .then(async pedidos => {
        return await pedidos.docs.map(documento => {
         const data = documento.data() as Pedido;
