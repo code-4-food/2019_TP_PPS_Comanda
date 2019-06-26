@@ -1,16 +1,16 @@
-.icon{
-    display: block;
-    width: 45%;
-    height: 50%;
-    border-radius: 50%;
-    float: right;
+.icon {
+  display: absolute;
+  width: 45%;
+  height: 49%;
+  border-radius: 49%;
+  float: right;
 }
 
-.text{
-    position: absolute;
-    vertical-align: middle;
+.text {
+  position: absolute;
+  vertical-align: middle;
 }
 
 .container {
-    line-height: 50%;
-  }
+  line-height: 100%;
+}

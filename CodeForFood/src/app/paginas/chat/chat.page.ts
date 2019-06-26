@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ChatService } from 'src/app/servicios/chat.service';
+import { Chat } from 'src/app/interfaces/chat';
+import { AuthService } from 'src/app/servicios/auth.service';
+import { MesasService } from 'src/app/servicios/mesas.service';
 
 @Component({
   selector: 'app-chat',
@@ -6,42 +10,46 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chat.page.scss'],
 })
 export class ChatPage implements OnInit {
-  mensajes = [
-    {
-      mensaje:'hola como estansdahghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh1?',
-      lado:'end',
-      nombre:'Marcos Rey',
-      fecha:'19/06/24 18:54'
-    },
-    {
-      mensaje:'hola como estan2?',
-      lado:'end',
-      nombre:'Marcos Rey',
-      fecha:'18/06/24 18:54'
-    },
-    {
-      mensaje:'hola como estan3?',
-      lado:'start',
-      nombre:'Marcos Rey',
-      fecha:'19/05/24 18:54'
-    },
-    {
-      mensaje:'hola como estan4?',
-      lado:'end',
-      nombre:'Marcos Rey',
-      fecha:'19/06/24 18:53'
-    },
-  ]
-  constructor() { }
+  mensajes = [];
+  msj='';
+  usuario;
+  constructor(private chat:ChatService, private auth:AuthService) { }
 
   ngOnInit() {
-    this.ordenarMensajes()
+    this.usuario = this.auth.getUsuario()
+    this.chat.GetChat().subscribe(mensajes=>{
+      this.mensajes = mensajes;
+      this.ordenarMensajes()
+    })
+
   }
 
   ordenarMensajes(){
     console.log(this.mensajes.sort(compare))
   }
 
+  sendMessage(){
+    let msj={};
+    msj['mensaje'] = this.msj;
+    if(this.usuario['perfil'] == 'delivery'){
+      msj['nombre']='DELIVERY: '+this.usuario['nombre']
+
+    }
+    else{
+      msj['nombre']=this.usuario['apellido']+'  '+this.usuario['nombre']
+    }
+    const fecha = new Date();
+    const anio = fecha.getFullYear().toString();
+    const mes = fecha.getMonth().toString();
+    const dia = fecha.getDate().toString();
+    const hora = fecha.getHours().toString();
+    const minuto = fecha.getMinutes().toString();
+    const seg = fecha.getSeconds().toString();
+    msj['fecha'] = anio+' '+mes+' '+dia +' '+ hora+':'+ minuto+':'+ seg
+    msj['usuario'] = this.usuario['id']
+    this.chat.SendMensaje(msj)
+    this.msj = ''
+  }
 }
 
 
