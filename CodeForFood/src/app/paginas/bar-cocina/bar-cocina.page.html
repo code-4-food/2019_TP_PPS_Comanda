@@ -18,7 +18,7 @@
         <div *ngFor="let producto of this.pendiente['productos']">
           <div *ngIf="producto.sector == empleado.perfil">
             <ion-item>
-              <ion-label>Nombre:</ion-label>
+              <ion-label>{{pendiente.cantidad}} --> </ion-label>
               <ion-input class='input_blanco' disabled type="text" [(ngModel)]="producto.nombre"></ion-input>
             </ion-item>
           </div>

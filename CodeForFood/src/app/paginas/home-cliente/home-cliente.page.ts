@@ -183,7 +183,7 @@ export class HomeClientePage {
         juegoBebida: false,
         juegoDescuento: false,
         juegoPostre: false,
-        propina: 0
+        propina: 1
       });
 
       this.reservasService.EliminarDeListaEsperaByIdCliente(this.usuario.id, this.listaEspera);

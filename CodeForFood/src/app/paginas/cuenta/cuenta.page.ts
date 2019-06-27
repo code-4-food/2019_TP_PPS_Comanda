@@ -65,7 +65,7 @@ export class CuentaPage implements OnInit {
       } else {
         this.total = 0;
         this.mesasClientes.forEach(m => {
-          if (m.idCliente === this.empleado.id) {
+          if (m.idCliente === this.empleado.id && !m.cerrada) {
             this.id = m.idMesa;
             // console.log('id-mesa-cliente actual: ', this.id);
           }
@@ -102,7 +102,7 @@ export class CuentaPage implements OnInit {
     let auxD = true;
     if (this.id !== '') {
       this.mesasClientes.forEach(m => {
-        if (m.idMesa === this.id) {
+        if (m.idMesa === this.id && !m.cerrada) {
           this.pedidos.forEach(p => {
             // console.log(p.id_mesa_cliente + " - - - - " + m.id)
             if (p.id_mesa_cliente === m.id) {
@@ -112,8 +112,12 @@ export class CuentaPage implements OnInit {
                 if (p.id === pp.id_pedido) {
                   this.productos.forEach(prod => {
                     if (prod.id === pp.id_producto) {
-                      this.productosCuenta.push(prod);
-                      this.total += Number.parseInt(prod.precio);
+                      let proda = prod;
+                      proda['cantidad'] = pp.cantidad;
+                      console.log(proda)
+                      this.productosCuenta.push(proda);
+                      console.log(this.productosCuenta)
+                      this.total += Number.parseInt(proda.precio) * Number.parseInt(proda.cantidad);
                       this.propina = m.propina;
                       // descuentos:
                       if (auxB && prod.sector == 'bar' && m.juegoBebida > 0) {
@@ -169,16 +173,16 @@ export class CuentaPage implements OnInit {
       if (barcodeData.text === 'malo') {
         this.GuardarPropina(1);
       } else if (barcodeData.text === 'regular') {
-        this.total *= 1.05;
+        this.propina *= 1.05;
         this.GuardarPropina(1.05);
       } else if (barcodeData.text === 'bien') {
-        this.total *= 1.10;
+        this.propina *= 1.10;
         this.GuardarPropina(1.10);
       } else if (barcodeData.text === 'muy bien') {
-        this.total *= 1.15;
+        this.propina *= 1.15;
         this.GuardarPropina(1.15);
       } else if (barcodeData.text === 'excelente') {
-        this.total *= 1.20;
+        this.propina *= 1.20;
         this.GuardarPropina(1.20);
       } else {
         this.alertServ.mensaje('', 'Código no válido!');
