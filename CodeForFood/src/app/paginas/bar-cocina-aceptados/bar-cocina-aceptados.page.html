@@ -17,7 +17,7 @@
         </ion-item>
         <div *ngFor="let producto of this.pedido['productos']">
           <ion-item>
-            <ion-label >Nombre:</ion-label>
+            <ion-label>{{pedido.cantidad}} --> </ion-label>
             <ion-input class='input_blanco' disabled type="text" [(ngModel)]="producto.nombre"></ion-input>
           </ion-item>
         </div>

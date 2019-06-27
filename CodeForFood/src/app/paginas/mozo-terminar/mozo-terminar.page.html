@@ -16,7 +16,7 @@
             <br>
             <table style="width: 100%; text-align: center;">
               <thead>
-                <th>Producto</th><th>Sector</th><th>Estado</th>
+                <th>Producto</th><th>Cantidad</th><th>Sector</th><th>Estado</th>
               </thead>
               <tbody>
                 <ng-container *ngFor="let prod of pedidosProductos">
@@ -25,6 +25,7 @@
                       <ng-container *ngFor="let p of productos">
                         <ng-container *ngIf="p.id == prod.id_producto">
                           <td>{{p.nombre}}</td>
+                          <td>{{prod.cantidad}}</td>
                           <td>{{p.sector}}</td>
                           <td>{{prod.estado}}</td>
                         </ng-container>              
@@ -34,7 +35,7 @@
                 </ng-container>  
                 <tr><td><br></td></tr>
                 <tr>
-                  <td colspan="3">
+                  <td colspan="4">
                     <ion-button (click)="EntregarPedido(item.id)" *ngIf="item['estado'] == 'terminado'" color="success" expand="full">
                       Entregar Pedido
                     </ion-button>

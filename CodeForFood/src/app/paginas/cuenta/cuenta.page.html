@@ -21,12 +21,13 @@
     <br><br>
     <table style="width: 100%; text-align: center;">
       <thead>
-        <th>Producto</th><th>Precio</th> 
+        <th>Producto</th><th>Precio</th><th>Cantidad</th> 
       </thead>
       <tbody>
         <tr *ngFor="let item of productosCuenta">
           <td>{{item.nombre}}</td>
           <td>{{item.precio}}</td>
+          <td>{{item.cantidad}}</td>
         </tr>
       </tbody>
     </table>
@@ -42,18 +43,18 @@
     </ion-item>
     <br>
     <ng-container *ngIf="!esMozo">
-      <ng-container *ngIf="propina == 0">
+      <ng-container>
         <ion-item style="text-align: center;">
           <h1>Total sin propina: ${{total}}</h1>
         </ion-item>
         <ion-button (click)="Propina()" color="dark">Sumar Propina</ion-button>
       </ng-container>
       <br>
-      <ion-item *ngIf="propina != 0">
-        <h1>Total final más propina: ${{total*propina}}</h1>
+      <ion-item>
+        <h1>Total final más propina: ${{total * propina}}</h1>
       </ion-item>
       <br>
-      <ng-container *ngIf="propina != 0">
+      <ng-container>
         <ion-button (click)="SolicitarCuenta()" color="danger" expand="block">Solicitar Cuenta</ion-button>
       </ng-container>
     </ng-container>
@@ -62,7 +63,7 @@
       <ion-item *ngIf="propina == 0 && total != 0">
         <h2>Falta ingresar la propina!</h2>
       </ion-item>
-      <ng-container *ngIf="propina != 0">
+      <ng-container>
         <ion-item>
           <h1>Total final más propina: ${{total*propina}}</h1>
         </ion-item>

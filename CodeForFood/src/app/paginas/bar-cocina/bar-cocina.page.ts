@@ -77,6 +77,7 @@ export class BarCocinaPage implements OnInit {
                   comanda: pp['comanda'],
                   ver_pedido: p,
                   pedido_productos: [pp],
+                  cantidad:pp['cantidad']
                 }
               }
               else{

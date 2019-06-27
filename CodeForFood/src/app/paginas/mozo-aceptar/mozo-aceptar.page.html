@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color='dark'>
     <ion-title>Aceptar Pedidos</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -17,7 +17,7 @@
             <br>
             <table style="width: 100%; text-align: center;">
               <thead style="font-size: 17px;">
-                <th>Producto</th><th>Sector</th>
+                <th>Producto</th><th>Cantidad</th>
               </thead>
               <tbody>
                 <ng-container *ngFor="let prod of pedidosProductos">
@@ -26,7 +26,7 @@
                       <ng-container *ngFor="let p of productos">
                         <ng-container *ngIf="p.id == prod.id_producto">
                           <td>{{p.nombre}}</td>
-                          <td>{{p.sector}}</td>
+                          <td>{{prod.cantidad}}</td>
                         </ng-container>              
                       </ng-container>           
                     </tr>

@@ -14,4 +14,5 @@ export interface PedidoProducto {
     id_producto:any;
     estado:string;
     id_comanda:string;
+    cantidad:number;
 }

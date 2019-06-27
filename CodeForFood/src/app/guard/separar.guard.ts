@@ -34,6 +34,9 @@ export class SepararGuard implements CanActivate {
         case 'metre':
           this.router.navigate(['home-metre']);
           break;
+        case 'delivery':
+            this.router.navigate(['home-delivery']);
+            break;
         case 'cocina':
         case 'bar':
           this.router.navigate(['home-comanda']);

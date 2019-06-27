@@ -62,7 +62,6 @@ export class HacerPedidoPage implements OnInit {
   public Agregar(idProd: string) {
     console.log(idProd);
     if (this.cantidad > 0 ) {
-      for (let index = 0; index < this.cantidad; index++) {
         const pedidoProd = {
           id_pedido: this.pedido['id'],
           estado: 'sconfirmar',
@@ -71,10 +70,12 @@ export class HacerPedidoPage implements OnInit {
           cantidad: this.cantidad
         };
         this.pedidosProductos.push(pedidoProd);
-      }
+        this.alertServ.mensaje(''+this.cantidad+' productos','agregados')
     }
+    console.log(this.pedidosProductos)
     this.cantidad = 1;
   }
+
   public TerminarPedido() {
     if (this.pedidosProductos.length > 0 ) {
       // console.log(this.pedido.id_mesa_cliente);
@@ -122,6 +123,7 @@ export class HacerPedidoPage implements OnInit {
     }
   }
   public LeerQR() {
+    //MICA agrega lo de poner la cantidad
     this.barcodeScanner.scan().then(resultado => {
       this.productos.forEach(producto => {
         if (producto.qr == resultado.text) {
