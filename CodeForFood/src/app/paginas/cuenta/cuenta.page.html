@@ -10,7 +10,7 @@
       <ion-label>Mesas con pedidos:</ion-label>
       <ion-select [(ngModel)]="id" placeholder="Seleccione mesa">
         <ng-container *ngFor="let item of mesasClientes">
-          <ion-select-option *ngIf="!item.cerrada" value="{{item.idMesa}}">{{item.idMesa}}</ion-select-option>
+          <ion-select-option *ngIf="!item.cerrada" value="{{item.id}}">{{item.idMesa}}</ion-select-option>
         </ng-container>
       </ion-select>
       <ion-button color="dark" (click)="CargarCuenta()">Cargar Cuenta</ion-button>
@@ -21,7 +21,7 @@
     <br><br>
     <table style="width: 100%; text-align: center;">
       <thead>
-        <th>Producto</th><th>Precio</th><th>Cantidad</th> 
+        <th>Producto</th><th>Precio Unit.</th><th>Cantidad</th> 
       </thead>
       <tbody>
         <tr *ngFor="let item of productosCuenta">
@@ -32,7 +32,7 @@
       </tbody>
     </table>
     <br>
-    <ion-item *ngIf="descBebida">
+    <!-- <ion-item *ngIf="descBebida">
       <h5>Descuento por bebida gratis: ${{bebidaGratis}}</h5>
     </ion-item>
     <ion-item *ngIf="descPostre">
@@ -41,7 +41,7 @@
     <ion-item *ngIf="descPorcentaje">
       <h5>Descuento por juego: 10%</h5>
     </ion-item>
-    <br>
+    <br> -->
     <ng-container *ngIf="!esMozo">
       <ng-container>
         <ion-item style="text-align: center;">

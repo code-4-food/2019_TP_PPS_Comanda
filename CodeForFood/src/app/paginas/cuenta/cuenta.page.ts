@@ -18,7 +18,6 @@ import { AlertService } from 'src/app/servicios/alert.service';
 })
 export class CuentaPage implements OnInit {
   public id = ''; // mesa cliente actual
-  private pedidoSelecc: Pedido;
   private pedidosproductos: any;
   public pedidos: any;
   private productos: any;
@@ -44,30 +43,31 @@ export class CuentaPage implements OnInit {
     this.empleado = this.authService.getUsuario();
     this.pedidosServ.getPedidos().subscribe((data) => {
       this.pedidos = data;
-      // console.log('pedidos: ', this.pedidos);
+      console.log('pedidos: ', this.pedidos);
     });
     this.pedidosServ.getPedidosProductos().subscribe((data) => {
       this.pedidosproductos = data;
-      // console.log('pedidos-productos: ', this.pedidosproductos);
+      console.log('pedidos-productos: ', this.pedidosproductos);
     });
     this.pedidosServ.getProductos().subscribe((data) => {
       this.productos = data;
-      // console.log('productos: ', this.productos);
+      console.log('productos: ', this.productos);
     });
     this.mesasServ.getMesas().subscribe((data) => {
       this.mesas = data;
     });
     this.mesasServ.getMesasClientes().subscribe((data) => {
       this.mesasClientes = data;
-      // console.log('mesas-clientes: ', this.mesasClientes);
+      console.log('mesas-clientes: ', this.mesasClientes);
       if (this.empleado.perfil !== 'cliente' && this.empleado.perfil !== 'anonimo') {
         this.esMozo = true;
       } else {
         this.total = 0;
+        this.esMozo = false;
         this.mesasClientes.forEach(m => {
           if (m.idCliente === this.empleado.id && !m.cerrada) {
-            this.id = m.idMesa;
-            // console.log('id-mesa-cliente actual: ', this.id);
+            this.id = m.id;
+            console.log('id-mesa-cliente actual: ', this.id);
           }
         });
         this.CargarCuenta();
@@ -102,11 +102,10 @@ export class CuentaPage implements OnInit {
     let auxD = true;
     if (this.id !== '') {
       this.mesasClientes.forEach(m => {
-        if (m.idMesa === this.id && !m.cerrada) {
+        if (m.id === this.id && !m.cerrada) {
           this.pedidos.forEach(p => {
             // console.log(p.id_mesa_cliente + " - - - - " + m.id)
             if (p.id_mesa_cliente === m.id) {
-              this.pedidoSelecc = p;
               this.pedidosproductos.forEach(pp => {
                 // console.log(p.id + " - - - - " + pp.id_pedido)
                 if (p.id === pp.id_pedido) {
@@ -114,13 +113,23 @@ export class CuentaPage implements OnInit {
                     if (prod.id === pp.id_producto) {
                       let proda = prod;
                       proda['cantidad'] = pp.cantidad;
-                      console.log(proda)
-                      this.productosCuenta.push(proda);
-                      console.log(this.productosCuenta)
-                      this.total += Number.parseInt(proda.precio) * Number.parseInt(proda.cantidad);
+                      // proda.precio = Number.parseInt(prod.precio) * Number.parseInt(pp.cantidad)
+                      console.log(proda);
+                      let repetido = false;
+                      this.productosCuenta.forEach( pc => {
+                        if (pc.id === proda.id) {
+                          pc.cantidad += pp.cantidad;
+                          // pc.precio += Number.parseInt(proda.precio);
+                          repetido = true;
+                        }
+                      });
+                      if (!repetido) {
+                        this.productosCuenta.push(proda);
+                      }
+                      console.log(this.productosCuenta);
                       this.propina = m.propina;
                       // descuentos:
-                      if (auxB && prod.sector == 'bar' && m.juegoBebida > 0) {
+                      /*if (auxB && prod.sector == 'bar' && m.juegoBebida > 0) {
                         this.bebidaGratis = prod.precio;
                         this.descBebida = true;
                         this.total -= Number.parseInt(prod.precio);
@@ -136,7 +145,7 @@ export class CuentaPage implements OnInit {
                         this.descPorcentaje = true;
                         this.total *= 0.9;
                         auxD = false;
-                      }
+                      }*/
                     }
                   });
                 }
@@ -146,12 +155,16 @@ export class CuentaPage implements OnInit {
         }
       });
       console.log(this.productosCuenta);
+      this.productosCuenta.forEach( p => {
+        let aux = Number.parseInt(p.precio) * Number.parseInt(p.cantidad);
+        this.total += aux;
+      });
     }
   }
   public Pagada() {
     // console.log(this.pedidoSelecc);
     this.mesasClientes.forEach(mesaCl => {
-      if (mesaCl.id === this.pedidoSelecc.id_mesa_cliente) {
+      if (mesaCl.id === this.id) {
         mesaCl.cerrada = true;
         this.mesasServ.updateMesaCliente(mesaCl);
         // console.log(mesaCl);

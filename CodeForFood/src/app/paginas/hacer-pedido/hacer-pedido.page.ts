@@ -50,7 +50,7 @@ export class HacerPedidoPage implements OnInit {
       } else {
         this.esMozo = false;
         for (const item of this.mesasClientes) {
-          if (item.idCliente === this.idUsusario) {
+          if (item.idCliente === this.idUsusario && !item.cerrada) {
             this.pedido.id_mesa_cliente = item.id;
             break;
           }
