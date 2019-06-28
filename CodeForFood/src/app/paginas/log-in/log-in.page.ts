@@ -29,7 +29,7 @@ export class LogInPage implements OnInit {
       console.log(res)
       this.publicRouter.navigate(['/home'])
     }).catch(err =>{
-      alert(err)
+      // alert(err)
       console.log(err)
     });
   }
