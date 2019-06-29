@@ -3,7 +3,7 @@ import { Espera } from './../../interfaces/reserva';
 import { PedidosService } from './../../servicios/pedidos.service';
 import { Pedido } from 'src/app/interfaces/pedido';
 import { Component } from '@angular/core';
-import { Platform } from '@ionic/angular';
+import { Platform, AlertController } from '@ionic/angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { MesasService } from './../../servicios/mesas.service';
 import { Mesa } from './../../interfaces/mesa';
@@ -12,6 +12,7 @@ import { ReservasService } from 'src/app/servicios/reservas.service';
 import { AuthService } from 'src/app/servicios/auth.service';
 import { Router } from '@angular/router';
 import { AlertService } from 'src/app/servicios/alert.service';
+import { SpinerService } from 'src/app/servicios/spiner.service';
 
 @Component({
   selector: 'app-home-cliente',
@@ -28,7 +29,7 @@ export class HomeClientePage {
   chat =false;
   constructor(private platform: Platform, private barcodeScanner: BarcodeScanner, private reservasService: ReservasService,
     private mesasService: MesasService, private pedidosService: PedidosService, private authService: AuthService, private route:Router,
-    public alert: AlertService) {
+    public alert: AlertService, private alertController: AlertController,private spiner:SpinerService) {
     this.usuario = JSON.parse(localStorage.getItem('usuario'));
 
     this.mesasService.getMesas().subscribe(mesas => { this.mesas = mesas; });
@@ -45,12 +46,16 @@ export class HomeClientePage {
     });
   }
 
-  public EscannerQR() {
+  public async EscannerQR() {
+    let sp = await this.spiner.GetAllPageSpinner("");
+    sp.present();
     this.barcodeScanner.scan().then(resultado => {
       let qrValido = false;
       let mesaOcupada = false;
 
       if (resultado.text == 'entrar al local') {
+    sp.dismiss();
+
         let esta_en_espera = false;
         this.listaEspera.forEach(espera => {
           if (espera.cliente == this.usuario['id']) {
@@ -151,21 +156,21 @@ export class HomeClientePage {
 
                 break;
               case 'comiendo':
-                if (confirm('Espero que esté disfrutando su pedido. Desea completar una breve encuesta acerca de su experiencia?')) {
-                  this.route.navigate(['/encuesta-cliente']);
-                }
+                this.alert.mensaje('','Lo enviaremos a hacer una encuesta. Si quiere puede no hacerla')
+                this.route.navigate(['/encuesta-cliente']);
 
                 break;
               case 'esperando cuenta':
-                if (confirm('Espero que haya disfrutado de su pedido. Desea completar una breve encuesta acerca de su experiencia?')) {
+                this.alert.mensaje('','Lo enviaremos a hacer una encuesta. Si quiere puede no hacerla')
                   this.route.navigate(['/encuesta-cliente']);
-                }
 
                 break;
             }
           }
         }
       });
+    sp.dismiss();
+
 
       if (!qrValido) {
         this.alert.mensaje('Atención!', 'El QR escaneado no es válido');
@@ -204,7 +209,9 @@ export class HomeClientePage {
     this.route.navigate(['/hacer-pedido']);
   }
 
- public ConfirmarRecepcion() {
+ public async ConfirmarRecepcion() {
+  let sp = await this.spiner.GetAllPageSpinner("");
+  sp.present();
     this.mesasClientes.forEach(mesacl => {
       if (mesacl.idCliente === this.usuario.id) {
         this.pedidos.forEach(pedido => {
@@ -232,6 +239,8 @@ export class HomeClientePage {
         this.pedidosService.updatePedido(pedido.id, pedido);
       }
     })
+    sp.dismiss();
+
   }
 
   public PedirCuenta() {

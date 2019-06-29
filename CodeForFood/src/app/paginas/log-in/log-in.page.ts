@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/servicios/auth.service';
 import { ToastController } from '@ionic/angular';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { SpinerService } from 'src/app/servicios/spiner.service';
 
 @Component({
   selector: 'app-log-in',
@@ -16,27 +17,30 @@ export class LogInPage implements OnInit {
     private publicRouter:Router,
     private auth:AuthService,
     public toastController: ToastController,
+    private spiner:SpinerService
   ) { }
 
   ngOnInit() {
 
   }
 
-  OnSubmitLogIn(){
+  async OnSubmitLogIn(){
+    let sp = await this.spiner.GetAllPageSpinner("");
+    sp.present();
     console.log(this.email)
     console.log(this.password)
     this.auth.LogIn(this.email, this.password).then(res => {
       console.log(res)
-      if(this.auth.getUsuario()['perfil'] != 'cliente'){
-        this.publicRouter.navigate(['encuesta-empleado'])
-      }
-      else{
-        this.publicRouter.navigate(['/home'])
-      }
+      sp.dismiss();
+
+      this.publicRouter.navigate(['/home'])
+    
     }).catch(err =>{
       // alert(err)
       console.log(err)
     });
+    sp.dismiss();
+
   }
 
 

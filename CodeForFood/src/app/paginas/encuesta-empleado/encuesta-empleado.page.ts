@@ -3,6 +3,7 @@ import { AlertService } from 'src/app/servicios/alert.service';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 import { FirestorageService } from 'src/app/servicios/firestorage.service';
 import { EncuestasService } from 'src/app/servicios/encuestas.service';
+import { AuthService } from 'src/app/servicios/auth.service';
 
 @Component({
   selector: 'app-encuesta-empleado',
@@ -20,7 +21,9 @@ export class EncuestaEmpleadoPage implements OnInit {
   };
 
   constructor(private alertServ: AlertService, private camera: Camera,
-    private firestorageService: FirestorageService, private encuestaServ: EncuestasService) { }
+    private firestorageService: FirestorageService, private encuestaServ: EncuestasService, private auth:AuthService) {
+      this.encuesta.sector = this.auth.getUsuario()['perfil'];
+     }
 
   ngOnInit() {
   }

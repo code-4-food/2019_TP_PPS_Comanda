@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PedidosService } from 'src/app/servicios/pedidos.service';
 import { ProductosService } from 'src/app/servicios/productos.service';
 import { AuthService } from 'src/app/servicios/auth.service';
+import { SpinerService } from 'src/app/servicios/spiner.service';
 
 @Component({
   selector: 'app-bar-cocina-aceptados',
@@ -19,7 +20,8 @@ export class BarCocinaAceptadosPage implements OnInit {
   constructor(
     private pedidosService: PedidosService,
     private productosService: ProductosService,
-    private auth: AuthService
+    private auth: AuthService,
+    private spiner:SpinerService
   ) { }
 
   ngOnInit() {
@@ -29,11 +31,14 @@ export class BarCocinaAceptadosPage implements OnInit {
 
 
   async tomarPedidos() {
+    let sp = await this.spiner.GetAllPageSpinner("");
+    sp.present();
     this.all_pedidos = []
     this.pedidosService.getPedidos().subscribe(async (pedidos) => {
       this.all_pedidos = []
       this.all_pedidos = pedidos
       this.tomarPedidoProductos()
+      sp.dismiss()
     })
   }
 
