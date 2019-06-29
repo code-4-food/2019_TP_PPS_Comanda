@@ -11,6 +11,7 @@ import { ErrorService } from 'src/app/servicios/error.service';
 import { Router } from '@angular/router';
 import { AlertService } from 'src/app/servicios/alert.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { SpinerService } from 'src/app/servicios/spiner.service';
 
 @Component({
   selector: 'app-cuenta',
@@ -38,7 +39,7 @@ export class CuentaPage implements OnInit {
   delivery=false;
   constructor(private pedidosServ: PedidosService, private mesasServ: MesasService,
     private authService: AuthService, private barcodeScanner: BarcodeScanner,
-    private errorHand: ErrorService, private router: Router, private alertServ: AlertService) {
+    private errorHand: ErrorService, private router: Router, private alertServ: AlertService,private spiner:SpinerService) {
   }
 
   ngOnInit() {
@@ -93,7 +94,9 @@ export class CuentaPage implements OnInit {
     this.alertServ.mensaje('', 'Cuenta solicitada.');
   }
 
-  public CargarCuenta() {
+  public async CargarCuenta() {
+    let sp = await this.spiner.GetAllPageSpinner("");
+    sp.present();
     this.total = 0;
     this.propina = 0;
     this.descBebida = false;
@@ -147,7 +150,7 @@ export class CuentaPage implements OnInit {
                       if (auxD && m.juegoDescuento > 0) {
                         this.descPorcentaje = true;
                         auxD = false;
-                      }*/
+                      }
                     }
                   });
                 }
@@ -195,6 +198,7 @@ export class CuentaPage implements OnInit {
         });
       }
     });
+    sp.dismiss();
 
 
     console.log(this.productosCuenta);

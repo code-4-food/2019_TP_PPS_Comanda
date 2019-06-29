@@ -4,6 +4,7 @@ import { MesasService } from 'src/app/servicios/mesas.service';
 import { ProductosService } from 'src/app/servicios/productos.service';
 import { database } from 'firebase';
 import { AuthService } from 'src/app/servicios/auth.service';
+import { SpinerService } from 'src/app/servicios/spiner.service';
 
 @Component({
   selector: 'app-mozo-terminar',
@@ -19,8 +20,15 @@ export class MozoTerminarPage implements OnInit {
   usr;
   
   constructor(private pedidosServ: PedidosService, private mesasServ: MesasService,
+    private spiner:SpinerService,
     private prodSev: ProductosService, private auth:AuthService) {
-      this.usr=this.auth.getUsuario();
+    }
+
+    async ngOnInit() {
+    let sp = await this.spiner.GetAllPageSpinner("");
+    sp.present();
+
+    this.usr=this.auth.getUsuario();
 
       this.mesasServ.getMesas().subscribe( (data) => {
         this.mesas = data;
@@ -53,9 +61,8 @@ export class MozoTerminarPage implements OnInit {
           });
         });
       });
-    }
+      sp.dismiss()
 
-  ngOnInit() {
   }
 
   public EntregarPedido(idPedido: string) {

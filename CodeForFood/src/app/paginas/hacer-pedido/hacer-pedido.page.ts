@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { AlertService } from 'src/app/servicios/alert.service';
 import { AlertController } from '@ionic/angular';
+import { SpinerService } from 'src/app/servicios/spiner.service';
 
 @Component({
   selector: 'app-hacer-pedido',
@@ -40,14 +41,16 @@ export class HacerPedidoPage implements OnInit {
     private mesaServ: MesasService, private authServ: AuthService,
     private router: Router, private barcodeScanner: BarcodeScanner, 
     private alertServ: AlertService,
-    private alertController: AlertController) {
+    private alertController: AlertController,private spiner:SpinerService) {
     this.prodServ.getProductos().subscribe( (data) => {
       this.productos = data;
       // console.log(data);
     });
     this.cantidad = 1;
   }
-  ngOnInit() {
+  async ngOnInit() {
+    let sp = await this.spiner.GetAllPageSpinner("");
+    sp.present();
     this.idUsusario = this.authServ.getUsuario()['id'];
     this.usuario = this.authServ.getUsuario();
     this.pedido.foto = this.usuario['foto'];
@@ -67,6 +70,8 @@ export class HacerPedidoPage implements OnInit {
           }
         }
       }
+    sp.dismiss();
+
     });
   }
 
@@ -88,10 +93,15 @@ export class HacerPedidoPage implements OnInit {
   }
 
   public async TerminarPedido(delivery:boolean=false) {
+    let sp = await this.spiner.GetAllPageSpinner("");
+    sp.present();
+
     if(!delivery){
       this.direccion = false;
     }
     if(this.esCliente && this.pedido.id_mesa_cliente == '' && !delivery){
+      sp.dismiss();
+
       const alert = await this.alertController.create({
         header: 'Usted no tiene mesa',
         message:' Desea hacer un delivery?',
@@ -159,6 +169,8 @@ export class HacerPedidoPage implements OnInit {
         this.alertServ.mensaje('Alerta:', 'Faltan datos para generar el pedido');
       }
     }
+    sp.dismiss();
+
   }
   public BorrarProducto(idProducto: string) {
     console.log(this.pedidosProductos);
