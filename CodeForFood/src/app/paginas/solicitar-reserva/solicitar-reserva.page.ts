@@ -1,3 +1,4 @@
+import { AlertService } from 'src/app/servicios/alert.service';
 import { Cliente } from './../../interfaces/usuario';
 import { Component } from '@angular/core';
 import { Mesa } from 'src/app/interfaces/mesa';
@@ -20,7 +21,7 @@ export class SolicitarReservaPage {
   public usuario: Cliente;
   public verMisReservas: boolean;
 
-  constructor(private mesasService: MesasService, private reservasService: ReservasService) {
+  constructor(private mesasService: MesasService, private reservasService: ReservasService, private alert: AlertService) {
     this.verMisReservas = true;
     this.misReservas = [];
     this.usuario = JSON.parse(localStorage.getItem('usuario'));
@@ -39,7 +40,7 @@ export class SolicitarReservaPage {
 
   solicitarReserva() {
     if (this.fechaReserva === undefined || this.horaReserva === undefined || this.mesaSeleccionada === undefined) {
-      alert('Debe completar todos los campos!');
+      this.alert.mensaje('', 'Debe completar todos los campos!');
       return;
     }
 
@@ -47,7 +48,7 @@ export class SolicitarReservaPage {
     let reservaValida = true;
 
     if (milisegundosReservaDeseada < (Date.now() + 3600000)) {
-      alert('Las reservas se pueden solicitar hasta 1 hora antes del horario a reservar');
+      this.alert.mensaje('', 'Las reservas se pueden solicitar hasta 1 hora antes del horario a reservar');
       return;
     }
 
@@ -58,7 +59,7 @@ export class SolicitarReservaPage {
         // Si la reserva que está solicitando se encuentra en el rango de los 40 minutos previos o posteriores de la reserva ya confirmada
         if ((milisegundosReservaYaConfirmada - 2400000) <= milisegundosReservaDeseada &&
         (milisegundosReservaYaConfirmada + 2400000) >= milisegundosReservaDeseada) {
-          alert('La mesa ya se encuentra reservada para ese día y horario');
+          this.alert.mensaje('', 'La mesa ya se encuentra reservada para ese día y horario');
           reservaValida = false;
         }
       }
@@ -72,9 +73,9 @@ export class SolicitarReservaPage {
         fecha: new Date(this.fechaReserva + ' ' + this.horaReserva),
         estado: 'pendiente',
       }).then(() => {
-        alert('Reserva solicitada');
+        this.alert.mensaje('', 'Reserva solicitada');
       }).catch(error => {
-        alert(error);
+        this.alert.mensaje('', error);
       });
     }
   }

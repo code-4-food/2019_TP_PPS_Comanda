@@ -27,9 +27,14 @@ export class LogInPage implements OnInit {
     console.log(this.password)
     this.auth.LogIn(this.email, this.password).then(res => {
       console.log(res)
-      this.publicRouter.navigate(['/home'])
+      if(this.auth.getUsuario()['perfil'] != 'cliente'){
+        this.publicRouter.navigate(['encuesta-empleado'])
+      }
+      else{
+        this.publicRouter.navigate(['/home'])
+      }
     }).catch(err =>{
-      alert(err)
+      // alert(err)
       console.log(err)
     });
   }

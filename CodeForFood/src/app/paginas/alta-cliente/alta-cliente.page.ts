@@ -1,3 +1,4 @@
+import { AlertService } from 'src/app/servicios/alert.service';
 import { Router } from '@angular/router';
 import { AuthService } from './../../servicios/auth.service';
 import { FirestorageService } from './../../servicios/firestorage.service';
@@ -23,7 +24,7 @@ export class AltaClientePage {
   public tipoRegistro: string;
   public dataDNI: string[];
 
-  constructor(private barcodeScanner: BarcodeScanner, private camera: Camera,
+  constructor(private barcodeScanner: BarcodeScanner, private camera: Camera, public alert: AlertService,
   private authService: AuthService, private firestorageService: FirestorageService, private router: Router) {
     this.nombreUsuario = '';
     this.apellidoUsuario = '';
@@ -69,15 +70,15 @@ export class AltaClientePage {
   }
 
   public cargarUsuario() {
-    if ((this.tipoRegistro === 'Anónimo' && (this.nombreUsuario === '' || this.urlFotoUsuario === '')) ||
+    if ((this.tipoRegistro === 'Anónimo' && this.nombreUsuario === '') ||
     this.tipoRegistro === 'Nuevo usuario' && (this.nombreUsuario === '' || this.apellidoUsuario === '' ||
-    this.dniUsuario === '' || this.correoUsuario === '' || this.claveUsuario === '' || this.urlFotoUsuario === '')) {
-      alert('Debe completar todos los campos');
+    this.dniUsuario === '' || this.correoUsuario === '' || this.claveUsuario === '')) {
+      this.alert.mensaje('', 'Debe completar todos los campos');
       return;
     }
 
     if (this.tipoRegistro === 'Nuevo usuario' && this.claveUsuario.length < 6) {
-      alert('La clave debe tener al menos 6 caracteres');
+      this.alert.mensaje('', 'La clave debe tener al menos 6 caracteres');
       return;
     }
 
@@ -85,7 +86,12 @@ export class AltaClientePage {
     emailRegex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
     if (this.tipoRegistro === 'Nuevo usuario' && !emailRegex.test(this.correoUsuario)) {
-      alert('Debe ingresar un e-mail válido');
+      this.alert.mensaje('', 'Debe ingresar un e-mail válido');
+      return;
+    }
+
+    if (this.urlFotoUsuario === '') {
+      this.alert.mensaje('', 'Debe cargar una foto');
       return;
     }
 
@@ -100,9 +106,9 @@ export class AltaClientePage {
         activo: false,
         perfil: 'cliente'
       }, this.dataFotoUsuario).then(usuario => {
-        alert('Usuario registrado exitosamente!');
+        this.alert.mensaje('', 'Usuario registrado exitosamente!');
       }).catch(error => {
-        alert('ERROR: ' + error);
+        this.alert.mensaje('', 'ERROR: ' + error);
       });
     }
     else {
@@ -112,9 +118,9 @@ export class AltaClientePage {
         perfil: 'anonimo'
       }, this.dataFotoUsuario).then(usuario => {
         this.router.navigate(['/home-cliente']);
-        alert('Usuario anónimo registrado exitosamente!');
+        this.alert.mensaje('Bienvenido!', 'Ingresó como usuario anónimo');
       }).catch(error => {
-        alert('ERROR: ' + error);
+        this.alert.mensaje('ERROR',  error);
       });
     }
   }

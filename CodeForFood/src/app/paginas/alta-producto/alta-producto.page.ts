@@ -93,7 +93,7 @@ export class AltaProductoPage implements OnInit {
       })
 
     }, error => {
-      alert(error)
+      // alert(error)
       if (error === 'No Image Selected') {
         console.log(error);
       } else {
@@ -101,7 +101,7 @@ export class AltaProductoPage implements OnInit {
       }
       console.log(error);
     }).catch(err => {
-      alert(err)
+      // alert(err)
       console.log(err);
     });
 
