@@ -10,6 +10,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { ErrorService } from 'src/app/servicios/error.service';
 import { Router } from '@angular/router';
 import { AlertService } from 'src/app/servicios/alert.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-cuenta',
