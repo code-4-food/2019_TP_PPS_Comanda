@@ -192,6 +192,7 @@ export class HomeClientePage {
         juegoBebida: 0,
         juegoDescuento: 0,
         juegoPostre: 0,
+
         propina: 1
       });
 
