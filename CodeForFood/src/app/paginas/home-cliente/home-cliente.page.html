@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content [scrollEvents]="true">
   <ion-card class="ion-activatable" (click)="this.EscannerQR()" [ngClass]="{ 'card-vertical': !this.platform.isLandscape(), 'card-horizontal': this.platform.isLandscape() }">
     <ion-ripple-effect></ion-ripple-effect>
     <ion-icon name="qr-scanner" [ngClass]="{ 'icon-horizontal': this.platform.isLandscape(), 'icon-vertical': !this.platform.isLandscape() }"></ion-icon>
@@ -30,6 +30,14 @@
       <h2>Realizar reserva</h2>
     </ion-card>
   </ng-container>
+
+  <ng-container *ngIf="this.chat">
+      <ion-card class="ion-activatable" (click)="this.Chat()" [ngClass]="{ 'card-vertical': !this.platform.isLandscape(), 'card-horizontal': this.platform.isLandscape() }">
+        <ion-ripple-effect></ion-ripple-effect>
+        <ion-icon name="chatboxes" [ngClass]="{ 'icon-horizontal': this.platform.isLandscape(), 'icon-vertical': !this.platform.isLandscape() }"></ion-icon>
+        <h2>Chat Delivery</h2>
+      </ion-card>
+    </ng-container>
 
   <ion-card class="ion-activatable" (click)="this.Jugar()" [ngClass]="{ 'card-vertical': !this.platform.isLandscape(), 'card-horizontal': this.platform.isLandscape() }">
     <ion-ripple-effect></ion-ripple-effect>

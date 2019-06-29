@@ -4,7 +4,15 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content type='reset' [scrollEvents]="true" class="back" color='medium'>
+<ion-content (ionScrollEnd)="logScrollEnd()" type='reset' [scrollEvents]="true" class="back" color='medium'>
+  <ion-header>
+    <ion-toolbar color='dark'>
+      <ion-button color='dark' expand="full"  (click)="ScrollToBottom()">
+        Ir a mas recientes
+      </ion-button>
+    </ion-toolbar>
+  </ion-header>
+
   <div *ngFor="let mensaje of mensajes">
 
       <div *ngIf="mensaje.lado=='end'" class="derecha">

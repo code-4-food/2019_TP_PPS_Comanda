@@ -47,19 +47,19 @@
         <ion-item style="text-align: center;">
           <h1>Total sin propina: ${{total}}</h1>
         </ion-item>
-        <ion-button (click)="Propina()" color="dark">Sumar Propina</ion-button>
+        <ion-button *ngIf="!delivery" (click)="Propina()" color="dark">Sumar Propina</ion-button>
       </ng-container>
       <br>
-      <ion-item>
+      <ion-item  *ngIf="!delivery">
         <h1>Total final más propina: ${{total * propina}}</h1>
       </ion-item>
       <br>
-      <ng-container>
+      <ng-container *ngIf="!delivery">
         <ion-button (click)="SolicitarCuenta()" color="danger" expand="block">Solicitar Cuenta</ion-button>
       </ng-container>
     </ng-container>
 
-    <ng-container *ngIf="esMozo">
+    <ng-container *ngIf="esMozo && !delivery">
       <ion-item *ngIf="propina == 0 && total != 0">
         <h2>Falta ingresar la propina!</h2>
       </ion-item>

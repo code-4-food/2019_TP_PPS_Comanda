@@ -3,6 +3,8 @@ import { PedidosService } from 'src/app/servicios/pedidos.service';
 import { ProductosService } from 'src/app/servicios/productos.service';
 import { MesasService } from 'src/app/servicios/mesas.service';
 import { AlertService } from 'src/app/servicios/alert.service';
+import { AuthService } from 'src/app/servicios/auth.service';
+import { EmailComposer, EmailComposerOptions } from '@ionic-native/email-composer/ngx';
 
 @Component({
   selector: 'app-mozo-aceptar',
@@ -15,9 +17,13 @@ export class MozoAceptarPage implements OnInit {
   public pedidosProductos = [];
   public productos = [];
   private mesas = [];
+  usr;
 
   constructor(private pedidosServ: PedidosService, private prodServ: ProductosService,
-    private mesasServ: MesasService, private alertServ: AlertService) {
+    private mesasServ: MesasService, private alertServ: AlertService, private auth:AuthService,
+    private emailComposer:EmailComposer) {
+      this.usr=this.auth.getUsuario();
+
       this.pedidosServ.getPedidos().subscribe( (data) => {
         this.pedidos = data;
         // console.log('pedidos: ', this.pedidos);
@@ -43,7 +49,56 @@ export class MozoAceptarPage implements OnInit {
   ngOnInit() {
   }
 
-  public BorrarPedido(idPedido: string, idMesaCliente: string) {
+  SendSiEmail(mail) {
+    this.emailComposer.isAvailable().then((available: boolean) => {
+      if (available) {
+        //Now we know we can send
+
+      }
+    });
+    let email:EmailComposerOptions = {
+      to: mail,
+      cc: '',
+      bcc: [],
+      attachments: [
+      ],
+      subject: 'Code for Food: Delivery',
+      body: 'Su pedido para delivery esta en preparacion. Si quiere puede entrar al chat para saber como esta su pedido',
+      isHtml: true
+    }
+
+    // Send a text message using default options
+    this.emailComposer.open(email).then(ret => { console.log(ret) }).catch(err => { alert(err); console.log(err) });
+
+  }
+
+  SendNoEmail(mail) {
+    this.emailComposer.isAvailable().then((available: boolean) => {
+      if (available) {
+        //Now we know we can send
+
+      }
+    });
+    let email:EmailComposerOptions = {
+      to: mail,
+      cc: '',
+      bcc: [],
+      attachments: [
+      ],
+      subject: 'Code for Food: Delivery',
+      body: 'Su pedido Ha sido rechazado',
+      isHtml: true
+    }
+
+    // Send a text message using default options
+    this.emailComposer.open(email).then(ret => { console.log(ret) }).catch(err => { alert(err); console.log(err) });
+
+  }
+
+
+
+
+  public BorrarPedido(idPedido: string, idMesaCliente: string, mail:string='') {
     this.mesasClientes.forEach(mesaCl => {
       if (mesaCl.id === idMesaCliente) {
         this.mesas.forEach(mesas => {
@@ -54,9 +109,12 @@ export class MozoAceptarPage implements OnInit {
         });
       }
     });
+    if(mail){
+      this.SendNoEmail(mail)
+    }
     this.pedidosServ.DeletePedido(idPedido).then( () => { console.log('pedido borrado'); });
   }
-  public AceptarPedido(idPedido: string) {
+  public AceptarPedido(idPedido: string, mail:string='') {
     this.pedidos.forEach(pedido => {
       if (pedido.id === idPedido) {
         pedido.estado = 'preparacion';
@@ -77,6 +135,9 @@ export class MozoAceptarPage implements OnInit {
           }
         });
         this.pedidosServ.updatePedido(idPedido, pedido);
+        if(mail){
+          this.SendSiEmail(mail)
+        }
       }
     });
   }
