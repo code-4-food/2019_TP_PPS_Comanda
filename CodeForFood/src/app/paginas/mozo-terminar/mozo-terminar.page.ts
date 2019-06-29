@@ -3,6 +3,7 @@ import { PedidosService } from 'src/app/servicios/pedidos.service';
 import { MesasService } from 'src/app/servicios/mesas.service';
 import { ProductosService } from 'src/app/servicios/productos.service';
 import { database } from 'firebase';
+import { AuthService } from 'src/app/servicios/auth.service';
 
 @Component({
   selector: 'app-mozo-terminar',
@@ -15,9 +16,12 @@ export class MozoTerminarPage implements OnInit {
   public pedidosProductos = [];
   public productos = [];
   private mesas = [];
-
+  usr;
+  
   constructor(private pedidosServ: PedidosService, private mesasServ: MesasService,
-    private prodSev: ProductosService) {
+    private prodSev: ProductosService, private auth:AuthService) {
+      this.usr=this.auth.getUsuario();
+
       this.mesasServ.getMesas().subscribe( (data) => {
         this.mesas = data;
       });

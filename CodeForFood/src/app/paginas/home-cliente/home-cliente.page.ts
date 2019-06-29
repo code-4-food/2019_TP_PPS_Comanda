@@ -24,9 +24,8 @@ export class HomeClientePage {
   public listaEspera: Espera[];
   public mesasClientes: MesaCliente[];
   public usuario: any;
-  public pedido: any;
   private pedidos = [];
-
+  chat =false;
   constructor(private platform: Platform, private barcodeScanner: BarcodeScanner, private reservasService: ReservasService,
     private mesasService: MesasService, private pedidosService: PedidosService, private authService: AuthService, private route:Router,
     public alert: AlertService) {
@@ -38,6 +37,11 @@ export class HomeClientePage {
     this.reservasService.getListaEspera().subscribe(listaEspera => { this.listaEspera = listaEspera; });
     this.pedidosService.getPedidos().subscribe( (data) => {
       this.pedidos = data;
+    this.pedidos.forEach(pedido=>{
+      if(pedido.id_mesa_cliente == this.usuario['id'] && pedido.delivery && pedido.estado!='fin'){
+        this.chat = true
+        }
+      })
     });
   }
 
@@ -70,7 +74,7 @@ export class HomeClientePage {
             this.mesasClientes.map(mesaCliente => {
               if (mesaCliente.idMesa === mesa.id && mesaCliente.cerrada === false) {
                 if (mesaCliente.idCliente !== this.usuario.id) {
-                  alert('Esta mesa se encuentra ocupada');
+                  this.alert.mensaje('Mesa ocupada', 'Esta mesa se encuentra ocupada');
                   mesaOcupada = true;
                 }
               }
@@ -82,26 +86,36 @@ export class HomeClientePage {
               case 'disponible':
                 let mesaDisponible = true;
 
-                this.reservas.forEach(reserva => {
-                  const milisegundosReserva = JSON.parse(JSON.stringify(reserva.fecha)).seconds * 1000;
-                  const milisegundosActuales = Date.now();
-
-                  if (reserva.estado === 'confirmada' && reserva.idMesa === mesa.id) {
-                    // Si faltan menos de 40 minutos para la reserva o todavía no pasaron 15 de la misma
-                    if ((milisegundosReserva - 2400000) <= milisegundosActuales &&
-                    (milisegundosReserva + 900000) >= milisegundosActuales) {
-                      mesaDisponible = false;
-
-                      if (reserva.idCliente === this.usuario.id) {
-                        this.solicitarMesa(mesa, `Bienvenido a su mesa ${this.usuario.nombre} ${this.usuario.apellido}! ` +
-                        'Pulse OK para confirmar su llegada');
-                      }
-                      else {
-                        alert('Esta mesa se encuentra reservada');
-                      }
-                    }
+                // Si el usuario ya tiene una mesa asignada, no debe poder tomar otra
+                this.mesasClientes.map(mesaCliente => {
+                  if (mesaCliente.idCliente === this.usuario.id && mesaCliente.cerrada === false) {
+                    this.alert.mensaje('Atención!', 'Usted ya tiene una mesa asignada');
+                    mesaDisponible = false;
                   }
                 });
+
+                if (mesaDisponible) {
+                  this.reservas.forEach(reserva => {
+                    const milisegundosReserva = JSON.parse(JSON.stringify(reserva.fecha)).seconds * 1000;
+                    const milisegundosActuales = Date.now();
+
+                    if (reserva.estado === 'confirmada' && reserva.idMesa === mesa.id) {
+                      // Si faltan menos de 40 minutos para la reserva o todavía no pasaron 15 de la misma
+                      if ((milisegundosReserva - 2400000) <= milisegundosActuales &&
+                      (milisegundosReserva + 900000) >= milisegundosActuales) {
+                        mesaDisponible = false;
+
+                        if (reserva.idCliente === this.usuario.id) {
+                          this.solicitarMesa(mesa, `Bienvenido a su mesa ${this.usuario.nombre} ${this.usuario.apellido}! ` +
+                          'Pulse OK para confirmar su llegada');
+                        }
+                        else {
+                          this.alert.mensaje('Mesa no disponible', 'Esta mesa se encuentra reservada');
+                        }
+                      }
+                    }
+                  });
+                }
 
                 if (mesaDisponible) {
                   this.solicitarMesa(mesa, 'La mesa se encuentra disponible! Desea solicitar esta mesa?');
@@ -110,30 +124,26 @@ export class HomeClientePage {
                 break;
               case 'realizando pedido':
                 this.route.navigate(['/hacer-pedido']);
-                alert('Ya puede realizar su pedido!');
+                this.alert.mensaje('Bienvenido!', 'Ya puede realizar su pedido');
 
                 break;
               case 'esperando pedido':
                 // Falta mostrar todo el detalle de cada producto del pedido
                 await this.pedidosService.getPedido(mesa.id).then(pedidos => {
                   pedidos.map(pedido => {
-                    this.pedido = pedido;
-
                     switch (pedido.estado) {
                       case 'sconfirmar':
-                        alert('Su pedido se encuentra pendiente de confirmación del mozo');
+                        this.alert.mensaje('Esperando confirmación', 'Su pedido se encuentra pendiente de confirmación por parte del mozo');
                         break;
                       case 'preparacion':
-                        alert('Su pedido se encuentra en preparación');
+                        this.alert.mensaje('En preparación', 'Su pedido se encuentra en preparación');
                         break;
                       case 'terminado':
-                        alert('Su pedido ya fue preparado y el mozo está por llevarselo a su mesa');
+                        this.alert.mensaje('Pedido finalizado', 'Su pedido ya fue preparado y el mozo se lo estará llevando a su mesa en ' +
+                        'unos instantes');
                         break;
                       case 'entregadosconfirmar':
-                        alert('Su pedido ya fue entregado y necesita su confirmación');
-                        break;
-                      case 'entregado':
-                        alert('Su pedido ya fue entregado');
+                        this.alert.mensaje('Confirmar entrega', 'Su pedido ya fue entregado y necesita su confirmación');
                         break;
                     }
                   });
@@ -158,16 +168,20 @@ export class HomeClientePage {
       });
 
       if (!qrValido) {
-        alert(resultado.text);
+        this.alert.mensaje('Atención!', 'El QR escaneado no es válido');
       }
     });
+  }
+
+  Chat(){
+    this.route.navigate(['chat'])
   }
 
   private async solicitarMesa(mesa, mensaje: string) {
     if (confirm(mensaje)) {
       mesa.estado = 'realizando pedido';
       await this.mesasService.updateMesa(mesa).catch(error => {
-        alert(error);
+        this.alert.mensaje('', error);
       });
 
       await this.mesasService.asignarMesa({
@@ -178,7 +192,7 @@ export class HomeClientePage {
         juegoBebida: false,
         juegoDescuento: false,
         juegoPostre: false,
-        propina: 0
+        propina: 1
       });
 
       this.reservasService.EliminarDeListaEsperaByIdCliente(this.usuario.id, this.listaEspera);
@@ -200,7 +214,7 @@ export class HomeClientePage {
               if (mesa.id === mesacl.idMesa) {
                 mesa.estado = 'comiendo';
                 this.mesasService.updateMesa(mesa).then( () => {
-                  alert('confirmado');
+                  this.alert.mensaje('Confirmado', 'Muchas gracias por confirmar la recepción de su pedido');
                 });
                 break;
               }
@@ -209,6 +223,14 @@ export class HomeClientePage {
         });
       }
     });
+
+    this.pedidos.forEach(pedido=>{
+      if(pedido.id_mesa_cliente == this.usuario['id'] && pedido.delivery && pedido.estado=='entregadosconfirmar'){
+        pedido.estado = 'fin';
+        this.alert.mensaje('Confirmado', 'Muchas gracias por realizar un delivery');
+        this.pedidosService.updatePedido(pedido.id, pedido);
+      }
+    })
   }
 
   public PedirCuenta() {

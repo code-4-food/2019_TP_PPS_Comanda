@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/servicios/auth.service';
 import { Router } from '@angular/router';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { AlertService } from 'src/app/servicios/alert.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-hacer-pedido',
@@ -18,22 +19,28 @@ import { AlertService } from 'src/app/servicios/alert.service';
 export class HacerPedidoPage implements OnInit {
   public productos: Producto[];
   public cantidad: number;
+  direccion:any=false;
   public pedido = {
     comienzo: (new Date()).toString(),
     estado: 'sconfirmar',
     id_mesa_cliente: '',
-    'id-mesa': ''
+    'id-mesa': '',
+    delivery:false,
+    direccion:'',
+    foto:'',
+    email:''
   };
   public pedidosProductos = [];
   public mesasClientes = [];
   private idUsusario = '';
   private usuario;
   public esMozo: boolean;
-
+  esCliente:boolean;
   constructor(private prodServ: ProductosService, private pedidoServ: PedidosService,
     private mesaServ: MesasService, private authServ: AuthService,
     private router: Router, private barcodeScanner: BarcodeScanner, 
-    private alertServ: AlertService) {
+    private alertServ: AlertService,
+    private alertController: AlertController) {
     this.prodServ.getProductos().subscribe( (data) => {
       this.productos = data;
       // console.log(data);
@@ -43,14 +50,18 @@ export class HacerPedidoPage implements OnInit {
   ngOnInit() {
     this.idUsusario = this.authServ.getUsuario()['id'];
     this.usuario = this.authServ.getUsuario();
+    this.pedido.foto = this.usuario['foto'];
+    this.pedido.email = this.usuario['mail'];
     this.mesaServ.getMesasClientes().subscribe( (data) => {
       this.mesasClientes = data;
       if (this.usuario.perfil != 'cliente' && this.usuario.perfil != 'anonimo') {
         this.esMozo = true;
       } else {
         this.esMozo = false;
+        this.esCliente = this.usuario.perfil == 'cliente';
+
         for (const item of this.mesasClientes) {
-          if (item.idCliente === this.idUsusario) {
+          if (item.idCliente === this.idUsusario && !item.cerrada) {
             this.pedido.id_mesa_cliente = item.id;
             break;
           }
@@ -62,7 +73,6 @@ export class HacerPedidoPage implements OnInit {
   public Agregar(idProd: string) {
     console.log(idProd);
     if (this.cantidad > 0 ) {
-      for (let index = 0; index < this.cantidad; index++) {
         const pedidoProd = {
           id_pedido: this.pedido['id'],
           estado: 'sconfirmar',
@@ -71,17 +81,62 @@ export class HacerPedidoPage implements OnInit {
           cantidad: this.cantidad
         };
         this.pedidosProductos.push(pedidoProd);
-      }
+        this.alertServ.mensaje(''+this.cantidad+' productos','agregados')
     }
+    console.log(this.pedidosProductos)
     this.cantidad = 1;
   }
-  public TerminarPedido() {
-    if (this.pedidosProductos.length > 0 ) {
+
+  public async TerminarPedido(delivery:boolean=false) {
+    if(!delivery){
+      this.direccion = false;
+    }
+    if(this.esCliente && this.pedido.id_mesa_cliente == '' && !delivery){
+      const alert = await this.alertController.create({
+        header: 'Usted no tiene mesa',
+        message:' Desea hacer un delivery?',
+        inputs: [
+          {
+            name: 'direccion',
+            type: 'text',
+            placeholder: 'Direccion del pedido'
+          }
+        ],
+        translucent: true,
+        buttons: [
+          {
+            text: 'Cancelar',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: () => {
+              this.alertServ.mensaje('','No se hara el delivery')
+            }
+          }, {
+            text: 'Aceptar',
+            handler: (data) => {
+              this.pedido.direccion = data['direccion'];
+              this.pedido.delivery = true;
+              this.pedido.id_mesa_cliente = this.usuario['id'];
+
+              this.TerminarPedido(data['direccion'])
+            }
+          }
+        ]
+      });
+      return alert.present();
+    }
+    if (this.pedidosProductos.length > 0) {
       // console.log(this.pedido.id_mesa_cliente);
-      if (this.pedido.id_mesa_cliente != '') {
+      if ((!this.esMozo && this.pedido.direccion && this.pedido.delivery) || this.pedido.id_mesa_cliente != '' ) {
         this.mesasClientes.forEach(mCliente => {
           if (mCliente.id == this.pedido.id_mesa_cliente) {
             this.pedido['id-mesa'] = mCliente.idMesa;
+
+            // By Eze
+            this.mesaServ.getMesaPorID(mCliente.idMesa).then(mesas => {
+              mesas[0].estado = 'esperando pedido';
+              this.mesaServ.updateMesa(mesas[0]);
+            });
           }
         });
         this.pedidoServ.AddPedido(this.pedido).then( (res) => {
@@ -101,7 +156,7 @@ export class HacerPedidoPage implements OnInit {
           }
         });
       } else {
-        this.alertServ.mensaje('Empleado:', 'No seleccionó mesa para el pedido!');
+        this.alertServ.mensaje('Alerta:', 'Faltan datos para generar el pedido');
       }
     }
   }
@@ -116,6 +171,7 @@ export class HacerPedidoPage implements OnInit {
     }
   }
   public LeerQR() {
+    //MICA agrega lo de poner la cantidad
     this.barcodeScanner.scan().then(resultado => {
       this.productos.forEach(producto => {
         if (producto.qr == resultado.text) {

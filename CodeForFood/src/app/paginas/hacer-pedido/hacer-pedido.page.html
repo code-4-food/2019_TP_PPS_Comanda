@@ -16,7 +16,7 @@
   <ng-container *ngIf="pedidosProductos.length > 0">
     <ion-item><ion-label>Pedido Actual:</ion-label></ion-item>
     <table style="width: 100%; border: 2px solid red; text-align: center;">
-      <thead><th>Producto</th><th>Precio</th><th>Borrar</th></thead>
+      <thead><th>Producto</th><th>Precio</th> <th>Cantidad</th> <th>Borrar</th></thead>
       <tbody>
         <ng-container *ngFor="let prod of pedidosProductos">
           <tr>
@@ -24,6 +24,7 @@
               <ng-container *ngIf="p.id == prod.id_producto">
                 <td>{{p.nombre}}</td>
                 <td>{{p.precio}}</td>
+                <td>{{prod.cantidad}}</td>
               </ng-container>              
             </ng-container>     
             <td><ion-button color="danger" (click)="BorrarProducto(prod.id_producto)" shape="round">X</ion-button></td>       
