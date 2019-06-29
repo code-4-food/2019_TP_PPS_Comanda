@@ -140,12 +140,11 @@ export class CuentaPage implements OnInit {
                         this.descPostre = true;
                         this.total -= Number.parseInt(prod.precio);
                         auxP = false;
-                      }
-                      if (auxD && m.juegoDescuento) {
-                        this.descPorcentaje = true;
-                        this.total *= 0.9;
-                        auxD = false;
                       }*/
+                      if (auxD && m.juegoDescuento > 0) {
+                        this.descPorcentaje = true;
+                        auxD = false;
+                      }
                     }
                   });
                 }
@@ -159,6 +158,9 @@ export class CuentaPage implements OnInit {
         let aux = Number.parseInt(p.precio) * Number.parseInt(p.cantidad);
         this.total += aux;
       });
+      if (this.descPorcentaje) {
+        this.total *= 0.9;
+      }
     }
   }
   public Pagada() {
