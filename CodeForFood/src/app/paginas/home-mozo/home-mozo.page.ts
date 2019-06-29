@@ -29,4 +29,8 @@ export class HomeMozoPage implements OnInit {
   public TerminarPedidos() {
     this.router.navigate(['/mozo-terminar']);
   }
+
+  encuesta(){
+    this.router.navigate(['/encuesta-empleado']);
+  }
 }
