@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChatService } from 'src/app/servicios/chat.service';
 import { Chat } from 'src/app/interfaces/chat';
 import { AuthService } from 'src/app/servicios/auth.service';
 import { MesasService } from 'src/app/servicios/mesas.service';
+import { IonContent } from '@ionic/angular';
 
 @Component({
   selector: 'app-chat',
@@ -13,6 +14,7 @@ export class ChatPage implements OnInit {
   mensajes = [];
   msj='';
   usuario;
+  @ViewChild(IonContent) content: IonContent;
   constructor(private chat:ChatService, private auth:AuthService) { }
 
   ngOnInit() {
@@ -25,11 +27,17 @@ export class ChatPage implements OnInit {
   }
 
   ordenarMensajes(){
+    this.ScrollToBottom()
     console.log(this.mensajes.sort(compare))
+    this.ScrollToBottom()
+    
   }
 
   sendMessage(){
     let msj={};
+    if(this.msj==''){
+      return
+    }
     msj['mensaje'] = this.msj;
     if(this.usuario['perfil'] == 'delivery'){
       msj['nombre']='DELIVERY: '+this.usuario['nombre']
@@ -41,14 +49,34 @@ export class ChatPage implements OnInit {
     const fecha = new Date();
     const anio = fecha.getFullYear().toString();
     const mes = fecha.getMonth().toString();
-    const dia = fecha.getDate().toString();
-    const hora = fecha.getHours().toString();
-    const minuto = fecha.getMinutes().toString();
-    const seg = fecha.getSeconds().toString();
+    let dia = fecha.getDate().toString();
+    if(dia.length==1){
+      dia = '0'+dia;
+    }
+    let hora = fecha.getHours().toString();
+    if(hora.length==1){
+      hora = '0'+hora;
+    }
+    let minuto = fecha.getMinutes().toString();
+    if(minuto.length==1){
+      minuto = '0'+minuto;
+    }
+    let seg = fecha.getSeconds().toString();
+    if(seg.length==1){
+      seg = '0'+seg;
+    }
     msj['fecha'] = anio+' '+mes+' '+dia +' '+ hora+':'+ minuto+':'+ seg
     msj['usuario'] = this.usuario['id']
     this.chat.SendMensaje(msj)
+    this.ScrollToBottom()
     this.msj = ''
+  }
+
+  ScrollToBottom(){
+    this.content.scrollToBottom(100);
+  }
+  logScrollEnd(){
+    console.log("logScrollEnd : When Scroll Ends");
   }
 }
 
