@@ -1,3 +1,4 @@
+import { AlertService } from 'src/app/servicios/alert.service';
 import { FirestorageService } from './../../servicios/firestorage.service';
 import { Component } from '@angular/core';
 import { EncuestasService } from 'src/app/servicios/encuestas.service';
@@ -23,7 +24,8 @@ export class EncuestaClientePage {
   public urlFoto3: string;
   public usuario: any;
 
-  constructor(private encuestasService: EncuestasService, private camera: Camera, private firestorageService: FirestorageService) {
+  constructor(private encuestasService: EncuestasService, private camera: Camera,
+    private firestorageService: FirestorageService, private alert: AlertService) {
     this.nivelSatisfaccion = 6;
     this.calidadComida = false;
     this.calidadBebida = false;
@@ -38,7 +40,7 @@ export class EncuestaClientePage {
 
   public tomarFoto() {
     if (this.urlFoto3 !== '') {
-      alert('No puede cargar más de 3 fotos!');
+      this.alert.mensaje('', 'No puede cargar más de 3 fotos!');
       return;
     }
 
@@ -80,7 +82,7 @@ export class EncuestaClientePage {
       foto3: this.urlFoto3,
       fecha: new Date()
     }).then(() => {
-      alert('Encuesta cargada exitosamente!');
-    }).catch(error => { alert(error); });
+      this.alert.mensaje('', 'Encuesta cargada exitosamente!');
+    }).catch(error => { this.alert.mensaje('ERROR', error); });
   }
 }

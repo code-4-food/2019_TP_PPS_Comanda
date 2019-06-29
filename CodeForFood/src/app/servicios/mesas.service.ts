@@ -1,3 +1,4 @@
+import { AlertService } from './alert.service';
 import { MesaCliente } from './../interfaces/mesa-cliente';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -8,7 +9,7 @@ import { map } from 'rxjs/internal/operators/map';
   providedIn: 'root'
 })
 export class MesasService {
-  constructor(private db: AngularFirestore) { }
+  constructor(private db: AngularFirestore, private alert: AlertService) { }
 
   updateMesa(mesa: Mesa) {
     return this.db.collection('mesas').doc(mesa.qr).set(mesa);
@@ -60,9 +61,9 @@ export class MesasService {
 
   asignarMesa(mesaCliente: MesaCliente) {
     this.db.collection('mesa-cliente').add(mesaCliente).then(() => {
-      alert('Mesa asignada, tome asiento');
+      this.alert.mensaje('Mesa asignada', 'Tome asiento');
     }).catch(error => {
-      alert(error);
+      this.alert.mensaje('ERROR', error);
     });
   }
 }

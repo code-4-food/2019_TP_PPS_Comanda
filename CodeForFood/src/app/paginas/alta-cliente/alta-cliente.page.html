@@ -53,5 +53,10 @@
 
   <ion-button (click)="this.tomarDatosDNI()" expand="full">Tomar datos desde código QR del DNI</ion-button>
   <ion-button (click)="this.tomarFotoUsuario()" expand="full">Cargar foto</ion-button>
-  <ion-button (click)="this.cargarUsuario()" expand="full">Registrar</ion-button>
+  <ng-container *ngIf="this.tipoRegistro == 'Nuevo usuario'">
+    <ion-button (click)="this.cargarUsuario()" expand="full">Registrar usuario</ion-button>
+  </ng-container>
+  <ng-container *ngIf="this.tipoRegistro == 'Anónimo'">
+    <ion-button (click)="this.cargarUsuario()" expand="full">Ingresar como anónimo</ion-button>
+  </ng-container>
 </ion-content>
