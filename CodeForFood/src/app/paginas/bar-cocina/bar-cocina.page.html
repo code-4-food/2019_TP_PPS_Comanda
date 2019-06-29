@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar color='dark'>
-    <ion-title text-center>Pedidos Pendientes</ion-title>
+    <ion-title text-center>Pedidos pendientes</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -9,7 +9,7 @@
     <ion-slide style="height: 100%" *ngFor="let pendiente of this.pedidos">
       <ion-content>
         <ion-item>
-          <ion-label>Creacion:</ion-label>
+          <ion-label>Creación:</ion-label>
           <ion-input class='input_blanco' type="text" [(ngModel)]="pendiente.comienzo"></ion-input>
         </ion-item>
         <ion-item>
@@ -26,7 +26,7 @@
         </div>
         <ion-footer>
           <ion-toolbar>
-            <ion-button color='dark' expand="full" (click)='this.AceptarPedido(pendiente)'>Aceptar Pedido</ion-button>
+            <ion-button color='dark' expand="full" (click)='this.AceptarPedido(pendiente)'>Aceptar pedido</ion-button>
           </ion-toolbar>
         </ion-footer>
       </ion-content>

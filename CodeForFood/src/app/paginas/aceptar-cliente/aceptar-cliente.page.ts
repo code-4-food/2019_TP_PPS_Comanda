@@ -63,7 +63,7 @@ export class AceptarClientePage implements OnInit {
     }
 
     // Send a text message using default options
-    this.emailComposer.open(email).then(ret => { console.log(ret) }).catch(err => { alert(err); console.log(err) });
+    this.emailComposer.open(email).then(ret => { console.log(ret) }).catch(err => { console.log(err); });
 
   }
 
@@ -86,7 +86,7 @@ export class AceptarClientePage implements OnInit {
     }
 
     // Send a text message using default options
-    this.emailComposer.open(email).then(ret => { console.log(ret) }).catch(err => { alert(err); console.log(err) });
+    this.emailComposer.open(email).then(ret => { console.log(ret) }).catch(err => { console.log(err); });
 
   }
 

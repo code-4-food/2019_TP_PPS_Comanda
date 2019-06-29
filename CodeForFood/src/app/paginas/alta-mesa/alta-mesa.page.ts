@@ -1,3 +1,4 @@
+import { AlertService } from 'src/app/servicios/alert.service';
 import { Component } from '@angular/core';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
@@ -16,7 +17,7 @@ export class AltaMesaPage {
   public codigoQrMesa: string;
   public urlFotoMesa: string;
 
-  constructor(private barcodeScanner: BarcodeScanner, private camera: Camera,
+  constructor(private barcodeScanner: BarcodeScanner, private camera: Camera, private alert: AlertService,
   private mesasService: MesasService, private firestorageService: FirestorageService) {
     this.numeroMesa = null;
     this.cantidadComensales = null;
@@ -57,7 +58,7 @@ export class AltaMesaPage {
       this.tipoMesa === '' ||
       this.codigoQrMesa === '' ||
       this.urlFotoMesa === '') {
-      alert('Debe completar todos los datos para poder cargar una mesa');
+      this.alert.mensaje('', 'Debe completar todos los datos para poder cargar una mesa');
       return;
     }
 
@@ -70,9 +71,9 @@ export class AltaMesaPage {
       foto: this.urlFotoMesa,
       estado: 'disponible'
     }).then(() => {
-      alert('Mesa cargada exitosamente!');
+      this.alert.mensaje('', 'Mesa cargada exitosamente!');
     }).catch(error => {
-      alert(error);
+      this.alert.mensaje('ERROR', error);
     });
   }
 }

@@ -1,3 +1,4 @@
+import { AlertService } from 'src/app/servicios/alert.service';
 import { Component } from '@angular/core';
 import { ReservasService } from 'src/app/servicios/reservas.service';
 import { Reserva } from 'src/app/interfaces/reserva';
@@ -10,21 +11,21 @@ import { Reserva } from 'src/app/interfaces/reserva';
 export class ConfirmarReservaPage {
   public reservasPendientes: Reserva[];
 
-  constructor(private reservasService: ReservasService) {
+  constructor(private reservasService: ReservasService, private alert: AlertService) {
     this.reservasService.getReservasPendientes().subscribe(reservasPend => { this.reservasPendientes = reservasPend; });
   }
 
   public confirmarReserva(reserva) {
     reserva.estado = 'confirmada';
     this.reservasService.updateReserva(reserva).then(() => {
-      alert('Reserva confirmada!');
-    }).catch(error => { alert(error); });
+      this.alert.mensaje('', 'Reserva confirmada!');
+    }).catch(error => { this.alert.mensaje('ERROR', error); });
   }
 
   public rechazarReserva(reserva) {
     reserva.estado = 'rechazada';
     this.reservasService.updateReserva(reserva).then(() => {
-      alert('Reserva rechazada!');
-    }).catch(error => { alert(error); });
+      this.alert.mensaje('', 'Reserva rechazada!');
+    }).catch(error => { this.alert.mensaje('ERROR', error); });
   }
 }

@@ -95,7 +95,7 @@ export class AltaEmpleadoPage implements OnInit {
   }
   public LeerQR() {
     this.barcodeScanner.scan().then(barcodeData => {
-      alert(barcodeData.text);
+      // alert(barcodeData.text);
       try {
         const datos = barcodeData.text.split('@');
         this.empleado.cuil = datos[0];

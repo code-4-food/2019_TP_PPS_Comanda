@@ -35,6 +35,16 @@ Registrate en: https://forms.gle/yZ8xsdWj7W7ECWAG8
 
 ## Marcos Ivan Rey:
 
+| Tarea | Descripcion | Estado |
+|---|---|---|
+| C | Alta producto | finalizado |
+| F | Ingreso Local | finalizado |
+| K | Encuesta supervisor | no integrado |
+| M | Tomar Pedido | finalizado |
+| R | Realizar pedido direccion | finalizado |
+| S | Chat delivery | finalizado |
+
+
 | Branch | Descripcion del trabajo | Fecha Finalizacion |
 |---|---|---|
 | organizacion-proyecto | Creacion de servicion (sin funcionalidad), interfaces y paginas para empezar a trabajar. Esqueleto del proyecto | 17/5 |
@@ -52,6 +62,15 @@ Registrate en: https://forms.gle/yZ8xsdWj7W7ECWAG8
 
 ## Micaela Saez:
 
+| Tarea | Descripcion | Estado |
+|---|---|---|
+| A | Alta dueño | finalizado |
+| B | Alta empleado | finalizado |
+| H | QR Propina | finalizado |
+| J | Encuesta empleado | finalizado |
+| L | Pedir plato y bebida | finalizado |
+| T | Juego descuento | finalizado |
+
 | Branch | Descripcion del trabajo | Fecha Finalizacion |
 |---|---|---|
 | CFF-4-alta-empleados | Registro de empleado, dueño y supervisor | 28/5 |
@@ -67,6 +86,15 @@ Registrate en: https://forms.gle/yZ8xsdWj7W7ECWAG8
 
 
 ## Ezequiel Mahafud:
+
+| Tarea | Descripcion | Estado |
+|---|---|---|
+| D | Alta cliente | finalizado |
+| E | Alta mesa | finalizado |
+| G | QR mesa | finalizado |
+| I | Encuesta cliente | finalizado |
+| N | Hacer reserva | finalizado |
+
 
 | Branch | Descripcion del trabajo | Fecha Finalizacion |
 |---|---|---|
