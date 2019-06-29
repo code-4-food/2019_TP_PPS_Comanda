@@ -33,7 +33,8 @@ export class CuentaPage implements OnInit {
   public descPorcentaje = false;
   public descBebida = false;
   public descPostre = false;
-
+  id_usr;
+  delivery=false;
   constructor(private pedidosServ: PedidosService, private mesasServ: MesasService,
     private authService: AuthService, private barcodeScanner: BarcodeScanner,
     private errorHand: ErrorService, private router: Router, private alertServ: AlertService) {
@@ -64,6 +65,7 @@ export class CuentaPage implements OnInit {
       } else {
         this.total = 0;
         this.esMozo = false;
+        this.id_usr = this.empleado['id']
         this.mesasClientes.forEach(m => {
           if (m.idCliente === this.empleado.id && !m.cerrada) {
             this.id = m.id;
@@ -154,12 +156,46 @@ export class CuentaPage implements OnInit {
           });
         }
       });
+
+
       console.log(this.productosCuenta);
       this.productosCuenta.forEach( p => {
         let aux = Number.parseInt(p.precio) * Number.parseInt(p.cantidad);
         this.total += aux;
       });
     }
+    this.pedidos.forEach(p => {
+      // console.log(p.id_mesa_cliente + " - - - - " + m.id)
+      if (p.id_mesa_cliente == this.id_usr && p.estado != 'fin') {
+        this.pedidosproductos.forEach(pp => {
+          // console.log(p.id + " - - - - " + pp.id_pedido)
+          if (p.id === pp.id_pedido && p.delivery) {
+            this.delivery = true;
+            this.id = this.id_usr;
+            this.productos.forEach(prod => {
+              if (prod.id === pp.id_producto) {
+                let proda = prod;
+                proda['cantidad'] = pp.cantidad;
+                console.log(proda)
+                this.productosCuenta.push(proda);
+                console.log(this.productosCuenta)
+                this.total += Number.parseInt(proda.precio) * Number.parseInt(proda.cantidad);
+                this.propina = 1;
+                // AGREGAR ALERT PARA MOSTRAR PROPINA AGREGAR
+                // descuentos:
+
+              }
+            });
+          }
+        });
+      }
+    });
+
+
+    console.log(this.productosCuenta);
+
+
+
   }
   public Pagada() {
     // console.log(this.pedidoSelecc);
