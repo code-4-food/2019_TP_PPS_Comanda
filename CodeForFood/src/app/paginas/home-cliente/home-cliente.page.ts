@@ -189,9 +189,9 @@ export class HomeClientePage {
         idCliente: this.usuario.id,
         idMesa: mesa.id,
         idMozo: '',
-        juegoBebida: false,
-        juegoDescuento: false,
-        juegoPostre: false,
+        juegoBebida: 0,
+        juegoDescuento: 0,
+        juegoPostre: 0,
         propina: 1
       });
 
@@ -237,9 +237,11 @@ export class HomeClientePage {
     this.route.navigate(['/cuenta']);
   }
 
-  public RealizarReserva() { 
+  public RealizarReserva() {
     this.route.navigate(['/solicitar-reserva']);
   }
 
-  public Jugar() { }
+  public Jugar() {
+    this.route.navigate(['/descuento']);
+  }
 }

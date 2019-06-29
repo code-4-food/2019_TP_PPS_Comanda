@@ -4,8 +4,8 @@ export interface MesaCliente {
     idCliente: string;
     idMesa: string;
     idMozo: string;
-    juegoBebida: boolean;
-    juegoDescuento: boolean;
-    juegoPostre: boolean;
+    juegoBebida: number;
+    juegoDescuento: number;
+    juegoPostre: number;
     propina: number;
 }
