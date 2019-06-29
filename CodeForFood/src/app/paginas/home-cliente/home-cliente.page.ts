@@ -25,7 +25,7 @@ export class HomeClientePage {
   public mesasClientes: MesaCliente[];
   public usuario: any;
   private pedidos = [];
-
+  chat =false;
   constructor(private platform: Platform, private barcodeScanner: BarcodeScanner, private reservasService: ReservasService,
     private mesasService: MesasService, private pedidosService: PedidosService, private authService: AuthService, private route:Router,
     public alert: AlertService) {
@@ -37,6 +37,11 @@ export class HomeClientePage {
     this.reservasService.getListaEspera().subscribe(listaEspera => { this.listaEspera = listaEspera; });
     this.pedidosService.getPedidos().subscribe( (data) => {
       this.pedidos = data;
+    this.pedidos.forEach(pedido=>{
+      if(pedido.id_mesa_cliente == this.usuario['id'] && pedido.delivery && pedido.estado!='fin'){
+        this.chat = true
+        }
+      })
     });
   }
 
@@ -168,6 +173,10 @@ export class HomeClientePage {
     });
   }
 
+  Chat(){
+    this.route.navigate(['chat'])
+  }
+
   private async solicitarMesa(mesa, mensaje: string) {
     if (confirm(mensaje)) {
       mesa.estado = 'realizando pedido';
@@ -214,6 +223,14 @@ export class HomeClientePage {
         });
       }
     });
+
+    this.pedidos.forEach(pedido=>{
+      if(pedido.id_mesa_cliente == this.usuario['id'] && pedido.delivery && pedido.estado=='entregadosconfirmar'){
+        pedido.estado = 'fin';
+        this.alert.mensaje('Confirmado', 'Muchas gracias por realizar un delivery');
+        this.pedidosService.updatePedido(pedido.id, pedido);
+      }
+    })
   }
 
   public PedirCuenta() {
